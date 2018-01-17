@@ -16,6 +16,8 @@ class CustomPostType
     // todo method for capability_type
     // todo method for capabilities
     // todo method for map_meta_cap
+	// todo method for capability_type
+	// todo method for capabilities
 
     private $name;
     public $singularName = '';
@@ -140,11 +142,48 @@ class CustomPostType
         return $this->pluralName;
     }
 
+	/**
+	 * Enables post type archives. Will use $post_type as archive slug by default.
+	 * Note: Will generate the proper rewrite rules if rewrite is enabled.
+	 * Also use rewrite to change the slug used. If string, it should be translatable.
+	 *
+	 * @param bool|string $val
+	 *
+	 * @return CustomPostType
+	 */
+	public function hasArchive($val = true) {
+		return $this->setArg('has_archive', $val);
+    }
+
     public function register()
     {
         add_action('init', function () {
             register_post_type($this->name, $this->buildArgs());
         });
+    }
+
+	/**
+	 * Provide a callback function that will be called when setting up the meta boxes for the edit form.
+	 * The callback function takes one argument $post, which contains the WP_Post object for the currently edited post.
+	 * Do remove_meta_box() and add_meta_box() calls in the callback.
+	 *
+	 * @param array|string $callback
+	 *
+	 * @return CustomPostType
+	 */
+	public function registerMetaBoxCB($callback = '') {
+		return $this->setArg('register_meta_box_cb', $callback);
+    }
+
+	/**
+	 * //todo document array args
+	 *
+	 * @param array|bool $val
+	 *
+	 * @return CustomPostType
+	 */
+	public function rewrite($val = true) {
+		return $this->setArg('rewrite', $val);
     }
 
     /**
@@ -197,6 +236,19 @@ class CustomPostType
     public function hierarchical(bool $bool = false)
     {
         return $this->setArg('hierarchical', $bool);
+    }
+
+	/**
+	 * Whether to use the internal default meta capability handling.
+	 * Note: If set it to false then standard admin role can't edit the posts types.
+	 * Then the edit_post capability must be added to all roles to add or edit the posts types.
+	 *
+	 * @param bool $bool
+	 *
+	 * @return CustomPostType
+	 */
+	public function mapMetaCap(bool $bool = true) {
+		return $this->setArg('map_meta_cap', $bool);
     }
 
     /**
@@ -433,6 +485,19 @@ class CustomPostType
     public function supports($features = ['editor', 'title'])
     {
         return $this->setArg('supports', $features);
+    }
+
+	/**
+	 * An array of registered taxonomies like category or post_tag that will be used with this post type.
+	 * This can be used in lieu of calling register_taxonomy_for_object_type() directly.
+	 * Custom taxonomies still need to be registered with register_taxonomy().
+	 *
+	 * @param array $taxonomies
+	 *
+	 * @return CustomPostType
+	 */
+	public function taxonomies(array $taxonomies = []) {
+		return $this->setArg('taxonomies', $taxonomies);
     }
 
     private function validateName()
