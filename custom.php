@@ -16,8 +16,8 @@ class CustomPostType
     // todo method for capability_type
     // todo method for capabilities
     // todo method for map_meta_cap
-	// todo method for capability_type
-	// todo method for capabilities
+    // todo method for capability_type
+    // todo method for capabilities
 
     private $name;
     public $singularName = '';
@@ -44,8 +44,9 @@ class CustomPostType
      */
     public function addSupportArg($arg = '')
     {
-        if (!$arg)
+        if ( ! $arg) {
             return $this;
+        }
 
         if (empty($this->overrideArgs['supports'])) {
             $this->overrideArgs['supports'] = [];
@@ -97,6 +98,36 @@ class CustomPostType
         return $defaultArgs;
     }
 
+    /**
+     * Whether or not the post_type can be exported
+     * Default: true
+     *
+     * @param bool $bool
+     *
+     * @return \WPDev\CustomPostType\CustomPostType
+     */
+    public function canExport(bool $bool = true)
+    {
+        return $this->setArg('can_export', $bool);
+    }
+
+    /**
+     * Whether to delete posts of this type when deleting a user. If true, posts of this type
+     * belonging to the user will be moved to trash when then user is deleted. If false, posts
+     * of this type belonging to the user will not be trashed or deleted. If not set (the default),
+     * posts are trashed if post_type_supports('author'). Otherwise posts are not trashed or deleted.
+     *
+     * Default: null
+     *
+     * @param bool $bool
+     *
+     * @return \WPDev\CustomPostType\CustomPostType
+     */
+    public function deleteWithUser(bool $bool = true)
+    {
+        return $this->setArg('delete_with_user', $bool);
+    }
+
     public function deregister(string $name = '')
     {
         if ( ! $name) {
@@ -142,17 +173,46 @@ class CustomPostType
         return $this->pluralName;
     }
 
-	/**
-	 * Enables post type archives. Will use $post_type as archive slug by default.
-	 * Note: Will generate the proper rewrite rules if rewrite is enabled.
-	 * Also use rewrite to change the slug used. If string, it should be translatable.
-	 *
-	 * @param bool|string $val
-	 *
-	 * @return CustomPostType
-	 */
-	public function hasArchive($val = true) {
-		return $this->setArg('has_archive', $val);
+    /**
+     * Enables post type archives. Will use $post_type as archive slug by default.
+     * Note: Will generate the proper rewrite rules if rewrite is enabled.
+     * Also use rewrite to change the slug used. If string, it should be translatable.
+     *
+     * @param bool|string $val
+     *
+     * @return \WPDev\CustomPostType\CustomPostType
+     */
+    public function hasArchive($val = true)
+    {
+        return $this->setArg('has_archive', $val);
+    }
+
+    /**
+     * This sets the endpoint mask. However rewrite['ep_mask'] takes precedence if it's set there too.
+     *
+     * @param int|const $endpoint Constant preferred to avoid future failure (core updates)
+     *
+     * @return \WPDev\CustomPostType\CustomPostType
+     */
+    public function permalinkEPMask($endpoint = EP_PERMALINK)
+    {
+        return $this->setArg('permalink_epmask', $endpoint);
+    }
+
+    /**
+     * True (default) will use the post type slug
+     * False disables query_var key use. A post type cannot be loaded at /?{query_var}={single_post_slug}
+     * A string essentially overrides the post type slug /?{query_var_string}={single_post_slug}
+     *
+     * Remember this is for query_vars not for permalink slug.
+     *
+     * @param bool|string $query_var
+     *
+     * @return \WPDev\CustomPostType\CustomPostType
+     */
+    public function queryVar($query_var = true)
+    {
+        return $this->setArg('query_var', $query_var);
     }
 
     public function register()
@@ -162,28 +222,69 @@ class CustomPostType
         });
     }
 
-	/**
-	 * Provide a callback function that will be called when setting up the meta boxes for the edit form.
-	 * The callback function takes one argument $post, which contains the WP_Post object for the currently edited post.
-	 * Do remove_meta_box() and add_meta_box() calls in the callback.
-	 *
-	 * @param array|string $callback
-	 *
-	 * @return CustomPostType
-	 */
-	public function registerMetaBoxCB($callback = '') {
-		return $this->setArg('register_meta_box_cb', $callback);
+    /**
+     * Provide a callback function that will be called when setting up the meta boxes for the edit form.
+     * The callback function takes one argument $post, which contains the WP_Post object for the currently edited post.
+     * Do remove_meta_box() and add_meta_box() calls in the callback.
+     *
+     * @param array|string $callback
+     *
+     * @return \WPDev\CustomPostType\CustomPostType
+     */
+    public function registerMetaBoxCB($callback = '')
+    {
+        return $this->setArg('register_meta_box_cb', $callback);
     }
 
-	/**
-	 * //todo document array args
-	 *
-	 * @param array|bool $val
-	 *
-	 * @return CustomPostType
-	 */
-	public function rewrite($val = true) {
-		return $this->setArg('rewrite', $val);
+    /**
+     * The base slug that this post type will use when accessed using the REST API.
+     * Default: $post_type
+     *
+     * @param string $rest_base
+     *
+     * @return \WPDev\CustomPostType\CustomPostType
+     */
+    public function restBase(string $rest_base)
+    {
+        if ( ! $rest_base) {
+            $rest_base = $this->name;
+        }
+
+        return $this->setArg('rest_base', $rest_base);
+    }
+
+    /**
+     * An optional custom controller to use instead of WP_REST_Posts_Controller. Must be a subclass of WP_REST_Controller.
+     * Default: WP_REST_Posts_Controller
+     *
+     * @param string $controller
+     *
+     * @return \WPDev\CustomPostType\CustomPostType
+     */
+    public function restControllerClass(string $controller = 'WP_REST_Posts_Controller')
+    {
+        return $this->setArg('rest_controller_class', $controller);
+    }
+
+    /**
+     * ['slug']         string Customize the permalink structure slug. Defaults to the $post_type value. Should be translatable.
+     * ['with_front']   bool Should the permalink structure be prepended with the front base.
+     *                  (example: if your permalink structure is /blog/,
+     *                  then your links will be: false->/news/, true->/blog/news/). Defaults to true
+     * ['feeds']        bool Should a feed permalink structure be built for this post type. Defaults to has_archive value.
+     * ['pages']        bool Should the permalink structure provide for pagination. Defaults to true
+     * ['ep_mask']      const If not specified, then it inherits from permalink_epmask(if permalink_epmask is set),
+     *                  otherwise defaults to EP_PERMALINK
+     *                  see @link https://make.wordpress.org/plugins/2012/06/07/rewrite-endpoints-api/
+     *                  and also @link https://code.tutsplus.com/articles/the-rewrite-api-post-types-taxonomies--wp-25488
+     *
+     * @param array|bool $val (see above)
+     *
+     * @return \WPDev\CustomPostType\CustomPostType
+     */
+    public function rewrite($val = true)
+    {
+        return $this->setArg('rewrite', $val);
     }
 
     /**
@@ -201,6 +302,18 @@ class CustomPostType
         $this->overrideArgs[$key] = $val;
 
         return $this;
+    }
+
+    /**
+     * Whether to expose this post type in the REST API.
+     *
+     * @param bool $bool
+     *
+     * @return \WPDev\CustomPostType\CustomPostType
+     */
+    public function showInRest(bool $bool = true)
+    {
+        return $this->setArg('show_in_rest', $bool);
     }
 
     /**
@@ -238,17 +351,18 @@ class CustomPostType
         return $this->setArg('hierarchical', $bool);
     }
 
-	/**
-	 * Whether to use the internal default meta capability handling.
-	 * Note: If set it to false then standard admin role can't edit the posts types.
-	 * Then the edit_post capability must be added to all roles to add or edit the posts types.
-	 *
-	 * @param bool $bool
-	 *
-	 * @return CustomPostType
-	 */
-	public function mapMetaCap(bool $bool = true) {
-		return $this->setArg('map_meta_cap', $bool);
+    /**
+     * Whether to use the internal default meta capability handling.
+     * Note: If set it to false then standard admin role can't edit the posts types.
+     * Then the edit_post capability must be added to all roles to add or edit the posts types.
+     *
+     * @param bool $bool
+     *
+     * @return \WPDev\CustomPostType\CustomPostType
+     */
+    public function mapMetaCap(bool $bool = true)
+    {
+        return $this->setArg('map_meta_cap', $bool);
     }
 
     /**
@@ -487,17 +601,18 @@ class CustomPostType
         return $this->setArg('supports', $features);
     }
 
-	/**
-	 * An array of registered taxonomies like category or post_tag that will be used with this post type.
-	 * This can be used in lieu of calling register_taxonomy_for_object_type() directly.
-	 * Custom taxonomies still need to be registered with register_taxonomy().
-	 *
-	 * @param array $taxonomies
-	 *
-	 * @return CustomPostType
-	 */
-	public function taxonomies(array $taxonomies = []) {
-		return $this->setArg('taxonomies', $taxonomies);
+    /**
+     * An array of registered taxonomies like category or post_tag that will be used with this post type.
+     * This can be used in lieu of calling register_taxonomy_for_object_type() directly.
+     * Custom taxonomies still need to be registered with register_taxonomy().
+     *
+     * @param array $taxonomies
+     *
+     * @return \WPDev\CustomPostType\CustomPostType
+     */
+    public function taxonomies(array $taxonomies = [])
+    {
+        return $this->setArg('taxonomies', $taxonomies);
     }
 
     private function validateName()
