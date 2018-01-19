@@ -9,7 +9,7 @@
 
 namespace WPDev\CustomPostType;
 
-use Whoops\Example\Exception;
+use Exception;
 
 class CustomPostType
 {
@@ -27,7 +27,7 @@ class CustomPostType
     public function __construct(string $name = '')
     {
         if ( ! $name) {
-            throw new \Exception('Did not receive a name for the custom post type');
+            throw new Exception('Did not receive a name for the custom post type');
         }
 
         $this->name = $name;
@@ -131,7 +131,7 @@ class CustomPostType
     public function deregister(string $name = '')
     {
         if ( ! $name) {
-            throw new \Exception('Need to pass in the name of the post type to deregister');
+            throw new Exception('Need to pass in the name of the post type to deregister');
         }
 
         unregister_post_type($name);
@@ -232,6 +232,8 @@ class CustomPostType
      * to be able to use @see remove_action() then you should use @see registerManually()
      *
      * @param callable|null $callback
+     *
+     * @return \WPDev\CustomPostType\CustomPostType
      */
     public function register(callable $callback = null)
     {
@@ -243,6 +245,8 @@ class CustomPostType
                 register_post_type($this->name, $this->buildArgs());
             }
         });
+
+        return $this;
     }
 
     /**
@@ -655,19 +659,19 @@ class CustomPostType
         ];
 
         if (in_array($this->name, $reserved_names)) {
-            throw new \Exception("'{$this->name}' is a WordPress reserved name");
+            throw new Exception("'{$this->name}' is a WordPress reserved name");
         }
 
         if (strpos($this->name, ' ') !== false) {
-            throw new \Exception('Post type machine name cannot contain spaces.');
+            throw new Exception('Post type machine name cannot contain spaces.');
         }
 
         if (strtolower($this->name) !== $this->name) {
-            throw new \Exception('Post type machine name cannot contain capital letters.');
+            throw new Exception('Post type machine name cannot contain capital letters.');
         }
 
         if (strlen($this->name) > 20) {
-            throw new \Exception('Post type machine name cannot exceed 20 characters. Current name is '.strlen($this->name).' characters long.');
+            throw new Exception('Post type machine name cannot exceed 20 characters. Current name is '.strlen($this->name).' characters long.');
         }
     }
 }
