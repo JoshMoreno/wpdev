@@ -348,7 +348,7 @@ class CustomPostType
      *
      * @return \WPDev\CustomPostType\CustomPostType
      */
-    public function excludeFromSearch(bool $bool = false)
+    public function excludeFromSearch(bool $bool = true)
     {
         return $this->setArg('exclude_from_search', $bool);
     }
@@ -369,7 +369,7 @@ class CustomPostType
      *
      * @return \WPDev\CustomPostType\CustomPostType
      */
-    public function hierarchical(bool $bool = false)
+    public function hierarchical(bool $bool = true)
     {
         return $this->setArg('hierarchical', $bool);
     }
