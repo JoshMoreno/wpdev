@@ -15,7 +15,6 @@ class CustomPostType
 {
     // todo method for capability_type
     // todo method for capabilities
-    // todo method for map_meta_cap
     // todo method for capability_type
     // todo method for capabilities
 
