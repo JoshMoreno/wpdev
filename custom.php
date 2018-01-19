@@ -215,10 +215,33 @@ class CustomPostType
         return $this->setArg('query_var', $query_var);
     }
 
-    public function register()
+    /**
+     * Use this method if you want need to use a named function
+     * to register your post type.
+     *
+     * @return \WP_Error|\WP_Post_Type
+     */
+    public function registerManually()
     {
-        add_action('init', function () {
-            register_post_type($this->name, $this->buildArgs());
+        return register_post_type($this->name, $this->buildArgs());
+    }
+
+    /**
+     * This is the easiest way to register your post type.
+     * However it uses an anonymous function so if you need to allow other plugins
+     * to be able to use @see remove_action() then you should use @see registerManually()
+     *
+     * @param callable|null $callback
+     */
+    public function register(callable $callback = null)
+    {
+        add_action('init', function () use ($callback) {
+            if ($callback) {
+                $response = register_post_type($this->name, $this->buildArgs());
+                $callback($response);
+            } else {
+                register_post_type($this->name, $this->buildArgs());
+            }
         });
     }
 
@@ -651,3 +674,4 @@ class CustomPostType
 
 $projects = new CustomPostType('package');
 $projects->register();
+
