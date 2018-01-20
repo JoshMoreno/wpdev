@@ -58,40 +58,61 @@ class CustomPostType
 
     private function buildArgs()
     {
-        return array_merge($this->buildDefaultArgs(), $this->overrideArgs);
+        echo "<pre>";
+        var_dump($this->deepMergeArray($this->buildDefaultArgs(), $this->overrideArgs));
+        echo "</pre>";
+        return $this->deepMergeArray($this->buildDefaultArgs(), $this->overrideArgs);
     }
 
     private function buildDefaultArgs()
     {
-        $defaultArgs           = [];
-        $defaultArgs['public'] = true;
-        $defaultArgs['labels'] = [
-            'name'                  => $this->getPluralName(),
-            'singular_name'         => $this->getSingularName(),
-            //'add_new'               => "", // defaults to 'Add New'
-            'add_new_item'          => "Add New {$this->getSingularName()}",
-            'edit_item'             => "Edit {$this->getSingularName()}",
-            'new_item'              => "New {$this->getSingularName()}",
-            'view_item'             => "View {$this->getSingularName()}",
-            'view_items'            => "View {$this->getPluralName()}",
-            'search_items'          => "Search {$this->getPluralName()}",
-            'not_found'             => "No {$this->getPluralName()} found",
-            'not_found_in_trash'    => "No {$this->getPluralName()} found in Trash",
-            'parent_item_colon'     => "Parent {$this->getSingularName()}:",
-            'all_items'             => "All {$this->getPluralName()}",
-            'archives'              => "{$this->getSingularName()} Archives",
-            'attributes'            => "{$this->getSingularName()} Attributes",
-            'insert_into_item'      => "Insert into {$this->getSingularName()}",
-            'uploaded_to_this_item' => "Uploaded to this {$this->getSingularName()}",
-            //'featured_image'        => '', // defaults to 'Featured Image'
-            //'set_featured_image'    => '', // defaults to 'Set featured image'
-            //'remove_featured_image' => '', // defaults to 'Remove featured image'
-            //'use_featured_image'    => '', // defaults to 'Use as featured image'
-            //'menu_name'             => '', // defaults to name from above
-            //'filter_items_list'     => "Filter {$this->getPluralName()}",
-            //'items_list_navigation' => '',
-            //'items_list'            => '',
-            //'name_admin_bar'        => '', // defaults to singular_name from above
+        $defaultArgs                = [
+
+            'labels' => [
+                'name'                  => $this->getPluralName(),
+                'singular_name'         => $this->getSingularName(),
+                'add_new'               => "Add New",
+                'add_new_item'          => "Add New {$this->getSingularName()}",
+                'edit_item'             => "Edit {$this->getSingularName()}",
+                'new_item'              => "New {$this->getSingularName()}",
+                'view_item'             => "View {$this->getSingularName()}",
+                'view_items'            => "View {$this->getPluralName()}",
+                'search_items'          => "Search {$this->getPluralName()}",
+                'not_found'             => "No {$this->getPluralName()} found",
+                'not_found_in_trash'    => "No {$this->getPluralName()} found in Trash",
+                'parent_item_colon'     => "Parent {$this->getSingularName()}:",
+                'all_items'             => "All {$this->getPluralName()}",
+                'archives'              => "{$this->getSingularName()} Archives",
+                'attributes'            => "{$this->getSingularName()} Attributes",
+                'insert_into_item'      => "Insert into {$this->getSingularName()}",
+                'uploaded_to_this_item' => "Uploaded to this {$this->getSingularName()}",
+                'featured_image'        => 'Featured Image',
+                'set_featured_image'    => 'Set featured image',
+                'remove_featured_image' => 'Remove featured image',
+                'use_featured_image'    => 'Use as featured image',
+                'menu_name'             => $this->getPluralName(),
+                'filter_items_list'     => "Filter {$this->getPluralName()} list",
+                'items_list_navigation' => "{$this->getPluralName()} list navigation",
+                'items_list'            => "{$this->getPluralName()} list",
+                'name_admin_bar'        => $this->getSingularName(),
+            ],
+
+            'description' => "Handles the {$this->getPluralName()}",
+
+            /**
+             * Implies:
+             * exclude_from_search = false
+             * publicly_queryable = true
+             * show_ui = true
+             * show_in_nav_menus = true
+             * show_in_menu = true
+             * show_in_admin_bar = true
+             */
+            'public' => true,
+
+            'menu_position' => 5, // below posts
+
+            'supports' => ['title', 'editor', 'thumbnail']
         ];
 
         return $defaultArgs;
@@ -673,8 +694,43 @@ class CustomPostType
             throw new Exception('Post type machine name cannot exceed 20 characters. Current name is '.strlen($this->name).' characters long.');
         }
     }
+
+    private function deepMergeArray() {
+        $arrays = func_get_args();
+        $result = [];
+
+        foreach ($arrays as $array) {
+            foreach ($array as $key => $value) {
+
+                // if it's zero-based, append it
+                if (is_integer($key)) {
+                    $result[] = $value;
+                    continue;
+                }
+
+                // if it's a new arg (aka key)
+                if (!isset($result[$key])) {
+                    $result[$key] = $value;
+                    continue;
+                }
+
+                $old_value = $result[$key];
+
+                // Recurse when both values are arrays.
+                if (is_array($old_value) && is_array($value)) {
+                    $result[$key] = $this->deepMergeArray($old_value, $value);
+                    continue;
+                }
+
+                // else override
+                $result[$key] = $value;
+            }
+        }
+
+        return $result;
+    }
 }
 
 $projects = new CustomPostType('package');
-$projects->register();
+$projects->supportsPageAttributes()->register();
 
