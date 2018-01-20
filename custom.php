@@ -58,9 +58,6 @@ class CustomPostType
 
     private function buildArgs()
     {
-        echo "<pre>";
-        var_dump($this->deepMergeArray($this->buildDefaultArgs(), $this->overrideArgs));
-        echo "</pre>";
         return $this->deepMergeArray($this->buildDefaultArgs(), $this->overrideArgs);
     }
 
@@ -732,5 +729,5 @@ class CustomPostType
 }
 
 $projects = new CustomPostType('package');
-$projects->supportsPageAttributes()->register();
+$projects->register();
 
