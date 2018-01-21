@@ -1,0 +1,12 @@
+{
+    "autoload": {
+        "psr-4": {
+            "WPDev\\": "inc/"
+        }
+    },
+    "require": {
+        "filp/whoops": "^2.1",
+        "symfony/var-dumper": "^4.0",
+        "cocur/slugify": "^3.0"
+    }
+}
