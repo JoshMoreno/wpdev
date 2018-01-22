@@ -13,4 +13,5 @@ return array(
     'Symfony\\Component\\VarDumper\\' => array($vendorDir . '/symfony/var-dumper'),
     'Psr\\Log\\' => array($vendorDir . '/psr/log/Psr/Log'),
     'Cocur\\Slugify\\' => array($vendorDir . '/cocur/slugify/src'),
+    'Brain\\Hierarchy\\' => array($vendorDir . '/brain/hierarchy/src'),
 );
