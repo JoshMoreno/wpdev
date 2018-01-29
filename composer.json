@@ -8,6 +8,7 @@
         "filp/whoops": "^2.1",
         "symfony/var-dumper": "^4.0",
         "cocur/slugify": "^3.0",
-        "brain/hierarchy": "^2.3"
+        "brain/hierarchy": "^2.3",
+        "symfony/finder": "^4.0"
     }
 }
