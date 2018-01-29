@@ -5,7 +5,9 @@ namespace WPDev;
 class Post
 {
     protected $content;
+    protected $createdDate;
     protected $excerpt;
+    protected $modifiedDate;
     protected $id = 0;
     protected $status;
     protected $title;
@@ -23,6 +25,16 @@ class Post
             $this->id = $this->wpPost->ID;
         }
     }
+
+    public function getCreatedDate($date_format = '')
+    {
+        if (is_null($this->createdDate)) {
+            $this->createdDate = get_the_date($date_format, $this->id);
+        }
+
+        return $this->createdDate;
+    }
+
 
     public function getId()
     {
@@ -71,6 +83,15 @@ class Post
         }
 
         return $this->excerpt;
+    }
+
+    public function getModifiedDate($date_format = '')
+    {
+        if (is_null($this->modifiedDate)) {
+            $this->modifiedDate = get_the_modified_date($date_format, $this->id);
+        }
+
+        return $this->modifiedDate;
     }
 
     public function getPostType()
