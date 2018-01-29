@@ -4,6 +4,7 @@ namespace WPDev;
 
 class Post
 {
+    protected $ancestors;
     protected $content;
     protected $createdDate;
     protected $excerpt;
@@ -24,8 +25,23 @@ class Post
         $this->wpPost = get_post($post);
 
         if ($this->hasWpPost()) {
-            $this->id = (int) $this->wpPost->ID;
+            $this->id = (int)$this->wpPost->ID;
         }
+    }
+
+    /**
+     * @return \WPDev\Post[] Array of \WPDev\Post objects
+     */
+    public function ancestors()
+    {
+        if (is_null($this->ancestors)) {
+            $ancestors       = get_post_ancestors($this->postElseId());
+            $this->ancestors = array_map(function ($ancestor_id) {
+                return new Post($ancestor_id);
+            }, $ancestors);
+        }
+
+        return $this->ancestors;
     }
 
     /**
@@ -77,14 +93,14 @@ class Post
     /**
      * @return string
     |--------------------------------------------------------------------------
-    | Same as what WP does minus the arguments and echo
-    |--------------------------------------------------------------------------
-    | WP has a get_the_content() that doesn't apply filters or convert
-    | shortcodes. So we do the same as the_content() here, minus the arguments
-    | and we don't echo.
-    | * Note that this can only be called reliably within The Loop. WP needs
-    | $GLOBALS['post'] to be set. Lame.
-    */
+     * | Same as what WP does minus the arguments and echo
+     * |--------------------------------------------------------------------------
+     * | WP has a get_the_content() that doesn't apply filters or convert
+     * | shortcodes. So we do the same as the_content() here, minus the arguments
+     * | and we don't echo.
+     * | * Note that this can only be called reliably within The Loop. WP needs
+     * | $GLOBALS['post'] to be set. Lame.
+     */
     public function content()
     {
         if (is_null($this->content)) {
@@ -150,6 +166,7 @@ class Post
         if (is_null($this->parentId)) {
             $this->parentId = ($this->hasWpPost()) ? $this->wpPost->post_parent : 0;
         }
+        get_post_ancestors();
 
         return (int)$this->parentId;
     }
