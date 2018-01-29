@@ -21,16 +21,7 @@ class Post
             $this->id = $this->wpPost->ID;
         }
     }
-
-    protected function setupProperties()
-    {
-        $id            = $this->wpPost->ID;
-        $this->id      = $id;
-        $this->title   = get_the_title($id);
-        $this->url     = get_the_permalink($id);
-        $this->content = get_the_content();
-    }
-
+    
     public function getId()
     {
         return $this->id;
