@@ -24,7 +24,7 @@ class Post
         $this->wpPost = get_post($post);
 
         if ($this->hasWpPost()) {
-            $this->id = $this->wpPost->ID;
+            $this->id = (int) $this->wpPost->ID;
         }
     }
 
