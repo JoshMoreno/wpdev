@@ -71,6 +71,16 @@ class Post
 
         return $this->excerpt;
     }
+
+    public function getPostType()
+    {
+        if ($this->hasWpPost()) {
+            return $this->wpPost->post_type;
+        }
+        
+        return '';
+    }
+
     protected function hasWpPost()
     {
         return ($this->wpPost instanceof \WP_Post);
