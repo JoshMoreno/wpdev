@@ -18,7 +18,7 @@ class Post
     {
         $this->wpPost = get_post($post);
 
-        if ($this->wpPost instanceof \WP_Post) {
+        if ($this->hasWpPost()) {
             $this->id = $this->wpPost->ID;
         }
     }
@@ -70,5 +70,9 @@ class Post
         }
 
         return $this->excerpt;
+    }
+    protected function hasWpPost()
+    {
+        return ($this->wpPost instanceof \WP_Post);
     }
 }
