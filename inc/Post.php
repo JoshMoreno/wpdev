@@ -123,7 +123,7 @@ class Post
     }
 
     /**
-     * @return false|\WP_Post
+     * @return bool|\WPDev\Post
      */
     public function parent()
     {
