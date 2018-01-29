@@ -7,6 +7,7 @@ class Post
     protected $content;
     protected $excerpt;
     protected $id = 0;
+    protected $status;
     protected $title;
     protected $url;
     protected $wpPost;
@@ -77,8 +78,17 @@ class Post
         if ($this->hasWpPost()) {
             return $this->wpPost->post_type;
         }
-        
+
         return '';
+    }
+
+    public function getStatus()
+    {
+        if (is_null($this->status)) {
+            $this->status = get_post_status($this->id);
+        }
+
+        return $this->status;
     }
 
     protected function hasWpPost()
