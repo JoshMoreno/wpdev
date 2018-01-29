@@ -9,6 +9,8 @@ class Post
     protected $excerpt;
     protected $modifiedDate;
     protected $id = 0;
+    protected $parent;
+    protected $parentId;
     protected $status;
     protected $title;
     protected $url;
