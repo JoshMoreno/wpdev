@@ -5,6 +5,7 @@ namespace WPDev;
 class Post
 {
     protected $content;
+    protected $excerpt;
     protected $id = 0;
     protected $title;
     protected $url;
@@ -21,7 +22,7 @@ class Post
             $this->id = $this->wpPost->ID;
         }
     }
-    
+
     public function getId()
     {
         return $this->id;
@@ -60,5 +61,14 @@ class Post
         }
 
         return $this->content;
+    }
+
+    public function getExcerpt()
+    {
+        if (is_null($this->excerpt)) {
+            $this->excerpt = get_the_excerpt($this->id);
+        }
+
+        return $this->excerpt;
     }
 }
