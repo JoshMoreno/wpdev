@@ -28,6 +28,11 @@ class Post
         }
     }
 
+    /**
+     * @param string $date_format
+     *
+     * @return false|string
+     */
     public function createdDate($date_format = '')
     {
         if (is_null($this->createdDate)) {
@@ -37,12 +42,17 @@ class Post
         return $this->createdDate;
     }
 
-
+    /**
+     * @return int
+     */
     public function id()
     {
         return $this->id;
     }
 
+    /**
+     * @return string
+     */
     public function title()
     {
         if (is_null($this->title)) {
@@ -52,14 +62,20 @@ class Post
         return $this->title;
     }
 
+    /**
+     * @return false|string
+     */
     public function url()
     {
         if (is_null($this->url)) {
             $this->url = get_permalink($this->postElseId());
         }
+
+        return $this->url;
     }
 
-    /*
+    /**
+     * @return string
     |--------------------------------------------------------------------------
     | Same as what WP does minus the arguments and echo
     |--------------------------------------------------------------------------
@@ -80,6 +96,9 @@ class Post
         return $this->content;
     }
 
+    /**
+     * @return string
+     */
     public function excerpt()
     {
         if (is_null($this->excerpt)) {
@@ -89,6 +108,11 @@ class Post
         return $this->excerpt;
     }
 
+    /**
+     * @param string $date_format
+     *
+     * @return false|string
+     */
     public function modifiedDate($date_format = '')
     {
         if (is_null($this->modifiedDate)) {
@@ -129,6 +153,10 @@ class Post
 
         return (int)$this->parentId;
     }
+
+    /**
+     * @return string
+     */
     public function postType()
     {
         if ($this->hasWpPost()) {
@@ -138,6 +166,9 @@ class Post
         return '';
     }
 
+    /**
+     * @return false|string
+     */
     public function status()
     {
         if (is_null($this->status)) {
@@ -147,11 +178,17 @@ class Post
         return $this->status;
     }
 
+    /**
+     * @return bool
+     */
     protected function hasWpPost()
     {
         return ($this->wpPost instanceof \WP_Post);
     }
 
+    /**
+     * @return int|\WP_Post
+     */
     protected function postElseId()
     {
         if ($this->hasWpPost()) {
