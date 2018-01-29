@@ -96,6 +96,37 @@ class Post
         return $this->modifiedDate;
     }
 
+    /**
+     * @return false|\WP_Post
+     */
+    public function parent()
+    {
+        if (is_null($this->parent)) {
+            $parent = get_post($this->parentId());
+
+            if ($parent instanceof \WP_Post) {
+                $this->parent = new Post($parent);
+            } else {
+                // set to false so this is_null() check won't rerun next time
+                // since WP will return null on failure
+                $this->parent = false;
+            }
+        }
+
+        return $this->parent;
+    }
+
+    /**
+     * @return int
+     */
+    public function parentId()
+    {
+        if (is_null($this->parentId)) {
+            $this->parentId = ($this->hasWpPost()) ? $this->wpPost->post_parent : 0;
+        }
+
+        return (int)$this->parentId;
+    }
     public function postType()
     {
         if ($this->hasWpPost()) {
