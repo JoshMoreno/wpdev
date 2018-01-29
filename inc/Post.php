@@ -26,34 +26,34 @@ class Post
         }
     }
 
-    public function getCreatedDate($date_format = '')
+    public function createdDate($date_format = '')
     {
         if (is_null($this->createdDate)) {
-            $this->createdDate = get_the_date($date_format, $this->id);
+            $this->createdDate = get_the_date($date_format, $this->postElseId());
         }
 
         return $this->createdDate;
     }
 
 
-    public function getId()
+    public function id()
     {
         return $this->id;
     }
 
-    public function getTitle()
+    public function title()
     {
         if (is_null($this->title)) {
-            $this->title = get_the_title($this->id);
+            $this->title = get_the_title($this->postElseId());
         }
 
         return $this->title;
     }
 
-    public function getUrl()
+    public function url()
     {
         if (is_null($this->url)) {
-            $this->url = get_permalink($this->id);
+            $this->url = get_permalink($this->postElseId());
         }
     }
 
@@ -64,8 +64,10 @@ class Post
     | WP has a get_the_content() that doesn't apply filters or convert
     | shortcodes. So we do the same as the_content() here, minus the arguments
     | and we don't echo.
+    | * Note that this can only be called reliably within The Loop. WP needs
+    | $GLOBALS['post'] to be set. Lame.
     */
-    public function getContent()
+    public function content()
     {
         if (is_null($this->content)) {
             $content       = get_the_content();
@@ -76,25 +78,25 @@ class Post
         return $this->content;
     }
 
-    public function getExcerpt()
+    public function excerpt()
     {
         if (is_null($this->excerpt)) {
-            $this->excerpt = get_the_excerpt($this->id);
+            $this->excerpt = get_the_excerpt($this->postElseId());
         }
 
         return $this->excerpt;
     }
 
-    public function getModifiedDate($date_format = '')
+    public function modifiedDate($date_format = '')
     {
         if (is_null($this->modifiedDate)) {
-            $this->modifiedDate = get_the_modified_date($date_format, $this->id);
+            $this->modifiedDate = get_the_modified_date($date_format, $this->postElseId());
         }
 
         return $this->modifiedDate;
     }
 
-    public function getPostType()
+    public function postType()
     {
         if ($this->hasWpPost()) {
             return $this->wpPost->post_type;
@@ -103,10 +105,10 @@ class Post
         return '';
     }
 
-    public function getStatus()
+    public function status()
     {
         if (is_null($this->status)) {
-            $this->status = get_post_status($this->id);
+            $this->status = get_post_status($this->postElseId());
         }
 
         return $this->status;
@@ -115,5 +117,14 @@ class Post
     protected function hasWpPost()
     {
         return ($this->wpPost instanceof \WP_Post);
+    }
+
+    protected function postElseId()
+    {
+        if ($this->hasWpPost()) {
+            return $this->wpPost;
+        }
+
+        return $this->id;
     }
 }
