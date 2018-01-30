@@ -8,6 +8,7 @@ class Post
     protected $content;
     protected $createdDate;
     protected $excerpt;
+    protected $globalPostStash;
     protected $modifiedDate;
     protected $id = 0;
     protected $parent;
@@ -90,23 +91,31 @@ class Post
         return $this->url;
     }
 
-    /**
-     * @return string
+    /*
     |--------------------------------------------------------------------------
-     * | Same as what WP does minus the arguments and echo
-     * |--------------------------------------------------------------------------
-     * | WP has a get_the_content() that doesn't apply filters or convert
-     * | shortcodes. So we do the same as the_content() here, minus the arguments
-     * | and we don't echo.
-     * | * Note that this can only be called reliably within The Loop. WP needs
-     * | $GLOBALS['post'] to be set. Lame.
+    | Same as the_content() except we don't echo.
+    |--------------------------------------------------------------------------
+    | WP has a get_the_content() that doesn't apply filters or convert
+    | shortcodes. Inconsistent. Doesn't accept an id or WP_Post object either. Lame.
+    | Rather than duplicating core code here we just capture the output.
+    */
+    /**
+     * @param null $more_link_text
+     * @param bool $strip_teaser
+     *
+     * @return string
      */
-    public function content()
+    public function content($more_link_text = null, $strip_teaser = false)
     {
         if (is_null($this->content)) {
-            $content       = get_the_content();
-            $content       = apply_filters('the_content', $content);
-            $this->content = str_replace(']]>', ']]&gt;', $content);
+            $this->setupWpGlobals();
+
+            // capture the output of the_content()
+            ob_start();
+            the_content($more_link_text, $strip_teaser);
+            $this->content = ob_get_clean();
+
+            $this->restoreWpGlobals();
         }
 
         return $this->content;
@@ -213,5 +222,42 @@ class Post
         }
 
         return $this->id;
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Restore globals
+    |--------------------------------------------------------------------------
+    | This is the cleanup of our setupWpGlobals() method.
+    | An attempt to leave no trace 🤫
+    */
+    protected function restoreWpGlobals()
+    {
+        if (isset($this->globalPostStash)) {
+            $GLOBALS['post'] = $this->globalPostStash;
+            setup_postdata($this->globalPostStash);
+            unset($this->globalPostStash);
+        } else {
+            unset($GLOBALS['post']);
+        }
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Setup messy globals 😞
+    |--------------------------------------------------------------------------
+    | This is a bit of a hack so we can reliably call functions
+    | like get_the_content() that depend on being called inside
+    | The Loop (aka having post as a global along with other related globals).
+    */
+    protected function setupWpGlobals()
+    {
+        // stash the current global so we can set it back up after we're done
+        if (isset($GLOBALS['post'])) {
+            $this->globalPostStash = $GLOBALS['post'];
+        }
+
+        $GLOBALS['post'] = $this->postElseId();
+        setup_postdata($this->postElseId());
     }
 }
