@@ -7,15 +7,5 @@
  * Author URI: http://JoshMoreno.com
  */
 
-use WPDev\CustomPostType;
-use WPDev\OptionsPage;
-
 require_once 'vendor/autoload.php';
 require_once 'inc/bootstrap.php';
-
-$projects = new CustomPostType('package');
-$projects->register();
-
-
-$optionsPage = new OptionsPage('Custom Settings');
-$optionsPage->register();
