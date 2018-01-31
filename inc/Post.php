@@ -152,6 +152,11 @@ class Post
      */
     public function parent()
     {
+        if (!$this->parentId()) {
+            $this->parent = false;
+            return $this->parent;
+        }
+
         if (is_null($this->parent)) {
             $parent = get_post($this->parentId());
 
@@ -175,7 +180,6 @@ class Post
         if (is_null($this->parentId)) {
             $this->parentId = ($this->hasWpPost()) ? $this->wpPost->post_parent : 0;
         }
-        get_post_ancestors();
 
         return (int)$this->parentId;
     }
