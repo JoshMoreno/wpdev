@@ -8,4 +8,5 @@
  */
 
 require_once 'vendor/autoload.php';
+require_once 'inc/helpers.php';
 require_once 'inc/bootstrap.php';

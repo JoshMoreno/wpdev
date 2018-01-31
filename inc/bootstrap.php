@@ -3,8 +3,18 @@
 namespace WPDev;
 
 use Brain\Hierarchy\Hierarchy;
+use Symfony\Component\VarDumper\VarDumper;
 use Whoops\Handler\PrettyPageHandler;
 use Whoops\Run;
+use WPDev\Debug\Dumper;
+
+/*
+|--------------------------------------------------------------------------
+| Setup Dumper
+|--------------------------------------------------------------------------
+| Better dumper for debugging
+*/
+VarDumper::setHandler([Dumper::class, 'dump']);
 
 /*
 |--------------------------------------------------------------------------
