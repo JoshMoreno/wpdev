@@ -49,7 +49,7 @@ class Post
     }
 
     /**
-     * @return \WPDev\Post[] Array of \WPDev\Post objects
+     * @return \WPDev\Models\Post[] Array of \WPDev\Models\Post objects
      */
     public function ancestors()
     {
@@ -171,7 +171,7 @@ class Post
     }
 
     /**
-     * @return bool|\WPDev\Post
+     * @return bool|\WPDev\Models\Post
      */
     public function parent()
     {
