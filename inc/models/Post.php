@@ -2,6 +2,8 @@
 
 namespace WPDev\Models;
 
+use WP_Error;
+
 class Post
 {
     protected $ancestors;
@@ -14,6 +16,8 @@ class Post
     protected $parent;
     protected $parentId;
     protected $status;
+    protected $taxonomies;
+    protected $terms = [];
     protected $title;
     protected $url;
     protected $wpPost;
@@ -117,7 +121,7 @@ class Post
 
         return $this->url;
     }
-    
+
     /**
      * Same as the_content() except we don't echo.
      *
@@ -231,6 +235,50 @@ class Post
         }
 
         return $this->status;
+    }
+
+    /**
+     * @return array
+     */
+    public function taxonomies()
+    {
+        if (is_null($this->taxonomies)) {
+            $this->taxonomies = get_post_taxonomies($this->postElseId());
+        }
+
+        return $this->taxonomies;
+    }
+
+    public function terms($taxonomy_name = null)
+    {
+        $fetch_all = is_null($taxonomy_name);
+
+        // return cache if we have it
+        if (!$fetch_all && isset($this->terms[$taxonomy_name])) {
+            return $this->terms[$taxonomy_name];
+        }
+
+        // fetch and return all the terms with recursion
+        if ($fetch_all) {
+            foreach ($this->taxonomies() as $taxonomy) {
+                $this->terms[$taxonomy] = $this->terms($taxonomy);
+            }
+
+            return $this->terms;
+        }
+
+        // no cache so get the terms
+        $terms = get_the_terms($this->postElseId(), $taxonomy_name);
+
+        // normalize the return type
+        if (!$terms || ($terms instanceof WP_Error)) {
+            $terms = [];
+        }
+
+        // cache it
+        $this->terms[$taxonomy_name] = $terms;
+
+        return $this->terms[$taxonomy_name];
     }
 
     /*
