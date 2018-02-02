@@ -15,6 +15,8 @@ This works the same way as default WP templating system. You can override parent
 ```php
 <?php
 
+namespace MyTheme;
+
 use WPDev\Controller\ControllerInterface;
 
 class SinglePost implements ControllerInterface
