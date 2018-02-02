@@ -86,11 +86,6 @@ class Post
         return get_post_meta($this->id, $key, $single_value);
     }
 
-    protected function isAcfActive()
-    {
-        return class_exists('acf');
-    }
-
     /**
      * @return int
      */
@@ -122,16 +117,14 @@ class Post
 
         return $this->url;
     }
-
-    /*
-    |--------------------------------------------------------------------------
-    | Same as the_content() except we don't echo.
-    |--------------------------------------------------------------------------
-    | WP has a get_the_content() that doesn't apply filters or convert
-    | shortcodes. Inconsistent. Doesn't accept an id or WP_Post object either. Lame.
-    | Rather than duplicating core code here we just capture the output.
-    */
+    
     /**
+     * Same as the_content() except we don't echo.
+     *
+     * WP has a get_the_content() that doesn't apply filters or convert
+     * shortcodes. Inconsistent. Doesn't accept an id or WP_Post object either. Lame.
+     * Rather than duplicating core code here we just capture the output.
+     *
      * @param null $more_link_text
      * @param bool $strip_teaser
      *
@@ -240,12 +233,24 @@ class Post
         return $this->status;
     }
 
+    /*
+    |--------------------------------------------------------------------------
+    | Protected - Helpers
+    |--------------------------------------------------------------------------
+    |
+    */
+
     /**
      * @return bool
      */
     protected function hasWpPost()
     {
         return ($this->wpPost instanceof \WP_Post);
+    }
+
+    protected function isAcfActive()
+    {
+        return class_exists('acf');
     }
 
     /**
