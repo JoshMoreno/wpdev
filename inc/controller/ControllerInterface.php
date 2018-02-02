@@ -1,6 +1,6 @@
 <?php
 
-namespace WPDev;
+namespace WPDev\Controller;
 
 interface ControllerInterface
 {

@@ -6,6 +6,7 @@ use Brain\Hierarchy\Hierarchy;
 use Symfony\Component\VarDumper\VarDumper;
 use Whoops\Handler\PrettyPageHandler;
 use Whoops\Run;
+use WPDev\Controller\ControllerLoader;
 use WPDev\Debug\Dumper;
 
 /*
@@ -44,7 +45,6 @@ function data($template)
     $controllerLoader = new ControllerLoader(new Hierarchy);
     $data             = $controllerLoader->buildData();
     extract($data);
-    dump($data);
 
     include $template;
 }

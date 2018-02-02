@@ -1,6 +1,6 @@
 <?php
 
-namespace WPDev;
+namespace WPDev\Facades;
 
 use Cocur\Slugify\Slugify;
 use InvalidArgumentException;

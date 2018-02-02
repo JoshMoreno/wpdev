@@ -1,6 +1,6 @@
 <?php
 
-namespace WPDev;
+namespace WPDev\Controller;
 
 use Brain\Hierarchy\Hierarchy;
 use Symfony\Component\Finder\Finder;

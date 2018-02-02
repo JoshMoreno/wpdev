@@ -1,11 +1,11 @@
 <?php
 
-namespace WPDev;
+namespace WPDev\Facades;
 
 use Exception;
 use InvalidArgumentException;
 
-class CustomPostType
+class PostType
 {
     // todo method for capability_type
     // todo method for capabilities
@@ -115,7 +115,7 @@ class CustomPostType
      *
      * @param bool $bool
      *
-     * @return \WPDev\CustomPostType\CustomPostType
+     * @return \WPDev\PostType
      */
     public function canExport(bool $bool = true)
     {
@@ -132,7 +132,7 @@ class CustomPostType
      *
      * @param bool $bool
      *
-     * @return \WPDev\CustomPostType\CustomPostType
+     * @return \WPDev\PostType
      */
     public function deleteWithUser(bool $bool = true)
     {
@@ -191,7 +191,7 @@ class CustomPostType
      *
      * @param bool|string $val
      *
-     * @return \WPDev\CustomPostType\CustomPostType
+     * @return \WPDev\PostType
      */
     public function hasArchive($val = true)
     {
@@ -203,7 +203,7 @@ class CustomPostType
      *
      * @param int|const $endpoint Constant preferred to avoid future failure (core updates)
      *
-     * @return \WPDev\CustomPostType\CustomPostType
+     * @return \WPDev\PostType
      */
     public function permalinkEPMask($endpoint = EP_PERMALINK)
     {
@@ -219,7 +219,7 @@ class CustomPostType
      *
      * @param bool|string $query_var
      *
-     * @return \WPDev\CustomPostType\CustomPostType
+     * @return \WPDev\PostType
      */
     public function queryVar($query_var = true)
     {
@@ -244,7 +244,7 @@ class CustomPostType
      *
      * @param callable|null $callback
      *
-     * @return \WPDev\CustomPostType\CustomPostType
+     * @return \WPDev\PostType
      */
     public function register(callable $callback = null)
     {
@@ -267,7 +267,7 @@ class CustomPostType
      *
      * @param array|string $callback
      *
-     * @return \WPDev\CustomPostType\CustomPostType
+     * @return \WPDev\PostType
      */
     public function registerMetaBoxCB($callback = '')
     {
@@ -280,7 +280,7 @@ class CustomPostType
      *
      * @param string $rest_base
      *
-     * @return \WPDev\CustomPostType\CustomPostType
+     * @return \WPDev\PostType
      */
     public function restBase(string $rest_base)
     {
@@ -297,7 +297,7 @@ class CustomPostType
      *
      * @param string $controller
      *
-     * @return \WPDev\CustomPostType\CustomPostType
+     * @return \WPDev\PostType
      */
     public function restControllerClass(string $controller = 'WP_REST_Posts_Controller')
     {
@@ -318,7 +318,7 @@ class CustomPostType
      *
      * @param array|bool $val (see above)
      *
-     * @return \WPDev\CustomPostType\CustomPostType
+     * @return \WPDev\PostType
      */
     public function rewrite($val = true)
     {
@@ -347,7 +347,7 @@ class CustomPostType
      *
      * @param bool $bool
      *
-     * @return \WPDev\CustomPostType\CustomPostType
+     * @return \WPDev\PostType
      */
     public function showInRest(bool $bool = true)
     {
@@ -361,7 +361,7 @@ class CustomPostType
      *
      * @param bool $bool
      *
-     * @return \WPDev\CustomPostType\CustomPostType
+     * @return \WPDev\PostType
      */
     public function excludeFromSearch(bool $bool = true)
     {
@@ -382,7 +382,7 @@ class CustomPostType
      *
      * @param bool $bool
      *
-     * @return \WPDev\CustomPostType\CustomPostType
+     * @return \WPDev\PostType
      */
     public function hierarchical(bool $bool = true)
     {
@@ -396,7 +396,7 @@ class CustomPostType
      *
      * @param bool $bool
      *
-     * @return \WPDev\CustomPostType\CustomPostType
+     * @return \WPDev\PostType
      */
     public function mapMetaCap(bool $bool = true)
     {
@@ -408,7 +408,7 @@ class CustomPostType
      *
      * @link https://developer.wordpress.org/resource/dashicons/
      *
-     * @return \WPDev\CustomPostType\CustomPostType
+     * @return \WPDev\PostType
      */
     public function menuIcon(string $icon = '')
     {
@@ -432,7 +432,7 @@ class CustomPostType
      *
      * @param int $position
      *
-     * @return \WPDev\CustomPostType\CustomPostType
+     * @return \WPDev\PostType
      */
     public function menuPosition(int $position = 25)
     {
@@ -455,7 +455,7 @@ class CustomPostType
      *
      * @param bool $bool
      *
-     * @return \WPDev\CustomPostType\CustomPostType
+     * @return \WPDev\PostType
      */
     public function public(bool $bool = true)
     {
@@ -467,7 +467,7 @@ class CustomPostType
      *
      * @param bool $bool
      *
-     * @return \WPDev\CustomPostType\CustomPostType
+     * @return \WPDev\PostType
      */
     public function publiclyQueryable(bool $bool = true)
     {
@@ -480,7 +480,7 @@ class CustomPostType
      *
      * @param bool $bool
      *
-     * @return \WPDev\CustomPostType\CustomPostType
+     * @return \WPDev\PostType
      */
     public function showInAdminBar(bool $bool = true)
     {
@@ -491,7 +491,7 @@ class CustomPostType
      * @param bool|string $val - If string is given it will be a submenu
      * if that url exists. Examples: 'tools.php' or 'edit.php?post_type=page';
      *
-     * @return \WPDev\CustomPostType\CustomPostType
+     * @return \WPDev\PostType
      */
     public function showInMenu($val = true)
     {
@@ -504,7 +504,7 @@ class CustomPostType
      *
      * @param bool $bool
      *
-     * @return \WPDev\CustomPostType\CustomPostType
+     * @return \WPDev\PostType
      */
     public function showInNavMenus(bool $bool = true)
     {
@@ -517,7 +517,7 @@ class CustomPostType
      *
      * @param bool $bool
      *
-     * @return \WPDev\CustomPostType\CustomPostType
+     * @return \WPDev\PostType
      */
     public function showUI(bool $bool = true)
     {
@@ -532,7 +532,7 @@ class CustomPostType
     }
 
     /**
-     * @return \WPDev\CustomPostType\CustomPostType
+     * @return \WPDev\PostType
      */
     public function supportsAuthor()
     {
@@ -540,7 +540,7 @@ class CustomPostType
     }
 
     /**
-     * @return \WPDev\CustomPostType\CustomPostType
+     * @return \WPDev\PostType
      */
     public function supportsComments()
     {
@@ -548,7 +548,7 @@ class CustomPostType
     }
 
     /**
-     * @return \WPDev\CustomPostType\CustomPostType
+     * @return \WPDev\PostType
      */
     public function supportsCustomFields()
     {
@@ -556,7 +556,7 @@ class CustomPostType
     }
 
     /**
-     * @return \WPDev\CustomPostType\CustomPostType
+     * @return \WPDev\PostType
      */
     public function supportsEditor()
     {
@@ -564,7 +564,7 @@ class CustomPostType
     }
 
     /**
-     * @return \WPDev\CustomPostType\CustomPostType
+     * @return \WPDev\PostType
      */
     public function supportsExcerpt()
     {
@@ -572,9 +572,9 @@ class CustomPostType
     }
 
     /**
-     * Alias for @see \WPDev\CustomPostType\CustomPostType::supportsThumbnail()
+     * Alias for @see \WPDev\PostType\PostType::supportsThumbnail()
      *
-     * @return \WPDev\CustomPostType\CustomPostType
+     * @return \WPDev\PostType\PostType
      */
     public function supportsFeaturedImage()
     {
@@ -582,7 +582,7 @@ class CustomPostType
     }
 
     /**
-     * @return \WPDev\CustomPostType\CustomPostType
+     * @return \WPDev\PostType
      */
     public function supportsPageAttributes()
     {
@@ -595,7 +595,7 @@ class CustomPostType
     }
 
     /**
-     * @return \WPDev\CustomPostType\CustomPostType
+     * @return \WPDev\PostType
      */
     public function supportsRevisions()
     {
@@ -603,7 +603,7 @@ class CustomPostType
     }
 
     /**
-     * @return \WPDev\CustomPostType\CustomPostType
+     * @return \WPDev\PostType
      */
     public function supportsThumbnail()
     {
@@ -611,7 +611,7 @@ class CustomPostType
     }
 
     /**
-     * @return \WPDev\CustomPostType\CustomPostType
+     * @return \WPDev\PostType
      */
     public function supportsTitle()
     {
@@ -619,7 +619,7 @@ class CustomPostType
     }
 
     /**
-     * @return \WPDev\CustomPostType\CustomPostType
+     * @return \WPDev\PostType
      */
     public function supportsTrackbacks()
     {
@@ -632,7 +632,7 @@ class CustomPostType
      *
      * @param array|false $features
      *
-     * @return \WPDev\CustomPostType\CustomPostType
+     * @return \WPDev\PostType
      */
     public function supports($features = ['editor', 'title'])
     {
@@ -646,7 +646,7 @@ class CustomPostType
      *
      * @param array $taxonomies
      *
-     * @return \WPDev\CustomPostType\CustomPostType
+     * @return \WPDev\PostType
      */
     public function taxonomies(array $taxonomies = [])
     {
