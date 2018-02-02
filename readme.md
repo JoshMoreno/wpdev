@@ -1,6 +1,18 @@
 # More Features and Docs Coming soon!
 **Still in early alpha stages.**
 
+## Requirements
+PHP 7+
+
+## Installation
+Need a better way to guarantee an early loading order so other Plugins can reliably depend on this plugin without the use of hooks such as `plugins_loaded`. Maybe on activation or something.
+
+#### Must Use Plugin
+Drop it into the `mu-plugins` folder. Run `composer install -o`.
+
+#### Regular Plugin
+This should be the first loaded plugin. This can be achieved by activating this plugin first or by using a plugin like [Plugins Load Order](https://wordpress.org/plugins/plugins-load-order/). 
+
 ## Controllers
 Let's get some separation of concerns going.
 
