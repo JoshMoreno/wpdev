@@ -77,6 +77,15 @@ class Post
         return $this->createdDate;
     }
 
+    public function field($key = '', $single_value = true)
+    {
+        if (!$key) {
+            return null;
+        }
+
+        return get_post_meta($this->id, $key, $single_value);
+    }
+
     protected function isAcfActive()
     {
         return class_exists('acf');
