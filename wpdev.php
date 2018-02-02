@@ -1,10 +1,9 @@
 <?php
 /**
- * Plugin name: Custom Plugin
- * Description: Description goes here.
+ * Plugin name: WPDev
+ * Description: Framework to streamline and normalize WordPress development.
  * Version: 1.0.0
  * Author: Josh Moreno
- * Author URI: http://JoshMoreno.com
  */
 
 require_once 'vendor/autoload.php';
