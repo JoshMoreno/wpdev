@@ -12,8 +12,24 @@ This works the same way as default WP templating system. You can override parent
 
 3. Create a class (name it whatever you'd like) that implements the `\WPDev\Controller\ControllerInterface` interface. Implement the interface by defining a `build` method that returns an array.
 
+```php
+<?php
+
+use WPDev\Controller\ControllerInterface;
+
+class SinglePost implements ControllerInterface
+{
+    public function build(): array
+    {
+        return [];
+    }
+}
+```
+
 4. Your data will be available in two ways: as `$data` (array) and as extracted variables. So `$data['some_value']` becomes `$some_value`. Use whatever you prefer.
 
 👉 There is also one more goodie that gets merged into the `$data` array - `$data['Post']` also available as `$Post`. This is an instance of `WPDev\Models\Post`.
+
+
 
 ### More docs coming soon...
