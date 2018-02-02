@@ -8,6 +8,7 @@ use Whoops\Handler\PrettyPageHandler;
 use Whoops\Run;
 use WPDev\Controller\ControllerLoader;
 use WPDev\Debug\Dumper;
+use WPDev\Models\Post;
 
 /*
 |--------------------------------------------------------------------------
@@ -41,9 +42,15 @@ function data($template)
         }
     }
 
+    $default_data = [
+        'Post' => new Post(get_post())
+    ];
+
     // Load Controllers then include the template
     $controllerLoader = new ControllerLoader(new Hierarchy);
-    $data             = $controllerLoader->buildData();
+
+    $data = array_merge($default_data, $controllerLoader->buildData());
+
     extract($data);
 
     include $template;
