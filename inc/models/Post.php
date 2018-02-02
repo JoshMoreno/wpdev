@@ -30,6 +30,24 @@ class Post
         }
     }
 
+    public function acfField($selector = null, $format = true)
+    {
+        if (is_null($selector) || !$this->isAcfActive()) {
+            return null;
+        }
+
+        return get_field($selector, $this->id, $format);
+    }
+
+    public function acfFields($format = true)
+    {
+        if ($this->isAcfActive()) {
+            return get_fields($this->id, $format);
+        }
+
+        return [];
+    }
+
     /**
      * @return \WPDev\Post[] Array of \WPDev\Post objects
      */
@@ -57,6 +75,11 @@ class Post
         }
 
         return $this->createdDate;
+    }
+
+    protected function isAcfActive()
+    {
+        return class_exists('acf');
     }
 
     /**
