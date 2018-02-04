@@ -139,7 +139,7 @@ class PostType
         return $this->setArg('delete_with_user', $bool);
     }
 
-    public function deregister(string $name = '')
+    public static function deregister(string $name = '')
     {
         if ( ! $name) {
             throw new Exception('Need to pass in the name of the post type to deregister');
