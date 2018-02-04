@@ -56,3 +56,27 @@ function data($template)
     include $template;
 }
 add_filter('template_include', __NAMESPACE__.'\\data', 1000);
+
+/*
+|--------------------------------------------------------------------------
+| Load this plugin first
+|--------------------------------------------------------------------------
+| WordPress sorts and loads plugins alphabetically.
+| Here we find the wpdev plugin and move it to the front.
+| And we have to do it every time a plugin is activated since
+| WP always calls sort()
+*/
+function on_plugin_activation()
+{
+    // should end up evaluating to 'wpdev/wpdev.php'
+    $path    = basename(dirname(__DIR__)).'/wpdev.php';
+    $plugins = get_option('active_plugins') ?? [];
+    $key     = array_search($path, $plugins);
+
+    if ($key !== false) {
+        array_splice($plugins, $key, 1);
+        array_unshift($plugins, $path);
+        update_option('active_plugins', $plugins);
+    }
+}
+add_action('activated_plugin', __NAMESPACE__.'\\on_plugin_activation');
