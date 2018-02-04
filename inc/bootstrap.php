@@ -43,7 +43,7 @@ function data($template)
     }
 
     $default_data = [
-        'Post' => new Post(get_post())
+        'Post' => new Post(get_post()),
     ];
 
     // Load Controllers then include the template
@@ -55,5 +55,4 @@ function data($template)
 
     include $template;
 }
-
 add_filter('template_include', __NAMESPACE__.'\\data', 1000);
