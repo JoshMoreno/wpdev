@@ -139,7 +139,11 @@ class PostType
         return $this->setArg('delete_with_user', $bool);
     }
 
-    public static function deregister(string $name = '')
+    public function deregister() {
+    	self::deregisterManually($this->name);
+    }
+
+    public static function deregisterManually(string $name = '')
     {
         if ( ! $name) {
             throw new Exception('Need to pass in the name of the post type to deregister');
@@ -226,6 +230,24 @@ class PostType
         return $this->setArg('query_var', $query_var);
     }
 
+    public function handleActivationHook() {
+    	register_activation_hook(wpdev_main_plugin_file_name(), [$this, 'onPluginActivation']);
+    }
+
+    public function handleDeactivationHook() {
+    	register_deactivation_hook(wpdev_main_plugin_file_name(), [$this, 'deregister']);
+    }
+
+	public function onPluginActivation() {
+		$this->registerManually();
+		flush_rewrite_rules();
+    }
+
+	public function onPluginDeactivation() {
+		$this->deregister();
+		flush_rewrite_rules();
+	}
+
     /**
      * Use this method if you want need to use a named function
      * to register your post type.
@@ -242,12 +264,18 @@ class PostType
      * However it uses an anonymous function so if you need to allow other plugins
      * to be able to use @see remove_action() then you should use @see registerManually()
      *
+     * @param bool $handle_activation_hooks Whether to register activation and deactivation hooks
      * @param callable|null $callback
      *
      * @return \WPDev\PostType
      */
-    public function register(callable $callback = null)
+    public function register(bool $handle_activation_hooks = true, callable $callback = null)
     {
+    	if ($handle_activation_hooks) {
+    		$this->handleActivationHook();
+    		$this->handleDeactivationHook();
+	    }
+
         add_action('init', function () use ($callback) {
             if ($callback) {
                 $response = register_post_type($this->name, $this->buildArgs());
@@ -665,6 +693,7 @@ class PostType
             'customize_changeset',
             'action',
             'author',
+            'order',
             'order',
             'theme',
         ];
