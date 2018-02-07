@@ -90,6 +90,17 @@ class Post
         return get_post_meta($this->id, $key, $single_value);
     }
 
+	/**
+	 * Wrapper for has_term()
+	 *
+	 * @param string|int|array $term The term name/term_id/slug or array of them to check for.
+	 * @param string $taxonomy_name Taxonomy name
+	 * @return bool True if the current post has any of the given tags (or any tag, if no tag specified).
+	 */
+	public function hasTerm($term = '', $taxonomy_name = '') {
+		return has_term($term, $taxonomy_name, $this->postElseId());
+    }
+
     /**
      * @return int
      */
