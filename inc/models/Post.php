@@ -281,6 +281,17 @@ class Post
         return $this->terms[$taxonomy_name];
     }
 
+	/**
+	 * @return \WP_Post|null
+	 */
+	public function wpPost() {
+		if ($this->hasWpPost()) {
+			return $this->wpPost;
+		}
+
+		return null;
+    }
+
     /*
     |--------------------------------------------------------------------------
     | Protected - Helpers
