@@ -9,6 +9,7 @@ use Whoops\Run;
 use WPDev\Controller\ControllerLoader;
 use WPDev\Debug\Dumper;
 use WPDev\Models\Post;
+use WP_Query;
 
 /*
 |--------------------------------------------------------------------------
@@ -34,26 +35,34 @@ $whoops->pushHandler(new PrettyPageHandler)->register();
 */
 function data($template)
 {
-    // If we don't have a template...do what WP would do
-    if ( ! $template && current_user_can('switch_themes')) {
-        $theme = wp_get_theme();
-        if ($theme->errors()) {
-            wp_die($theme->errors());
-        }
-    }
+	// If we don't have a template...do what WP would do
+	if ( ! $template && current_user_can('switch_themes')) {
+		$theme = wp_get_theme();
+		if ($theme->errors()) {
+			wp_die($theme->errors());
+		}
+	}
 
-    $default_data = [
-        'Post' => new Post(get_post()),
-    ];
+	$default_data = [
+		'Post' => new Post(get_post()),
+		'Posts' => [],
+	];
 
-    // Load Controllers then include the template
-    $controllerLoader = new ControllerLoader(new Hierarchy);
 
-    $data = array_merge($default_data, $controllerLoader->buildData());
+	if (!empty($GLOBALS['wp_query']) && $GLOBALS['wp_query'] instanceof WP_Query) {
+		$default_data['Posts'] = array_map(function($post) {
+			return new Post($post);
+		}, $GLOBALS['wp_query']->posts);
+	}
 
-    extract($data);
+	// Load Controllers then include the template
+	$controllerLoader = new ControllerLoader(new Hierarchy);
 
-    include $template;
+	$data = array_merge($default_data, $controllerLoader->buildData());
+
+	extract($data);
+
+	include $template;
 }
 add_filter('template_include', __NAMESPACE__.'\\data', 1000);
 
@@ -68,15 +77,15 @@ add_filter('template_include', __NAMESPACE__.'\\data', 1000);
 */
 function on_plugin_activation()
 {
-    // should end up evaluating to 'wpdev/wpdev.php'
-    $path    = basename(dirname(__DIR__)).'/wpdev.php';
-    $plugins = get_option('active_plugins') ?? [];
-    $key     = array_search($path, $plugins);
+	// should end up evaluating to 'wpdev/wpdev.php'
+	$path    = basename(dirname(__DIR__)).'/wpdev.php';
+	$plugins = get_option('active_plugins') ?? [];
+	$key     = array_search($path, $plugins);
 
-    if ($key !== false) {
-        array_splice($plugins, $key, 1);
-        array_unshift($plugins, $path);
-        update_option('active_plugins', $plugins);
-    }
+	if ($key !== false) {
+		array_splice($plugins, $key, 1);
+		array_unshift($plugins, $path);
+		update_option('active_plugins', $plugins);
+	}
 }
 add_action('activated_plugin', __NAMESPACE__.'\\on_plugin_activation');
