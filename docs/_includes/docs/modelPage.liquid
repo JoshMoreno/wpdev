@@ -9,6 +9,11 @@
 	<p class="lead">{{ include.tagline }}</p>
 {% endif %}
 
+{% if include.usage %}
+	<h2 class="mt-4">Usage</h2>
+	{{ include.usage }}
+{% endif %}
+
 {% if model.methods %}
 	<h2 class="mt-4">Public Methods</h2>
 	{% include docs/methodTable.liquid methods=methods %}

@@ -9,7 +9,7 @@
   sublinks:
     - text: PostType
       url: /facades/post-type
-      
+
 - text: Models
   url: \#
   sublinks:
