@@ -34,16 +34,27 @@ class Post
         }
     }
 
-    public function acfField($selector = null, $format = true)
+    /**
+     * @param string $selector The field key
+     * @param bool $format Should ACF format the value for you
+     *
+     * @return mixed|null
+     */
+    public function acfField(string $selector, bool $format = true)
     {
-        if (is_null($selector) || !$this->isAcfActive()) {
+        if (!$this->isAcfActive()) {
             return null;
         }
 
         return get_field($selector, $this->id, $format);
     }
 
-    public function acfFields($format = true)
+    /**
+     * @param bool $format Whether ACF should format the values.
+     *
+     * @return array Associate array with all custom field values
+     */
+    public function acfFields(bool $format = true)
     {
         if ($this->isAcfActive()) {
             return get_fields($this->id, $format);
@@ -53,6 +64,11 @@ class Post
     }
 
     /**
+     * Retrieves the parent posts in direct parent to highest level ancestor order.
+     *
+     * The direct parent is returned as the first value in the array.
+     * The highest level ancestor is returned as the last value in the array.
+     *
      * @return \WPDev\Models\Post[] Array of \WPDev\Models\Post objects
      */
     public function ancestors()
@@ -68,11 +84,13 @@ class Post
     }
 
     /**
-     * @param string $date_format
+     * Returns the date the post was created.
      *
-     * @return false|string
+     * @param string $date_format A date format string. Defaults to date format set in the WP backend.
+     *
+     * @return false|string The formatted date. False on failure.
      */
-    public function createdDate($date_format = '')
+    public function createdDate(string $date_format = '')
     {
         if (is_null($this->createdDate)) {
             $this->createdDate = get_the_date($date_format, $this->postElseId());
@@ -81,12 +99,16 @@ class Post
         return $this->createdDate;
     }
 
-    public function field($key = '', $single_value = true)
+    /**
+     * Gets a field value.
+     *
+     * @param string $key The field key (aka meta key).
+     * @param bool $single_value Whether WP should return the value or the value wrapped in an array.
+     *
+     * @return mixed The field value if it exists. Else an empty string if $single_value = true or an empty array if $single_value = false.
+     */
+    public function field(string $key, bool $single_value = true)
     {
-        if (!$key) {
-            return null;
-        }
-
         return get_post_meta($this->id, $key, $single_value);
     }
 
@@ -279,6 +301,15 @@ class Post
         $this->terms[$taxonomy_name] = $terms;
 
         return $this->terms[$taxonomy_name];
+    }
+
+    public function wpPost()
+    {
+        if ($this->hasWpPost()) {
+            return $this->wpPost;
+        }
+
+        return null;
     }
 
     /*
