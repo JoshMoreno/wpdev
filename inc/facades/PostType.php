@@ -17,6 +17,11 @@ class PostType
     public $pluralName = '';
     public $overrideArgs = [];
 
+	/**
+	 * PostType constructor. For more fluid syntax use PostType::create()
+	 *
+	 * @param string $name The name of the post type. Should be singular.
+	 */
     public function __construct(string $name)
     {
         if ( ! $name) {
@@ -120,6 +125,18 @@ class PostType
     public function canExport(bool $bool = true)
     {
         return $this->setArg('can_export', $bool);
+    }
+
+	/**
+	 * For a more fluid syntax.
+	 *
+	 * Runs the constructor and returns itself.
+	 *
+	 * @param string $name
+	 * @return static
+	 */
+	public static function create(string $name) {
+		return new static($name);
     }
 
     /**
