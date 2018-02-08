@@ -4,7 +4,7 @@ namespace: WPDev\Models
 methods:
     -
         name: __construct
-        summary: ''
+        summary: Constructor.
         description: ''
         visibility: public
         return:
@@ -18,7 +18,7 @@ methods:
                 default: null
     -
         name: acfField
-        summary: ''
+        summary: 'Uses ACF''s <code>get_field()</code> to fetch a field value.'
         description: ''
         visibility: public
         return:
@@ -36,7 +36,7 @@ methods:
                 default: true
     -
         name: acfFields
-        summary: ''
+        summary: 'Uses ACF''s <code>get_fields()</code> to get all custom field values in an associative array.'
         description: ''
         visibility: public
         return:
@@ -50,7 +50,7 @@ methods:
                 default: true
     -
         name: ancestors
-        summary: 'Retrieves the parent posts in direct parent to highest level ancestor order.'
+        summary: 'Retrieves the parent posts in direct parent to highest level ancestor order. Each post will be an instance of \WPDev\Models\Post.'
         description: "The direct parent is returned as the first value in the array.\nThe highest level ancestor is returned as the last value in the array."
         visibility: public
         return:
@@ -58,7 +58,7 @@ methods:
             description: 'Array of \WPDev\Models\Post objects'
     -
         name: createdDate
-        summary: 'Returns the date the post was created.'
+        summary: 'The date the post was created.'
         description: ''
         visibility: public
         return:
@@ -72,7 +72,7 @@ methods:
                 default: ''
     -
         name: field
-        summary: 'Gets a field value.'
+        summary: 'Gets a field value using <code>get_post_meta()</code>.'
         description: ''
         visibility: public
         return:
@@ -90,7 +90,7 @@ methods:
                 default: true
     -
         name: hasTerm
-        summary: 'Wrapper for <code>has_term()</code>'
+        summary: 'Checks whether the post has the term. If no arg passed checks if it has any term.'
         description: ''
         visibility: public
         return:
@@ -109,7 +109,7 @@ methods:
                 default: ''
     -
         name: id
-        summary: ''
+        summary: 'Post ID'
         description: ''
         visibility: public
         return:
@@ -117,7 +117,7 @@ methods:
             description: ''
     -
         name: title
-        summary: ''
+        summary: 'Post title'
         description: ''
         visibility: public
         return:
@@ -125,7 +125,7 @@ methods:
             description: ''
     -
         name: url
-        summary: ''
+        summary: 'Post url (aka permalink).'
         description: ''
         visibility: public
         return:
@@ -152,7 +152,7 @@ methods:
                 default: false
     -
         name: excerpt
-        summary: ''
+        summary: 'Post excerpt'
         description: ''
         visibility: public
         return:
@@ -160,7 +160,7 @@ methods:
             description: ''
     -
         name: modifiedDate
-        summary: ''
+        summary: 'The last modified date.'
         description: ''
         visibility: public
         return:
@@ -174,7 +174,7 @@ methods:
                 default: ''
     -
         name: parent
-        summary: ''
+        summary: 'Gets the parent post if any. If so will return a \WPDev\Models\Post object.'
         description: ''
         visibility: public
         return:
@@ -182,7 +182,7 @@ methods:
             description: ''
     -
         name: parentId
-        summary: ''
+        summary: 'The parent ID if there is a parent. Else 0.'
         description: ''
         visibility: public
         return:
@@ -190,7 +190,7 @@ methods:
             description: ''
     -
         name: postType
-        summary: ''
+        summary: 'The post type'
         description: ''
         visibility: public
         return:
@@ -198,7 +198,7 @@ methods:
             description: ''
     -
         name: status
-        summary: ''
+        summary: 'The current post status'
         description: ''
         visibility: public
         return:
@@ -206,27 +206,29 @@ methods:
             description: ''
     -
         name: taxonomies
-        summary: ''
+        summary: 'The taxonomy names associated with the post.'
         description: ''
         visibility: public
         return:
             type: array
-            description: ''
+            description: 'Taxonomy names'
     -
         name: terms
-        summary: ''
+        summary: 'Terms for all or a specific associated taxonomy.'
         description: ''
         visibility: public
         return:
-            type: null
+            type: array|mixed
             description: ''
         args:
             -
                 name: taxonomy_name
+                description: ''
+                type: 'null'
                 default: null
     -
         name: wpPost
-        summary: ''
+        summary: 'The original WP_Post object'
         description: ''
         visibility: public
         return:

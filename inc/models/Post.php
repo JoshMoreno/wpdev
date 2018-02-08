@@ -23,6 +23,8 @@ class Post
     protected $wpPost;
 
     /**
+     * Constructor.
+     *
      * @param int|WP_Post|null $post Optional. Post ID or post object. Defaults to global $post.
      */
     public function __construct($post = null)
@@ -35,6 +37,8 @@ class Post
     }
 
     /**
+     * Uses ACF's get_field() to fetch a field value.
+     *
      * @param string $selector The field key
      * @param bool $format Should ACF format the value for you
      *
@@ -50,6 +54,8 @@ class Post
     }
 
     /**
+     * Uses ACF's get_fields() to get all custom field values in an associative array.
+     *
      * @param bool $format Whether ACF should format the values.
      *
      * @return array Associate array with all custom field values
@@ -64,7 +70,7 @@ class Post
     }
 
     /**
-     * Retrieves the parent posts in direct parent to highest level ancestor order.
+     * Retrieves the parent posts in direct parent to highest level ancestor order. Each post will be an instance of \WPDev\Models\Post.
      *
      * The direct parent is returned as the first value in the array.
      * The highest level ancestor is returned as the last value in the array.
@@ -84,7 +90,7 @@ class Post
     }
 
     /**
-     * Returns the date the post was created.
+     * The date the post was created.
      *
      * @param string $date_format A date format string. Defaults to date format set in the WP backend.
      *
@@ -100,7 +106,7 @@ class Post
     }
 
     /**
-     * Gets a field value.
+     * Gets a field value using get_post_meta().
      *
      * @param string $key The field key (aka meta key).
      * @param bool $single_value Whether WP should return the value or the value wrapped in an array.
@@ -113,7 +119,7 @@ class Post
     }
 
 	/**
-	 * Wrapper for has_term()
+	 * Checks whether the post has the term. If no arg passed checks if it has any term.
 	 *
 	 * @param string|int|array $term The term name/term_id/slug or array of them to check for.
 	 * @param string $taxonomy_name Taxonomy name
@@ -124,6 +130,8 @@ class Post
     }
 
     /**
+     * Post ID
+     *
      * @return int
      */
     public function id()
@@ -132,6 +140,8 @@ class Post
     }
 
     /**
+     * Post title
+     *
      * @return string
      */
     public function title()
@@ -144,6 +154,8 @@ class Post
     }
 
     /**
+     * Post url (aka permalink).
+     *
      * @return false|string
      */
     public function url()
@@ -184,6 +196,8 @@ class Post
     }
 
     /**
+     * Post excerpt
+     *
      * @return string
      */
     public function excerpt()
@@ -196,6 +210,8 @@ class Post
     }
 
     /**
+     * The last modified date.
+     *
      * @param string $date_format
      *
      * @return false|string
@@ -210,6 +226,8 @@ class Post
     }
 
     /**
+     * Gets the parent post if any. If so will return a \WPDev\Models\Post object.
+     *
      * @return bool|\WPDev\Models\Post
      */
     public function parent()
@@ -235,6 +253,8 @@ class Post
     }
 
     /**
+     * The parent ID if there is a parent. Else 0.
+     *
      * @return int
      */
     public function parentId()
@@ -247,6 +267,8 @@ class Post
     }
 
     /**
+     * The post type
+     *
      * @return string
      */
     public function postType()
@@ -259,6 +281,8 @@ class Post
     }
 
     /**
+     * The current post status
+     *
      * @return false|string
      */
     public function status()
@@ -271,7 +295,9 @@ class Post
     }
 
     /**
-     * @return array
+     * The taxonomy names associated with the post.
+     *
+     * @return array Taxonomy names
      */
     public function taxonomies()
     {
@@ -282,6 +308,13 @@ class Post
         return $this->taxonomies;
     }
 
+    /**
+     * Terms for all or a specific associated taxonomy.
+     *
+     * @param null $taxonomy_name
+     *
+     * @return array|mixed
+     */
     public function terms($taxonomy_name = null)
     {
         $fetch_all = is_null($taxonomy_name);
@@ -316,6 +349,8 @@ class Post
 
 
 	/**
+     * The original WP_Post object
+     *
 	 * @return \WP_Post|null
 	 */
 	public function wpPost() {
