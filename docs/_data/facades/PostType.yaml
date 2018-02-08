@@ -1,0 +1,586 @@
+name: WPDev\Facades\PostType
+shortName: PostType
+namespace: WPDev\Facades
+methods:
+    -
+        name: __construct
+        summary: 'PostType constructor. For more fluid syntax use PostType::<code>create()</code>'
+        description: ''
+        visibility: public
+        return:
+            type: null
+            description: ''
+        args:
+            -
+                name: name
+                description: 'The name of the post type. Should be singular.'
+                type: string
+    -
+        name: addSupportArg
+        summary: 'Adds to the ''supports'' array'
+        description: ''
+        visibility: public
+        return:
+            type: $this
+            description: ''
+        args:
+            -
+                name: arg
+                description: ''
+                type: string
+                default: ''
+    -
+        name: canExport
+        summary: "Whether or not the post_type can be exported\nDefault: true"
+        description: ''
+        visibility: public
+        return:
+            type: \WPDev\PostType
+            description: ''
+        args:
+            -
+                name: bool
+                description: ''
+                type: bool
+                default: true
+    -
+        name: create
+        summary: 'For a more fluid syntax.'
+        description: 'Runs the constructor and returns itself.'
+        visibility: public
+        return:
+            type: static
+            description: ''
+        args:
+            -
+                name: name
+                description: ''
+                type: string
+    -
+        name: deleteWithUser
+        summary: "Whether to delete posts of this type when deleting a user. If true, posts of this type\nbelonging to the user will be moved to trash when then user is deleted. If false, posts\nof this type belonging to the user will not be trashed or deleted. If not set (the default),\nposts are trashed if <code>post_type_supports('author')</code>. Otherwise posts are not trashed or deleted."
+        description: 'Default: null'
+        visibility: public
+        return:
+            type: \WPDev\PostType
+            description: ''
+        args:
+            -
+                name: bool
+                description: ''
+                type: bool
+                default: true
+    -
+        name: deregister
+        summary: ''
+        description: ''
+        visibility: public
+        return:
+            type: null
+            description: ''
+    -
+        name: deregisterManually
+        summary: ''
+        description: ''
+        visibility: public
+        return:
+            type: null
+            description: ''
+        args:
+            -
+                name: name
+                type: string
+                default: ''
+    -
+        name: hasArchive
+        summary: 'Enables post type archives. Will use $post_type as archive slug by default.'
+        description: "Note: Will generate the proper rewrite rules if rewrite is enabled.\nAlso use rewrite to change the slug used. If string, it should be translatable."
+        visibility: public
+        return:
+            type: \WPDev\PostType
+            description: ''
+        args:
+            -
+                name: val
+                description: ''
+                type: bool|string
+                default: true
+    -
+        name: permalinkEPMask
+        summary: 'This sets the endpoint mask. However rewrite[''ep_mask''] takes precedence if it''s set there too.'
+        description: ''
+        visibility: public
+        return:
+            type: \WPDev\PostType
+            description: ''
+        args:
+            -
+                name: endpoint
+                description: 'Constant preferred to avoid future failure (core updates)'
+                type: int|\const
+                default: EP_PERMALINK
+    -
+        name: queryVar
+        summary: "True (default) will use the post type slug\nFalse disables query_var key use. A post type cannot be loaded at /?{query_var}={single_post_slug}\nA string essentially overrides the post type slug /?{query_var_string}={single_post_slug}"
+        description: 'Remember this is for query_vars not for permalink slug.'
+        visibility: public
+        return:
+            type: \WPDev\PostType
+            description: ''
+        args:
+            -
+                name: query_var
+                description: ''
+                type: bool|string
+                default: true
+    -
+        name: handleActivationHook
+        summary: ''
+        description: ''
+        visibility: public
+        return:
+            type: null
+            description: ''
+    -
+        name: handleDeactivationHook
+        summary: ''
+        description: ''
+        visibility: public
+        return:
+            type: null
+            description: ''
+    -
+        name: onPluginActivation
+        summary: ''
+        description: ''
+        visibility: public
+        return:
+            type: null
+            description: ''
+    -
+        name: onPluginDeactivation
+        summary: ''
+        description: ''
+        visibility: public
+        return:
+            type: null
+            description: ''
+    -
+        name: registerManually
+        summary: "Use this method if you want need to use a named function\nto register your post type."
+        description: ''
+        visibility: public
+        return:
+            type: \WP_Error|\WP_Post_Type
+            description: ''
+    -
+        name: register
+        summary: 'This is the easiest way to register your post type.'
+        description: "However it uses an anonymous function so if you need to allow other plugins\nto be able to use @see <code>remove_action()</code> then you should use @see <code>registerManually()</code>"
+        visibility: public
+        return:
+            type: \WPDev\PostType
+            description: ''
+        args:
+            -
+                name: handle_activation_hooks
+                description: 'Whether to register activation and deactivation hooks'
+                type: bool
+                default: true
+            -
+                name: callback
+                description: ''
+                type: callable
+                default: null
+    -
+        name: registerMetaBoxCB
+        summary: 'Provide a callback function that will be called when setting up the meta boxes for the edit form.'
+        description: "The callback function takes one argument $post, which contains the WP_Post object for the currently edited post.\nDo <code>remove_meta_box()</code> and <code>add_meta_box()</code> calls in the callback."
+        visibility: public
+        return:
+            type: \WPDev\PostType
+            description: ''
+        args:
+            -
+                name: callback
+                description: ''
+                type: array|string
+                default: ''
+    -
+        name: restBase
+        summary: 'The base slug that this post type will use when accessed using the REST API.'
+        description: 'Default: $post_type'
+        visibility: public
+        return:
+            type: \WPDev\PostType
+            description: ''
+        args:
+            -
+                name: rest_base
+                description: ''
+                type: string
+    -
+        name: restControllerClass
+        summary: 'An optional custom controller to use instead of WP_REST_Posts_Controller. Must be a subclass of WP_REST_Controller.'
+        description: 'Default: WP_REST_Posts_Controller'
+        visibility: public
+        return:
+            type: \WPDev\PostType
+            description: ''
+        args:
+            -
+                name: controller
+                description: ''
+                type: string
+                default: WP_REST_Posts_Controller
+    -
+        name: rewrite
+        summary: '[''slug'']         string Customize the permalink structure slug. Defaults to the $post_type value. Should be translatable.'
+        description: "['with_front']   bool Should the permalink structure be prepended with the front base.\n                 (example: if your permalink structure is /blog/,\n                 then your links will be: false->/news/, true->/blog/news/). Defaults to true\n['feeds']        bool Should a feed permalink structure be built for this post type. Defaults to has_archive value.\n['pages']        bool Should the permalink structure provide for pagination. Defaults to true\n['ep_mask']      const If not specified, then it inherits from <code>permalink_epmask(if permalink_epmask is set)</code>,\n                 otherwise defaults to EP_PERMALINK\n                 see @link https://make.wordpress.org/plugins/2012/06/07/rewrite-endpoints-api/\n                 and also @link https://code.tutsplus.com/articles/the-rewrite-api-post-types-taxonomies--wp-25488"
+        visibility: public
+        return:
+            type: \WPDev\PostType
+            description: ''
+        args:
+            -
+                name: val
+                description: '(see above)'
+                type: array|bool
+                default: true
+    -
+        name: setArg
+        summary: 'Set an arg. Can be used to override the defaults.'
+        description: "This is just a catch-all. In case there isn't a more semantic\nmethod or if that's just your preference."
+        visibility: public
+        return:
+            type: $this
+            description: ''
+        args:
+            -
+                name: key
+                description: ''
+                type: string
+                default: ''
+            -
+                name: val
+                description: ''
+                type: mixed
+                default: ''
+    -
+        name: showInRest
+        summary: 'Whether to expose this post type in the REST API.'
+        description: ''
+        visibility: public
+        return:
+            type: \WPDev\PostType
+            description: ''
+        args:
+            -
+                name: bool
+                description: ''
+                type: bool
+                default: true
+    -
+        name: excludeFromSearch
+        summary: 'Self explanatory, but a word from the docs.'
+        description: "..\nIf you set to true, on the taxonomy page (ex: taxonomy.php)\nWordPress will not find your posts and/or pagination will make 404 error..."
+        visibility: public
+        return:
+            type: \WPDev\PostType
+            description: ''
+        args:
+            -
+                name: bool
+                description: ''
+                type: bool
+                default: true
+    -
+        name: hierarchical
+        summary: 'Whether the post type is hierarchical (e.g. page). Allows Parent to be specified.'
+        description: "The 'supports' parameter should contain 'page-attributes' to show the\nparent select box on the editor page.\n\nNote: this parameter was intended for Pages. Be careful when choosing it\nfor your custom post type - if you are planning to have very many entries\n(say - over 2-3 thousand), you will run into load time issues. With this\nparameter set to true WordPress will fetch all IDs of that particular post\ntype on each administration page load for your post type. Servers with\nlimited memory resources may also be challenged by this parameter being set to true."
+        visibility: public
+        return:
+            type: \WPDev\PostType
+            description: ''
+        args:
+            -
+                name: bool
+                description: ''
+                type: bool
+                default: true
+    -
+        name: mapMetaCap
+        summary: 'Whether to use the internal default meta capability handling.'
+        description: "Note: If set it to false then standard admin role can't edit the posts types.\nThen the edit_post capability must be added to all roles to add or edit the posts types."
+        visibility: public
+        return:
+            type: \WPDev\PostType
+            description: ''
+        args:
+            -
+                name: bool
+                description: ''
+                type: bool
+                default: true
+    -
+        name: menuIcon
+        summary: ''
+        description: ''
+        visibility: public
+        return:
+            type: \WPDev\PostType
+            description: ''
+        args:
+            -
+                name: icon
+                description: 'name of Dashicon, URL to icon, or base64 encoded svg with fill="black"'
+                type: string
+                default: ''
+    -
+        name: menuPosition
+        summary: 'The position in the menu order the post type should appear. show_in_menu must be true.'
+        description: "Default: defaults to below Comments\n5 - below Posts\n10 - below Media\n15 - below Links\n20 - below Pages\n25 - below comments\n60 - below first separator\n65 - below Plugins\n70 - below Users\n75 - below Tools\n80 - below Settings\n100 - below second separator"
+        visibility: public
+        return:
+            type: \WPDev\PostType
+            description: ''
+        args:
+            -
+                name: position
+                description: ''
+                type: int
+                default: 25
+    -
+        name: setPluralName
+        summary: ''
+        description: ''
+        visibility: public
+        return:
+            type: null
+            description: ''
+        args:
+            -
+                name: plural_name
+                type: string
+                default: ''
+    -
+        name: public
+        summary: "Implies:\nexclude_from_search = false\npublicly_queryable = true\nshow_in_nav_menus = true\nshow_ui = true"
+        description: ''
+        visibility: public
+        return:
+            type: \WPDev\PostType
+            description: ''
+        args:
+            -
+                name: bool
+                description: ''
+                type: bool
+                default: true
+    -
+        name: publiclyQueryable
+        summary: 'Whether queries can be performed on the front end as part of <code>parse_request()</code>.'
+        description: ''
+        visibility: public
+        return:
+            type: \WPDev\PostType
+            description: ''
+        args:
+            -
+                name: bool
+                description: ''
+                type: bool
+                default: true
+    -
+        name: showInAdminBar
+        summary: 'Whether to make this post type available in the WordPress admin bar.'
+        description: 'Default: value of the show_in_menu argument'
+        visibility: public
+        return:
+            type: \WPDev\PostType
+            description: ''
+        args:
+            -
+                name: bool
+                description: ''
+                type: bool
+                default: true
+    -
+        name: showInMenu
+        summary: ''
+        description: ''
+        visibility: public
+        return:
+            type: \WPDev\PostType
+            description: ''
+        args:
+            -
+                name: val
+                description: "- If string is given it will be a submenu\nif that url exists. Examples: 'tools.php' or 'edit.php?post_type=page';"
+                type: bool|string
+                default: true
+    -
+        name: showInNavMenus
+        summary: 'Whether post_type is available for selection in navigation menus.'
+        description: 'Default: value of public argument'
+        visibility: public
+        return:
+            type: \WPDev\PostType
+            description: ''
+        args:
+            -
+                name: bool
+                description: ''
+                type: bool
+                default: true
+    -
+        name: showUI
+        summary: 'Whether to generate a default UI for managing this post type in the admin.'
+        description: 'Default: value of public argument'
+        visibility: public
+        return:
+            type: \WPDev\PostType
+            description: ''
+        args:
+            -
+                name: bool
+                description: ''
+                type: bool
+                default: true
+    -
+        name: setSingularName
+        summary: ''
+        description: ''
+        visibility: public
+        return:
+            type: null
+            description: ''
+        args:
+            -
+                name: singular_name
+                type: string
+                default: ''
+    -
+        name: supportsAuthor
+        summary: ''
+        description: ''
+        visibility: public
+        return:
+            type: \WPDev\PostType
+            description: ''
+    -
+        name: supportsComments
+        summary: ''
+        description: ''
+        visibility: public
+        return:
+            type: \WPDev\PostType
+            description: ''
+    -
+        name: supportsCustomFields
+        summary: ''
+        description: ''
+        visibility: public
+        return:
+            type: \WPDev\PostType
+            description: ''
+    -
+        name: supportsEditor
+        summary: ''
+        description: ''
+        visibility: public
+        return:
+            type: \WPDev\PostType
+            description: ''
+    -
+        name: supportsExcerpt
+        summary: ''
+        description: ''
+        visibility: public
+        return:
+            type: \WPDev\PostType
+            description: ''
+    -
+        name: supportsFeaturedImage
+        summary: 'Alias for @see \WPDev\PostType\PostType::<code>supportsThumbnail()</code>'
+        description: ''
+        visibility: public
+        return:
+            type: \WPDev\PostType\PostType
+            description: ''
+    -
+        name: supportsPageAttributes
+        summary: ''
+        description: ''
+        visibility: public
+        return:
+            type: \WPDev\PostType
+            description: ''
+    -
+        name: supportsPostFormats
+        summary: ''
+        description: ''
+        visibility: public
+        return:
+            type: null
+            description: ''
+    -
+        name: supportsRevisions
+        summary: ''
+        description: ''
+        visibility: public
+        return:
+            type: \WPDev\PostType
+            description: ''
+    -
+        name: supportsThumbnail
+        summary: ''
+        description: ''
+        visibility: public
+        return:
+            type: \WPDev\PostType
+            description: ''
+    -
+        name: supportsTitle
+        summary: ''
+        description: ''
+        visibility: public
+        return:
+            type: \WPDev\PostType
+            description: ''
+    -
+        name: supportsTrackbacks
+        summary: ''
+        description: ''
+        visibility: public
+        return:
+            type: \WPDev\PostType
+            description: ''
+    -
+        name: supports
+        summary: "False can be passed as value instead of an array to\nprevent default (title and editor) behavior"
+        description: ''
+        visibility: public
+        return:
+            type: \WPDev\PostType
+            description: ''
+        args:
+            -
+                name: features
+                description: ''
+                type: array|bool
+                default: [editor, title]
+    -
+        name: taxonomies
+        summary: 'An array of registered taxonomies like category or post_tag that will be used with this post type.'
+        description: "This can be used in lieu of calling <code>register_taxonomy_for_object_type()</code> directly.\nCustom taxonomies still need to be registered with <code>register_taxonomy()</code>."
+        visibility: public
+        return:
+            type: \WPDev\PostType
+            description: ''
+        args:
+            -
+                name: taxonomies
+                description: ''
+                type: array
+                default: {  }

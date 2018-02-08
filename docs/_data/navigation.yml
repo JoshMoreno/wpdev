@@ -10,5 +10,8 @@
 #- text: Controllers
 #  url: \#
 
-#- text: Facades
-#  url: \#
+- text: Facades
+  url: \#
+  sublinks:
+    - text: PostType
+      url: /facades/post-type

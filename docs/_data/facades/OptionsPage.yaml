@@ -1,0 +1,142 @@
+name: WPDev\Facades\OptionsPage
+shortName: OptionsPage
+namespace: WPDev\Facades
+methods:
+    -
+        name: __construct
+        summary: ''
+        description: ''
+        visibility: public
+        return:
+            type: null
+            description: ''
+        args:
+            -
+                name: page_title
+                description: ''
+                type: string
+    -
+        name: contentCallback
+        summary: ''
+        description: ''
+        visibility: public
+        return:
+            type: null
+            description: ''
+        args:
+            -
+                name: callback
+                type: callable
+    -
+        name: capability
+        summary: ''
+        description: ''
+        visibility: public
+        return:
+            type: null
+            description: ''
+        args:
+            -
+                name: capability
+                type: string
+    -
+        name: menuIcon
+        summary: ''
+        description: ''
+        visibility: public
+        return:
+            type: $this
+            description: ''
+        args:
+            -
+                name: icon
+                description: 'name of Dashicon, URL to icon, or base64 encoded svg with fill="black"'
+                type: string
+                default: ''
+    -
+        name: menuSlug
+        summary: ''
+        description: ''
+        visibility: public
+        return:
+            type: null
+            description: ''
+        args:
+            -
+                name: menu_slug
+                type: string
+    -
+        name: menuTitle
+        summary: ''
+        description: ''
+        visibility: public
+        return:
+            type: null
+            description: ''
+        args:
+            -
+                name: menu_title
+                type: string
+    -
+        name: parentSlug
+        summary: ''
+        description: ''
+        visibility: public
+        return:
+            type: null
+            description: ''
+        args:
+            -
+                name: slug
+                type: string
+                default: options-general.php
+    -
+        name: position
+        summary: ''
+        description: ''
+        visibility: public
+        return:
+            type: null
+            description: ''
+        args:
+            -
+                name: position
+                type: int
+                default: 100
+    -
+        name: register
+        summary: ''
+        description: ''
+        visibility: public
+        return:
+            type: null
+            description: ''
+    -
+        name: registerManually
+        summary: 'Registers the page but not within the appropriate hook.'
+        description: ''
+        visibility: public
+        return:
+            type: null
+            description: ''
+    -
+        name: sampleCallback
+        summary: 'https://codex.wordpress.org/Creating_Options_Pages#Opening_the_Page'
+        description: ''
+        visibility: public
+        return:
+            type: null
+            description: ''
+    -
+        name: topLevel
+        summary: ''
+        description: ''
+        visibility: public
+        return:
+            type: null
+            description: ''
+        args:
+            -
+                name: bool
+                type: bool
+                default: true
