@@ -1,0 +1,15 @@
+{
+    "require": {
+        "symfony/yaml": "^4.0",
+        "phpdocumentor/reflection-docblock": "^4.3",
+        "danielstjules/stringy": "^3.1"
+    },
+    "autoload": {
+        "psr-4": {
+            "WPDev\\": ["inc/", "../inc/models/"]
+        },
+        "files": [
+            "inc/helpers.php"
+        ]
+    }
+}
