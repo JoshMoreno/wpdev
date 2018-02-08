@@ -1,0 +1,24 @@
+<table class="table table-bordered">
+	<thead class="thead-light">
+		<tr>
+			<th>Method</th>
+			<th>Summary</th>
+		</tr>
+	</thead>
+	<tbody>
+		{% for method in include.methods %}
+			<tr>
+				<td data-th="Method">
+					{% if method.return %}
+						<a href="#{{ method.name }}">{{ method.name }}</a>
+					{% else %}
+						{{ method.name }}
+					{% endif %}
+				</td>
+				<td data-th="Summary">
+					{{ method.summary }}
+				</td>
+			</tr>
+		{% endfor %}
+	</tbody>
+</table>

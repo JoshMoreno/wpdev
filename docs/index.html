@@ -1,0 +1,46 @@
+---
+layout: docs
+---
+
+<h1>Getting Started</h1>
+<hr>
+
+<h2><a id="requirements" href="#requirements">Requirements</a></h2>
+<ul>
+    <li>PHP 7+</li>
+    <li><a href="https://wordpress.org/download/" target="_blank" rel="noopener noreferrer">WordPress 4.9+</a></li>
+    <li><a href="https://getcomposer.org/" target="_blank" rel="noopener noreferrer">Composer</a></li>
+</ul>
+<br>
+
+<h2><a id="installation" href="#installation">Installation</a></h2>
+<h5>WP-CLI</h5>
+{% highlight shell %}
+# One Liner (copy all 4 lines) - Make sure you're directly in the plugins folder
+wp plugin install {{site.zipUrl}} &&
+cd wpdev &&
+composer install -o &&
+wp plugin activate wpdev
+
+# ---------------------------
+
+# Download the plugin
+wp plugin install {{site.zipUrl}}
+
+# Move into wpdev folder
+cd plugins/wpdev
+
+# Install dependencies
+composer install -o
+
+# Activate
+wp plugin activate wpdev
+{% endhighlight %}
+
+<h5>Manually</h5>
+<ol>
+    <li>Download the plugin and drop it into the plugins folder - <a href="{{site.zipUrl}}">latest release</a></li>
+    <li>Run <code>composer install -o</code> via the command line inside the plugin folder.</li>
+    <li>Activate</li>
+</ol>
+

@@ -1,0 +1,14 @@
+- text: Getting Started
+  url: /
+
+- text: Models
+  url: \#
+  sublinks:
+    - text: Post
+      url: /models/post
+
+#- text: Controllers
+#  url: \#
+
+#- text: Facades
+#  url: \#

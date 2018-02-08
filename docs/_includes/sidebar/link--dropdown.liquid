@@ -1,0 +1,19 @@
+{% if page.url == include.link.url %}
+	{% assign classes = 'disabled nav-link pl-0 active' %}
+{% else %}
+	{% assign classes = 'disabled nav-link pl-0' %}
+{% endif %}
+
+<li class="nav-item">
+	<span href="{{ include.link.url }}"
+	   class="{{ classes }}"
+	   role="button"
+	>
+		{{ include.link.text }}
+	</span>
+	<ul class="list-unstyled pl-4">
+		{% for sublink in include.link.sublinks %}
+			{% include sidebar/link.liquid link=sublink %}
+		{% endfor %}
+	</ul>
+</li>
