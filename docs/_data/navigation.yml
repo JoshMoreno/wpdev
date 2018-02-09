@@ -9,6 +9,8 @@
   sublinks:
     - text: PostType
       url: /facades/post-type
+    - text: OptionsPage
+      url: /facades/options-page
 
 - text: Models
   url: \#
