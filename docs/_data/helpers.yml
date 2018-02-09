@@ -1,0 +1,23 @@
+- name: dd
+  summary: '<code>dump()</code> and <code>die</code>.'
+  description: ''
+  fullName: dd( mixed ...$args )
+  args:
+    - name: args
+      description: 'Items to dump'
+      type: mixed
+- name: dump
+  summary: 'A prettier var dump.'
+  description: ''
+  fullName: dump( mixed ...$args )
+  args:
+    - name: args
+      description: 'Items to dump'
+      type: mixed
+- name: get_posts_from_query
+  summary: 'Map <code>WP_Query->posts</code> to <code>WPDev\Models\Post</code> objects'
+  fullName: get_posts_from_query( WP_Query $wp_query )
+  args:
+      - name: wp_query
+        description: 'A WP_Query object'
+        type: WP_Query

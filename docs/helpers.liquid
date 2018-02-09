@@ -1,0 +1,88 @@
+---
+layout: docs
+permalink: helpers.html
+---
+<h1 class="display-4">Helpers</h1>
+<p class="lead">Global <h></h>elper functions.</p>
+<table class="table table-bordered">
+	<thead class="thead-light">
+		<tr>
+			<th>Function</th>
+			<th>Summary</th>
+		</tr>
+	</thead>
+	<tbody>
+		{% for function in site.data.helpers %}
+			<tr>
+				<td data-th="Function">
+					<a href="#{{ function.name }}">
+						{{ function.name }}
+					</a>
+				</td>
+				<td data-th="Summary">
+					{{ function.summary }}
+				</td>
+			</tr>
+		{% endfor %}
+	</tbody>
+</table>
+
+<ul class="list-unstyled">
+	{% for function in site.data.helpers %}
+		<li id="{{ function.name }}" class="pt-5 method-detail">
+			<h3>
+				<a href="#{{ function.name }}">
+					{{ function.name }}
+				</a>
+			</h3>
+
+			<p class="lead">
+				{{ function.fullName }}
+			</p>
+
+			{% if function.summary and function.summary != '' %}
+				<section class="mb-3">
+					<strong class="d-block">Summary</strong>
+					{{ function.summary }}
+				</section>
+			{% endif %}
+
+			{% if function.description and function.description != '' %}
+				<section class="mb-3">
+					<strong class="d-block">Description</strong>
+					{{ function.description }}
+				</section>
+			{% endif %}
+
+			{% if function.args %}
+				<section class="mb-3">
+					<strong>Parameters</strong>
+					{% for arg in function.args %}
+						<div class="{% if forloop.last != true %}mb-2 {% endif %}row">
+							<div class="col-sm-3 col-md-2">
+								{{ arg.name }}
+							</div>
+							<div class="col-sm-9 col-md-10">
+								{{ arg.description }}
+							</div>
+						</div>
+					{% endfor %}
+				</section>
+			{% endif %}
+
+			{% if function.return %}
+				<section class="method__returns">
+					<strong>Returns</strong>
+					<div class="row">
+						<div class="col-sm-3 col-md-2">
+							<p>{{ function.return.type }}</p>
+						</div>
+						<div class="col-sm-9 col-md-10">
+							<p>{{ function.return.description }}</p>
+						</div>
+					</div>
+				</section>
+			{% endif %}
+		</li>
+	{% endfor %}
+</ul>

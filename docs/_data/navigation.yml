@@ -18,3 +18,5 @@
     - text: Post
       url: /models/post
 
+- text: Helpers
+  url: /helpers
