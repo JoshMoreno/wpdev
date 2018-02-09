@@ -207,19 +207,25 @@ class Post
         return $this->content;
     }
 
-    /**
-     * Post excerpt
-     *
-     * @return string
-     */
-    public function excerpt()
-    {
-        if (is_null($this->excerpt)) {
-            $this->excerpt = get_the_excerpt($this->postElseId());
-        }
+	/**
+	 * Post excerpt
+	 *
+	 * @return string
+	 */
+	public function excerpt()
+	{
+		if (is_null($this->excerpt)) {
+			$this->setupWpGlobals();
 
-        return $this->excerpt;
-    }
+			ob_start();
+			the_excerpt();
+			$this->excerpt = ob_get_clean();
+
+			$this->restoreWpGlobals();
+		}
+
+		return $this->excerpt;
+	}
 
     /**
      * The last modified date.
