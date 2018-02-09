@@ -24,9 +24,21 @@ use WPDev\Controller\ControllerInterface;
 
 class SinglePost implements ControllerInterface
 {
+	/**
+	* The default data. Gets set before calling build()
+    * @var array
+    */
+	protected $defaultData = [];
+	
+	public function sampleData() {
+		return [1, 2, 3];
+	}
+	
     public function build(): array
     {
-        return [];
+        return [
+            'sample_data' => $this->sampleData(),	
+		];
     }
 }
 ```

@@ -32,6 +32,25 @@ class ControllerLoader
         $this->loadController();
     }
 
+	/**
+	 * For more fluid syntax
+	 *
+	 * @param \Brain\Hierarchy\Hierarchy $hierarchy
+	 * @return $this
+	 */
+	public static function create(Hierarchy $hierarchy) {
+		return new static($hierarchy);
+    }
+
+	/**
+	 * Returns the controller instance
+	 *
+	 * @return \WPDev\ControllerInterface
+	 */
+	public function getController() {
+		return $this->controller;
+    }
+
     /**
      * Gets all the controller files.
      *

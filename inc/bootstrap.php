@@ -48,15 +48,21 @@ function data($template)
 		'Posts' => [],
 	];
 
-
 	if (!empty($GLOBALS['wp_query'])) {
 	    $default_data['Posts'] = get_posts_from_query($GLOBALS['wp_query']);
 	}
 
 	// Load Controllers then include the template
-	$controllerLoader = new ControllerLoader(new Hierarchy);
+	$controller = ControllerLoader::create(new Hierarchy)->getController();
 
-	$data = array_merge($default_data, $controllerLoader->buildData());
+	/** @var \WPDev\Controller\ControllerInterface $controller */
+	if ($controller) {
+		// set the default data so controller can access it in the build method
+		$controller->defaultData = $default_data;
+		$data = array_merge($default_data, $controller->build());
+	} else {
+		$data = $default_data;
+	}
 
 	extract($data);
 
