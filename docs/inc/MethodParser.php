@@ -100,6 +100,7 @@ class MethodParser extends \ReflectionMethod
 
             // default val
             if ($param->isOptional()) {
+
                 $data['default'] = $param->getDefaultValue();
             }
 
@@ -120,6 +121,20 @@ class MethodParser extends \ReflectionMethod
         if ($this->isPrivate()) {
             return 'private';
         }
+    }
+
+    /**
+     * Checks to see if there is an @return tag
+     *
+     * @return bool
+     */
+    public function hasReturnTag()
+    {
+        if (!$this->docblock) {
+            return false;
+        }
+
+        return count($this->docblock->getTagsByName('return')) > 0;
     }
 
     protected function getParamDocByName($name)

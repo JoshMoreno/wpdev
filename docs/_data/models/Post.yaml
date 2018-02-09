@@ -7,9 +7,6 @@ methods:
         summary: Constructor.
         description: ''
         visibility: public
-        return:
-            type: null
-            description: ''
         args:
             -
                 name: post

@@ -21,5 +21,8 @@ functionName( argType $argName [, argType $optionalArgName = argDefaultValue] )
 	{% endfor %}
 {% endcapture %}
 
-
-{{ include.method.name }}( {{ args | replace_first: ', ', '' | strip_newlines }} )
+{% if include.method.static == true %}
+	::{{ include.method.name }}( {{ args | replace_first: ', ', '' | strip_newlines }} )
+{% else %}
+	{{ include.method.name }}( {{ args | replace_first: ', ', '' | strip_newlines }} )
+{% endif %}

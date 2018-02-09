@@ -7,9 +7,6 @@ methods:
         summary: 'PostType constructor. For more fluid syntax use PostType::<code>create()</code>'
         description: ''
         visibility: public
-        return:
-            type: null
-            description: ''
         args:
             -
                 name: name
@@ -35,7 +32,7 @@ methods:
         description: ''
         visibility: public
         return:
-            type: \WPDev\PostType
+            type: $this
             description: ''
         args:
             -
@@ -48,8 +45,9 @@ methods:
         summary: 'For a more fluid syntax.'
         description: 'Runs the constructor and returns itself.'
         visibility: public
+        static: true
         return:
-            type: static
+            type: $this
             description: ''
         args:
             -
@@ -62,7 +60,7 @@ methods:
         description: 'Default: null'
         visibility: public
         return:
-            type: \WPDev\PostType
+            type: $this
             description: ''
         args:
             -
@@ -75,17 +73,12 @@ methods:
         summary: ''
         description: ''
         visibility: public
-        return:
-            type: null
-            description: ''
     -
         name: deregisterManually
         summary: ''
         description: ''
         visibility: public
-        return:
-            type: null
-            description: ''
+        static: true
         args:
             -
                 name: name
@@ -97,7 +90,7 @@ methods:
         description: "Note: Will generate the proper rewrite rules if rewrite is enabled.\nAlso use rewrite to change the slug used. If string, it should be translatable."
         visibility: public
         return:
-            type: \WPDev\PostType
+            type: $this
             description: ''
         args:
             -
@@ -111,7 +104,7 @@ methods:
         description: ''
         visibility: public
         return:
-            type: \WPDev\PostType
+            type: $this
             description: ''
         args:
             -
@@ -125,7 +118,7 @@ methods:
         description: 'Remember this is for query_vars not for permalink slug.'
         visibility: public
         return:
-            type: \WPDev\PostType
+            type: $this
             description: ''
         args:
             -
@@ -138,33 +131,21 @@ methods:
         summary: ''
         description: ''
         visibility: public
-        return:
-            type: null
-            description: ''
     -
         name: handleDeactivationHook
         summary: ''
         description: ''
         visibility: public
-        return:
-            type: null
-            description: ''
     -
         name: onPluginActivation
         summary: ''
         description: ''
         visibility: public
-        return:
-            type: null
-            description: ''
     -
         name: onPluginDeactivation
         summary: ''
         description: ''
         visibility: public
-        return:
-            type: null
-            description: ''
     -
         name: registerManually
         summary: "Use this method if you want need to use a named function\nto register your post type."
@@ -179,7 +160,7 @@ methods:
         description: "However it uses an anonymous function so if you need to allow other plugins\nto be able to use @see <code>remove_action()</code> then you should use @see <code>registerManually()</code>"
         visibility: public
         return:
-            type: \WPDev\PostType
+            type: $this
             description: ''
         args:
             -
@@ -198,7 +179,7 @@ methods:
         description: "The callback function takes one argument $post, which contains the WP_Post object for the currently edited post.\nDo <code>remove_meta_box()</code> and <code>add_meta_box()</code> calls in the callback."
         visibility: public
         return:
-            type: \WPDev\PostType
+            type: $this
             description: ''
         args:
             -
@@ -212,7 +193,7 @@ methods:
         description: 'Default: $post_type'
         visibility: public
         return:
-            type: \WPDev\PostType
+            type: $this
             description: ''
         args:
             -
@@ -225,7 +206,7 @@ methods:
         description: 'Default: WP_REST_Posts_Controller'
         visibility: public
         return:
-            type: \WPDev\PostType
+            type: $this
             description: ''
         args:
             -
@@ -239,7 +220,7 @@ methods:
         description: "['with_front']   bool Should the permalink structure be prepended with the front base.\n                 (example: if your permalink structure is /blog/,\n                 then your links will be: false->/news/, true->/blog/news/). Defaults to true\n['feeds']        bool Should a feed permalink structure be built for this post type. Defaults to has_archive value.\n['pages']        bool Should the permalink structure provide for pagination. Defaults to true\n['ep_mask']      const If not specified, then it inherits from <code>permalink_epmask(if permalink_epmask is set)</code>,\n                 otherwise defaults to EP_PERMALINK\n                 see @link https://make.wordpress.org/plugins/2012/06/07/rewrite-endpoints-api/\n                 and also @link https://code.tutsplus.com/articles/the-rewrite-api-post-types-taxonomies--wp-25488"
         visibility: public
         return:
-            type: \WPDev\PostType
+            type: $this
             description: ''
         args:
             -
@@ -272,7 +253,7 @@ methods:
         description: ''
         visibility: public
         return:
-            type: \WPDev\PostType
+            type: $this
             description: ''
         args:
             -
@@ -286,7 +267,7 @@ methods:
         description: "..\nIf you set to true, on the taxonomy page (ex: taxonomy.php)\nWordPress will not find your posts and/or pagination will make 404 error..."
         visibility: public
         return:
-            type: \WPDev\PostType
+            type: $this
             description: ''
         args:
             -
@@ -300,7 +281,7 @@ methods:
         description: "The 'supports' parameter should contain 'page-attributes' to show the\nparent select box on the editor page.\n\nNote: this parameter was intended for Pages. Be careful when choosing it\nfor your custom post type - if you are planning to have very many entries\n(say - over 2-3 thousand), you will run into load time issues. With this\nparameter set to true WordPress will fetch all IDs of that particular post\ntype on each administration page load for your post type. Servers with\nlimited memory resources may also be challenged by this parameter being set to true."
         visibility: public
         return:
-            type: \WPDev\PostType
+            type: $this
             description: ''
         args:
             -
@@ -314,7 +295,7 @@ methods:
         description: "Note: If set it to false then standard admin role can't edit the posts types.\nThen the edit_post capability must be added to all roles to add or edit the posts types."
         visibility: public
         return:
-            type: \WPDev\PostType
+            type: $this
             description: ''
         args:
             -
@@ -328,7 +309,7 @@ methods:
         description: ''
         visibility: public
         return:
-            type: \WPDev\PostType
+            type: $this
             description: ''
         args:
             -
@@ -342,7 +323,7 @@ methods:
         description: "Default: defaults to below Comments\n5 - below Posts\n10 - below Media\n15 - below Links\n20 - below Pages\n25 - below comments\n60 - below first separator\n65 - below Plugins\n70 - below Users\n75 - below Tools\n80 - below Settings\n100 - below second separator"
         visibility: public
         return:
-            type: \WPDev\PostType
+            type: $this
             description: ''
         args:
             -
@@ -355,9 +336,6 @@ methods:
         summary: ''
         description: ''
         visibility: public
-        return:
-            type: null
-            description: ''
         args:
             -
                 name: plural_name
@@ -369,7 +347,7 @@ methods:
         description: ''
         visibility: public
         return:
-            type: \WPDev\PostType
+            type: $this
             description: ''
         args:
             -
@@ -383,7 +361,7 @@ methods:
         description: ''
         visibility: public
         return:
-            type: \WPDev\PostType
+            type: $this
             description: ''
         args:
             -
@@ -397,7 +375,7 @@ methods:
         description: 'Default: value of the show_in_menu argument'
         visibility: public
         return:
-            type: \WPDev\PostType
+            type: $this
             description: ''
         args:
             -
@@ -411,7 +389,7 @@ methods:
         description: ''
         visibility: public
         return:
-            type: \WPDev\PostType
+            type: $this
             description: ''
         args:
             -
@@ -425,7 +403,7 @@ methods:
         description: 'Default: value of public argument'
         visibility: public
         return:
-            type: \WPDev\PostType
+            type: $this
             description: ''
         args:
             -
@@ -439,7 +417,7 @@ methods:
         description: 'Default: value of public argument'
         visibility: public
         return:
-            type: \WPDev\PostType
+            type: $this
             description: ''
         args:
             -
@@ -452,9 +430,6 @@ methods:
         summary: ''
         description: ''
         visibility: public
-        return:
-            type: null
-            description: ''
         args:
             -
                 name: singular_name
@@ -466,7 +441,7 @@ methods:
         description: ''
         visibility: public
         return:
-            type: \WPDev\PostType
+            type: $this
             description: ''
     -
         name: supportsComments
@@ -474,7 +449,7 @@ methods:
         description: ''
         visibility: public
         return:
-            type: \WPDev\PostType
+            type: $this
             description: ''
     -
         name: supportsCustomFields
@@ -482,7 +457,7 @@ methods:
         description: ''
         visibility: public
         return:
-            type: \WPDev\PostType
+            type: $this
             description: ''
     -
         name: supportsEditor
@@ -490,7 +465,7 @@ methods:
         description: ''
         visibility: public
         return:
-            type: \WPDev\PostType
+            type: $this
             description: ''
     -
         name: supportsExcerpt
@@ -498,7 +473,7 @@ methods:
         description: ''
         visibility: public
         return:
-            type: \WPDev\PostType
+            type: $this
             description: ''
     -
         name: supportsFeaturedImage
@@ -506,7 +481,7 @@ methods:
         description: ''
         visibility: public
         return:
-            type: \WPDev\PostType\PostType
+            type: $this
             description: ''
     -
         name: supportsPageAttributes
@@ -514,23 +489,20 @@ methods:
         description: ''
         visibility: public
         return:
-            type: \WPDev\PostType
+            type: $this
             description: ''
     -
         name: supportsPostFormats
         summary: ''
         description: ''
         visibility: public
-        return:
-            type: null
-            description: ''
     -
         name: supportsRevisions
         summary: ''
         description: ''
         visibility: public
         return:
-            type: \WPDev\PostType
+            type: $this
             description: ''
     -
         name: supportsThumbnail
@@ -538,7 +510,7 @@ methods:
         description: ''
         visibility: public
         return:
-            type: \WPDev\PostType
+            type: $this
             description: ''
     -
         name: supportsTitle
@@ -546,7 +518,7 @@ methods:
         description: ''
         visibility: public
         return:
-            type: \WPDev\PostType
+            type: $this
             description: ''
     -
         name: supportsTrackbacks
@@ -554,7 +526,7 @@ methods:
         description: ''
         visibility: public
         return:
-            type: \WPDev\PostType
+            type: $this
             description: ''
     -
         name: supports
@@ -562,7 +534,7 @@ methods:
         description: ''
         visibility: public
         return:
-            type: \WPDev\PostType
+            type: $this
             description: ''
         args:
             -
@@ -576,7 +548,7 @@ methods:
         description: "This can be used in lieu of calling <code>register_taxonomy_for_object_type()</code> directly.\nCustom taxonomies still need to be registered with <code>register_taxonomy()</code>."
         visibility: public
         return:
-            type: \WPDev\PostType
+            type: $this
             description: ''
         args:
             -

@@ -9,11 +9,13 @@
 		{% for method in include.methods %}
 			<tr>
 				<td data-th="Method">
-					{% if method.return %}
-						<a href="#{{ method.name }}">{{ method.name }}</a>
-					{% else %}
-						{{ method.name }}
-					{% endif %}
+					<a href="#{{ method.name }}">
+						{% if method.static == true %}
+							::{{ method.name }}
+						{% else %}
+							{{ method.name }}
+						{% endif %}
+					</a>
 				</td>
 				<td data-th="Summary">
 					{{ method.summary }}

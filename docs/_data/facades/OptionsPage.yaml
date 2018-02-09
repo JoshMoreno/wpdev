@@ -7,9 +7,6 @@ methods:
         summary: ''
         description: ''
         visibility: public
-        return:
-            type: null
-            description: ''
         args:
             -
                 name: page_title
@@ -20,9 +17,6 @@ methods:
         summary: ''
         description: ''
         visibility: public
-        return:
-            type: null
-            description: ''
         args:
             -
                 name: callback
@@ -32,9 +26,6 @@ methods:
         summary: ''
         description: ''
         visibility: public
-        return:
-            type: null
-            description: ''
         args:
             -
                 name: capability
@@ -58,9 +49,6 @@ methods:
         summary: ''
         description: ''
         visibility: public
-        return:
-            type: null
-            description: ''
         args:
             -
                 name: menu_slug
@@ -70,9 +58,6 @@ methods:
         summary: ''
         description: ''
         visibility: public
-        return:
-            type: null
-            description: ''
         args:
             -
                 name: menu_title
@@ -82,9 +67,6 @@ methods:
         summary: ''
         description: ''
         visibility: public
-        return:
-            type: null
-            description: ''
         args:
             -
                 name: slug
@@ -95,9 +77,6 @@ methods:
         summary: ''
         description: ''
         visibility: public
-        return:
-            type: null
-            description: ''
         args:
             -
                 name: position
@@ -108,33 +87,21 @@ methods:
         summary: ''
         description: ''
         visibility: public
-        return:
-            type: null
-            description: ''
     -
         name: registerManually
         summary: 'Registers the page but not within the appropriate hook.'
         description: ''
         visibility: public
-        return:
-            type: null
-            description: ''
     -
         name: sampleCallback
         summary: 'https://codex.wordpress.org/Creating_Options_Pages#Opening_the_Page'
         description: ''
         visibility: public
-        return:
-            type: null
-            description: ''
     -
         name: topLevel
         summary: ''
         description: ''
         visibility: public
-        return:
-            type: null
-            description: ''
         args:
             -
                 name: bool

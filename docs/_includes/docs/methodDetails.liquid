@@ -1,10 +1,13 @@
-{% assign methods = include.methods | where_exp: "method", "method.return"  %}
 <ul class="list-unstyled">
-	{% for method in methods %}
+	{% for method in include.methods %}
 		<li id="{{ method.name }}" class="pt-5 method-detail">
 			<h3>
 				<a href="#{{ method.name }}">
-					{{ method.name }}
+					{% if method.static == true %}
+						::{{ method.name }}
+					{% else %}
+						{{ method.name }}
+					{% endif %}
 				</a>
 			</h3>
 
