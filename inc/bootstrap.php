@@ -49,10 +49,8 @@ function data($template)
 	];
 
 
-	if (!empty($GLOBALS['wp_query']) && $GLOBALS['wp_query'] instanceof WP_Query) {
-		$default_data['Posts'] = array_map(function($post) {
-			return new Post($post);
-		}, $GLOBALS['wp_query']->posts);
+	if (!empty($GLOBALS['wp_query'])) {
+	    $default_data['Posts'] = get_posts_from_query($GLOBALS['wp_query']);
 	}
 
 	// Load Controllers then include the template
