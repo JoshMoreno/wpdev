@@ -37,6 +37,18 @@ class Post
     }
 
     /**
+     * Alternative to constructor. For more fluid syntax.
+     *
+     * @param int|WP_Post|null $post Optional. Post ID or post object. Defaults to global $post.
+     *
+     * @return $this
+     */
+    public static function create($post = null)
+    {
+        return new static($post);
+    }
+
+    /**
      * Uses ACF's get_field() to fetch a field value.
      *
      * @param string $selector The field key
