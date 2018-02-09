@@ -25,7 +25,7 @@ if ( ! function_exists('get_posts_from_query')) {
      *
      * @param \WP_Query $wp_query A WP_Query object
      *
-     * @return array If not empty will be an array of WPDev\Models\Post objects
+     * @return array Array of WPDev\Models\Post objects or an empty array if there were no posts to map over.
      */
     function get_posts_from_query(WP_Query $wp_query)
     {

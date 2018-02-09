@@ -6,6 +6,7 @@
     - name: args
       description: 'Items to dump'
       type: mixed
+
 - name: dump
   summary: 'A prettier var dump.'
   description: ''
@@ -14,6 +15,10 @@
     - name: args
       description: 'Items to dump'
       type: mixed
+  return:
+    type: mixed
+    description: Basically, whataver was passed in. To elaborate, if a single paramater was passed, then the value of that paramater. If multiple paramaters were passed, an array containing the values of those paramaters in the order they were passed in.
+
 - name: get_posts_from_query
   summary: 'Map <code>WP_Query->posts</code> to <code>WPDev\Models\Post</code> objects'
   fullName: get_posts_from_query( WP_Query $wp_query )
@@ -21,3 +26,6 @@
       - name: wp_query
         description: 'A WP_Query object'
         type: WP_Query
+  return:
+    type: array
+    description: 'Array of WPDev\Models\Post objects or an empty array if there were no posts to map over.'
