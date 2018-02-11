@@ -20,6 +20,7 @@ class Image
     public $withCaption = false;
     protected $caption;
     protected $id;
+    protected $metadata = [];
     protected $size;
 
     /**
@@ -56,6 +57,16 @@ class Image
             <figcaption><?= $this->caption(); ?></figcaption>
         </figure>
         <?php return ob_get_clean();
+    }
+
+    /**
+     * Get the alt text.
+     *
+     * @return null|string
+     */
+    public function alt()
+    {
+        return $this->getAttribute('alt');
     }
 
     /**
@@ -102,6 +113,30 @@ class Image
     }
 
     /**
+     * Get the height of the image in the current size.
+     *
+     * @return null|string
+     */
+    public function height()
+    {
+        return $this->getAttribute('height');
+    }
+
+    /**
+     * Gets the metadata.
+     *
+     * @return array|mixed
+     */
+    public function metadata()
+    {
+        if (is_null($this->metadata)) {
+            $this->metadata = wp_get_attachment_metadata($this->id);
+        }
+
+        return $this->metadata;
+    }
+
+    /**
      * Remove an attribute.
      *
      * @param string $name The attribute name
@@ -128,6 +163,36 @@ class Image
         $this->attributes[$name] = $value;
 
         return $this;
+    }
+
+    /**
+     * Gets the title field. This is not the filename.
+     *
+     * @return null|string
+     */
+    public function title()
+    {
+        return $this->getAttribute('title');
+    }
+
+    /**
+     * Gets the url of the image in the current size.
+     *
+     * @return null|string
+     */
+    public function url()
+    {
+        return $this->getAttribute('src');
+    }
+
+    /**
+     * Gets the width of the image in the current size.
+     *
+     * @return null|string
+     */
+    public function width()
+    {
+        return $this->getAttribute('width');
     }
 
     /**
@@ -193,7 +258,7 @@ class Image
 
         if ($srcset = wp_get_attachment_image_srcset($this->id, $this->size)) {
             $this->attributes['srcset'] = $srcset;
-            $this->attributes['sizes']  = "(max-width: $image_data[1]) 100vw, $image_data[1]";
+            $this->attributes['sizes']  = "(max-width: $image_data[1]px) 100vw, $image_data[1]px";
         }
 
         if ($title = get_the_title($this->id)) {
