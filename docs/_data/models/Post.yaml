@@ -84,7 +84,7 @@ methods:
                 default: ''
     -
         name: featuredImage
-        summary: 'Get the featured image.'
+        summary: 'Get the featured image. Returns an instance of <code>\WPDev\Models\Image</code>.'
         description: ''
         visibility: public
         return:

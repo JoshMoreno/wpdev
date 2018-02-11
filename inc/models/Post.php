@@ -119,7 +119,7 @@ class Post
     }
 
     /**
-     * Get the featured image.
+     * Get the featured image. Returns an instance of `\WPDev\Models\Image`.
      *
      * @param string $size The image size to use.
      *
