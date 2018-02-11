@@ -2,9 +2,21 @@
 layout: docs
 permalink: /facades/options-page.html
 ---
+{% capture usage %}
+{% highlight php %}
+use WPDev\Facades\OptionsPage;
+
+OptionsPage::create('Site Settings')
+    ->topLevel()
+    ->menuIcon('dashicons-admin-settings')
+    ->register();
+{% endhighlight %}
+{% endcapture %}
+
 {% include docs/modelPage.liquid
     model=site.data.facades.OptionsPage
     title="Options Page Facade"
     tagline="Add custom admin pages with ease."
+    usage=usage
 %}
 
