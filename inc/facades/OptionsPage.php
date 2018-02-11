@@ -18,7 +18,7 @@ class OptionsPage
     private $parentSlug = 'options-general.php';
 
     /**
-     * Constructor. Alternative use the `::create()` method for a more fluid syntax.
+     * Constructor. For a more fluid syntax use `OptionsPage::create()`.
      *
      * @param string $page_title The title of the page. By default this will also be used as the menu title and the page slug (a slugified version of course).
      */

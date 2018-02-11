@@ -23,7 +23,7 @@ class Post
     protected $wpPost;
 
     /**
-     * Constructor.
+     * Constructor. For a more fluid syntax use `Post::create()`.
      *
      * @param int|WP_Post|null $post Optional. Post ID or post object. Defaults to global $post.
      */
@@ -39,7 +39,7 @@ class Post
     /**
      * Alternative to constructor. For more fluid syntax.
      *
-     * @param int|WP_Post|null $post Optional. Post ID or post object. Defaults to global $post.
+     * @param int|WP_Post|null $post Optional. Post ID or post object. Defaults to `$GLOBALS['post']`.
      *
      * @return $this
      */
@@ -49,7 +49,7 @@ class Post
     }
 
     /**
-     * Uses ACF's get_field() to fetch a field value.
+     * Uses ACF's `get_field()` to fetch a field value.
      *
      * @param string $selector The field key
      * @param bool $format Should ACF format the value for you
@@ -66,7 +66,7 @@ class Post
     }
 
     /**
-     * Uses ACF's get_fields() to get all custom field values in an associative array.
+     * Uses ACF's `get_fields()` to get all custom field values in an associative array.
      *
      * @param bool $format Whether ACF should format the values.
      *
@@ -82,7 +82,7 @@ class Post
     }
 
     /**
-     * Retrieves the parent posts in direct parent to highest level ancestor order. Each post will be an instance of \WPDev\Models\Post.
+     * Retrieves the parent posts in direct parent to highest level ancestor order. Each post will be an instance of `\WPDev\Models\Post`.
      *
      * The direct parent is returned as the first value in the array.
      * The highest level ancestor is returned as the last value in the array.
@@ -104,7 +104,7 @@ class Post
     /**
      * The date the post was created.
      *
-     * @param string $date_format A date format string. Defaults to date format set in the WP backend.
+     * @param string $date_format A date format string. Defaults to `get_option('date_format')` date format set in the WP backend.
      *
      * @return false|string The formatted date. False on failure.
      */
@@ -118,7 +118,7 @@ class Post
     }
 
     /**
-     * Gets a field value using get_post_meta().
+     * Gets a field value using `get_post_meta()`.
      *
      * @param string $key The field key (aka meta key).
      * @param bool $single_value Whether WP should return the value or the value wrapped in an array.
@@ -180,10 +180,10 @@ class Post
     }
 
     /**
-     * Same as the_content() except we don't echo.
+     * Same as `the_content()` except we don't echo.
      *
-     * WP has a get_the_content() that doesn't apply filters or convert
-     * shortcodes. Inconsistent. Doesn't accept an id or WP_Post object either. Lame.
+     * WP has a `get_the_content()` that doesn't apply filters or convert
+     * shortcodes. Inconsistent. Doesn't accept an `id` or `WP_Post` object either. Lame.
      * Rather than duplicating core code here we just capture the output.
      *
      * @param null $more_link_text
@@ -244,7 +244,7 @@ class Post
     }
 
     /**
-     * Gets the parent post if any. If so will return a \WPDev\Models\Post object.
+     * Gets the parent post if any. If so will return a `\WPDev\Models\Post` object.
      *
      * @return bool|\WPDev\Models\Post
      */
@@ -367,7 +367,7 @@ class Post
 
 
 	/**
-     * The original WP_Post object
+     * The original `WP_Post` object
      *
 	 * @return \WP_Post|null
 	 */

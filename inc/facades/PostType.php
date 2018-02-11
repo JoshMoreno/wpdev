@@ -18,7 +18,7 @@ class PostType
     public $overrideArgs = [];
 
 	/**
-	 * PostType constructor. For more fluid syntax use PostType::create()
+	 * Constructor. For more fluid syntax use `PostType::create()`
 	 *
 	 * @param string $name The name of the post type. Should be singular.
 	 */
@@ -130,8 +130,6 @@ class PostType
 	/**
 	 * For a more fluid syntax.
 	 *
-	 * Runs the constructor and returns itself.
-	 *
 	 * @param string $name
 	 * @return $this
 	 */
@@ -156,10 +154,20 @@ class PostType
         return $this->setArg('delete_with_user', $bool);
     }
 
+    /**
+     * Deregisters the post type.
+     */
     public function deregister() {
     	self::deregisterManually($this->name);
     }
 
+    /**
+     * Calls `unregister_post_type`. Meant for use in deactivation hook.
+     *
+     * @param string $name
+     *
+     * @throws \Exception
+     */
     public static function deregisterManually(string $name = '')
     {
         if ( ! $name) {
@@ -220,7 +228,7 @@ class PostType
     }
 
     /**
-     * This sets the endpoint mask. However rewrite['ep_mask'] takes precedence if it's set there too.
+     * This sets the endpoint mask. However `rewrite['ep_mask']` takes precedence if it's set there too.
      *
      * @param int|const $endpoint Constant preferred to avoid future failure (core updates)
      *
@@ -247,19 +255,31 @@ class PostType
         return $this->setArg('query_var', $query_var);
     }
 
+    /**
+     * Registers the activation hook.
+     */
     public function handleActivationHook() {
     	register_activation_hook(wpdev_main_plugin_file_name(), [$this, 'onPluginActivation']);
     }
 
+    /**
+     * Registers the deactivation hook.
+     */
     public function handleDeactivationHook() {
     	register_deactivation_hook(wpdev_main_plugin_file_name(), [$this, 'deregister']);
     }
 
+    /**
+     * Registers the post type and flushes rewrite rules.
+     */
 	public function onPluginActivation() {
 		$this->registerManually();
 		flush_rewrite_rules();
     }
 
+    /**
+     * Deregisters the post type and flushes rewrite rules.
+     */
 	public function onPluginDeactivation() {
 		$this->deregister();
 		flush_rewrite_rules();
@@ -277,9 +297,10 @@ class PostType
     }
 
     /**
-     * This is the easiest way to register your post type.
-     * However it uses an anonymous function so if you need to allow other plugins
-     * to be able to use @see remove_action() then you should use @see registerManually()
+     * Registers the post type. Hooks and all.
+     *
+     * It uses an anonymous function so if you need to allow other plugins
+     * to be able to use `@see remove_action()` then you should use `@see registerManually()`
      *
      * @param bool $handle_activation_hooks Whether to register activation and deactivation hooks
      * @param callable|null $callback
@@ -307,7 +328,8 @@ class PostType
 
     /**
      * Provide a callback function that will be called when setting up the meta boxes for the edit form.
-     * The callback function takes one argument $post, which contains the WP_Post object for the currently edited post.
+     *
+     * The callback function takes one argument `$post`, which contains the `WP_Post` object for the currently edited post.
      * Do remove_meta_box() and add_meta_box() calls in the callback.
      *
      * @param array|string $callback
@@ -337,7 +359,7 @@ class PostType
     }
 
     /**
-     * An optional custom controller to use instead of WP_REST_Posts_Controller. Must be a subclass of WP_REST_Controller.
+     * An optional custom controller to use instead of `WP_REST_Posts_Controller`. Must be a subclass of `WP_REST_Controller`.
      * Default: WP_REST_Posts_Controller
      *
      * @param string $controller
@@ -350,6 +372,8 @@ class PostType
     }
 
     /**
+     * Set the `rewrite` arg.
+     *
      * ['slug']         string Customize the permalink structure slug. Defaults to the $post_type value. Should be translatable.
      * ['with_front']   bool Should the permalink structure be prepended with the front base.
      *                  (example: if your permalink structure is /blog/,
@@ -372,6 +396,7 @@ class PostType
 
     /**
      * Set an arg. Can be used to override the defaults.
+     *
      * This is just a catch-all. In case there isn't a more semantic
      * method or if that's just your preference.
      *
@@ -388,7 +413,7 @@ class PostType
     }
 
     /**
-     * Whether to expose this post type in the REST API.
+     * Whether to expose this post type in the `REST API`.
      *
      * @param bool $bool
      *
@@ -400,7 +425,8 @@ class PostType
     }
 
     /**
-     * Self explanatory, but a word from the docs...
+     * Exclude from search results
+     *
      * If you set to true, on the taxonomy page (ex: taxonomy.php)
      * WordPress will not find your posts and/or pagination will make 404 error...
      *
@@ -414,7 +440,9 @@ class PostType
     }
 
     /**
-     * Whether the post type is hierarchical (e.g. page). Allows Parent to be specified.
+     * Whether the post type is hierarchical (e.g. page).
+     *
+     * Allows Parent to be specified.
      * The 'supports' parameter should contain 'page-attributes' to show the
      * parent select box on the editor page.
      *
@@ -436,6 +464,7 @@ class PostType
 
     /**
      * Whether to use the internal default meta capability handling.
+     *
      * Note: If set it to false then standard admin role can't edit the posts types.
      * Then the edit_post capability must be added to all roles to add or edit the posts types.
      *
@@ -449,6 +478,8 @@ class PostType
     }
 
     /**
+     * The menu icon.
+     *
      * @param string $icon name of Dashicon, URL to icon, or base64 encoded svg with fill="black"
      *
      * @link https://developer.wordpress.org/resource/dashicons/
@@ -461,7 +492,9 @@ class PostType
     }
 
     /**
-     * The position in the menu order the post type should appear. show_in_menu must be true.
+     * The position in the menu order the post type should appear.
+     *
+     * `show_in_menu` must be true.
      * Default: defaults to below Comments
      * 5 - below Posts
      * 10 - below Media
@@ -484,6 +517,13 @@ class PostType
         return $this->setArg('menu_position', $position);
     }
 
+    /**
+     * Set the plural name. Useful if simply appending an 's' isn't grammatically correct.
+     *
+     * @param string $plural_name
+     *
+     * @return $this
+     */
     public function setPluralName(string $plural_name = '')
     {
         $this->pluralName = $plural_name;
@@ -492,6 +532,8 @@ class PostType
     }
 
     /**
+     * Sets the `public` arg.
+     *
      * Implies:
      * exclude_from_search = false
      * publicly_queryable = true
@@ -521,6 +563,7 @@ class PostType
 
     /**
      * Whether to make this post type available in the WordPress admin bar.
+     *
      * Default: value of the show_in_menu argument
      *
      * @param bool $bool
@@ -533,6 +576,8 @@ class PostType
     }
 
     /**
+     * Show this post type in the menu.
+     *
      * @param bool|string $val - If string is given it will be a submenu
      * if that url exists. Examples: 'tools.php' or 'edit.php?post_type=page';
      *
@@ -544,7 +589,8 @@ class PostType
     }
 
     /**
-     * Whether post_type is available for selection in navigation menus.
+     * Post type is available for selection in navigation menus.
+     *
      * Default: value of public argument
      *
      * @param bool $bool
@@ -558,6 +604,7 @@ class PostType
 
     /**
      * Whether to generate a default UI for managing this post type in the admin.
+     *
      * Default: value of public argument
      *
      * @param bool $bool
@@ -569,6 +616,13 @@ class PostType
         return $this->setArg('show_ui', $bool);
     }
 
+    /**
+     * Overrides auto generated singular name.
+     *
+     * @param string $singular_name
+     *
+     * @return $this
+     */
     public function setSingularName(string $singular_name = '')
     {
         $this->singularName = $singular_name;
@@ -577,6 +631,8 @@ class PostType
     }
 
     /**
+     * Support author.
+     *
      * @return $this
      */
     public function supportsAuthor()
@@ -585,6 +641,8 @@ class PostType
     }
 
     /**
+     * Support comments.
+     *
      * @return $this
      */
     public function supportsComments()
@@ -593,6 +651,8 @@ class PostType
     }
 
     /**
+     * Support custom fields.
+     *
      * @return $this
      */
     public function supportsCustomFields()
@@ -601,6 +661,8 @@ class PostType
     }
 
     /**
+     * Support editor.
+     *
      * @return $this
      */
     public function supportsEditor()
@@ -609,6 +671,8 @@ class PostType
     }
 
     /**
+     * Support excerpt.
+     *
      * @return $this
      */
     public function supportsExcerpt()
@@ -617,6 +681,8 @@ class PostType
     }
 
     /**
+     * Support featured image (aka thumbnail).
+     *
      * Alias for @see \WPDev\PostType\PostType::supportsThumbnail()
      *
      * @return $this
@@ -627,6 +693,8 @@ class PostType
     }
 
     /**
+     * Support page attributes.
+     *
      * @return $this
      */
     public function supportsPageAttributes()
@@ -634,12 +702,19 @@ class PostType
         return $this->addSupportArg('page-attributes');
     }
 
+    /**
+     * Support post formats.
+     *
+     * @return $this
+     */
     public function supportsPostFormats()
     {
         return $this->addSupportArg('post-formats');
     }
 
     /**
+     * Support revisions.
+     *
      * @return $this
      */
     public function supportsRevisions()
@@ -648,6 +723,8 @@ class PostType
     }
 
     /**
+     * Alternative to `@see supportsFeaturedImage`. Support featured image (aka thumbnail).
+     *
      * @return $this
      */
     public function supportsThumbnail()
@@ -656,6 +733,8 @@ class PostType
     }
 
     /**
+     * Support title.
+     *
      * @return $this
      */
     public function supportsTitle()
@@ -664,6 +743,8 @@ class PostType
     }
 
     /**
+     * Support trackbacks.
+     *
      * @return $this
      */
     public function supportsTrackbacks()
@@ -686,6 +767,7 @@ class PostType
 
     /**
      * An array of registered taxonomies like category or post_tag that will be used with this post type.
+     *
      * This can be used in lieu of calling register_taxonomy_for_object_type() directly.
      * Custom taxonomies still need to be registered with register_taxonomy().
      *

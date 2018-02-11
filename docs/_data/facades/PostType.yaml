@@ -4,7 +4,7 @@ namespace: WPDev\Facades
 methods:
     -
         name: __construct
-        summary: 'PostType constructor. For more fluid syntax use PostType::create()'
+        summary: 'Constructor. For more fluid syntax use <code>PostType::create()</code>'
         description: ''
         visibility: public
         args:
@@ -43,7 +43,7 @@ methods:
     -
         name: create
         summary: 'For a more fluid syntax.'
-        description: 'Runs the constructor and returns itself.'
+        description: ''
         visibility: public
         static: true
         return:
@@ -70,18 +70,19 @@ methods:
                 default: true
     -
         name: deregister
-        summary: ''
+        summary: 'Deregisters the post type.'
         description: ''
         visibility: public
     -
         name: deregisterManually
-        summary: ''
+        summary: 'Calls <code>unregister_post_type</code>. Meant for use in deactivation hook.'
         description: ''
         visibility: public
         static: true
         args:
             -
                 name: name
+                description: ''
                 type: string
                 default: ''
     -
@@ -100,7 +101,7 @@ methods:
                 default: true
     -
         name: permalinkEPMask
-        summary: 'This sets the endpoint mask. However rewrite[''ep_mask''] takes precedence if it''s set there too.'
+        summary: 'This sets the endpoint mask. However <code>rewrite[''ep_mask'']</code> takes precedence if it''s set there too.'
         description: ''
         visibility: public
         return:
@@ -128,22 +129,22 @@ methods:
                 default: true
     -
         name: handleActivationHook
-        summary: ''
+        summary: 'Registers the activation hook.'
         description: ''
         visibility: public
     -
         name: handleDeactivationHook
-        summary: ''
+        summary: 'Registers the deactivation hook.'
         description: ''
         visibility: public
     -
         name: onPluginActivation
-        summary: ''
+        summary: 'Registers the post type and flushes rewrite rules.'
         description: ''
         visibility: public
     -
         name: onPluginDeactivation
-        summary: ''
+        summary: 'Deregisters the post type and flushes rewrite rules.'
         description: ''
         visibility: public
     -
@@ -156,8 +157,8 @@ methods:
             description: ''
     -
         name: register
-        summary: 'This is the easiest way to register your post type.'
-        description: "However it uses an anonymous function so if you need to allow other plugins\nto be able to use @see remove_action() then you should use @see registerManually()"
+        summary: 'Registers the post type. Hooks and all.'
+        description: "It uses an anonymous function so if you need to allow other plugins\nto be able to use <code>@see remove_action()</code> then you should use <code>@see registerManually()</code>"
         visibility: public
         return:
             type: $this
@@ -176,7 +177,7 @@ methods:
     -
         name: registerMetaBoxCB
         summary: 'Provide a callback function that will be called when setting up the meta boxes for the edit form.'
-        description: "The callback function takes one argument $post, which contains the WP_Post object for the currently edited post.\nDo remove_meta_box() and add_meta_box() calls in the callback."
+        description: "The callback function takes one argument <code>$post</code>, which contains the <code>WP_Post</code> object for the currently edited post.\nDo remove_meta_box() and add_meta_box() calls in the callback."
         visibility: public
         return:
             type: $this
@@ -202,7 +203,7 @@ methods:
                 type: string
     -
         name: restControllerClass
-        summary: 'An optional custom controller to use instead of WP_REST_Posts_Controller. Must be a subclass of WP_REST_Controller.'
+        summary: 'An optional custom controller to use instead of <code>WP_REST_Posts_Controller</code>. Must be a subclass of <code>WP_REST_Controller</code>.'
         description: 'Default: WP_REST_Posts_Controller'
         visibility: public
         return:
@@ -216,8 +217,8 @@ methods:
                 default: WP_REST_Posts_Controller
     -
         name: rewrite
-        summary: '[''slug'']         string Customize the permalink structure slug. Defaults to the $post_type value. Should be translatable.'
-        description: "['with_front']   bool Should the permalink structure be prepended with the front base.\n                 (example: if your permalink structure is /blog/,\n                 then your links will be: false->/news/, true->/blog/news/). Defaults to true\n['feeds']        bool Should a feed permalink structure be built for this post type. Defaults to has_archive value.\n['pages']        bool Should the permalink structure provide for pagination. Defaults to true\n['ep_mask']      const If not specified, then it inherits from permalink_epmask(if permalink_epmask is set),\n                 otherwise defaults to EP_PERMALINK\n                 see @link https://make.wordpress.org/plugins/2012/06/07/rewrite-endpoints-api/\n                 and also @link https://code.tutsplus.com/articles/the-rewrite-api-post-types-taxonomies--wp-25488"
+        summary: 'Set the <code>rewrite</code> arg.'
+        description: "['slug']         string Customize the permalink structure slug. Defaults to the $post_type value. Should be translatable.\n['with_front']   bool Should the permalink structure be prepended with the front base.\n                 (example: if your permalink structure is /blog/,\n                 then your links will be: false->/news/, true->/blog/news/). Defaults to true\n['feeds']        bool Should a feed permalink structure be built for this post type. Defaults to has_archive value.\n['pages']        bool Should the permalink structure provide for pagination. Defaults to true\n['ep_mask']      const If not specified, then it inherits from permalink_epmask(if permalink_epmask is set),\n                 otherwise defaults to EP_PERMALINK\n                 see @link https://make.wordpress.org/plugins/2012/06/07/rewrite-endpoints-api/\n                 and also @link https://code.tutsplus.com/articles/the-rewrite-api-post-types-taxonomies--wp-25488"
         visibility: public
         return:
             type: $this
@@ -249,7 +250,7 @@ methods:
                 default: ''
     -
         name: showInRest
-        summary: 'Whether to expose this post type in the REST API.'
+        summary: 'Whether to expose this post type in the <code>REST API</code>.'
         description: ''
         visibility: public
         return:
@@ -263,8 +264,8 @@ methods:
                 default: true
     -
         name: excludeFromSearch
-        summary: 'Self explanatory, but a word from the docs.'
-        description: "..\nIf you set to true, on the taxonomy page (ex: taxonomy.php)\nWordPress will not find your posts and/or pagination will make 404 error..."
+        summary: 'Exclude from search results'
+        description: "If you set to true, on the taxonomy page (ex: taxonomy.php)\nWordPress will not find your posts and/or pagination will make 404 error..."
         visibility: public
         return:
             type: $this
@@ -277,8 +278,8 @@ methods:
                 default: true
     -
         name: hierarchical
-        summary: 'Whether the post type is hierarchical (e.g. page). Allows Parent to be specified.'
-        description: "The 'supports' parameter should contain 'page-attributes' to show the\nparent select box on the editor page.\n\nNote: this parameter was intended for Pages. Be careful when choosing it\nfor your custom post type - if you are planning to have very many entries\n(say - over 2-3 thousand), you will run into load time issues. With this\nparameter set to true WordPress will fetch all IDs of that particular post\ntype on each administration page load for your post type. Servers with\nlimited memory resources may also be challenged by this parameter being set to true."
+        summary: 'Whether the post type is hierarchical (e.g. page).'
+        description: "Allows Parent to be specified.\nThe 'supports' parameter should contain 'page-attributes' to show the\nparent select box on the editor page.\n\nNote: this parameter was intended for Pages. Be careful when choosing it\nfor your custom post type - if you are planning to have very many entries\n(say - over 2-3 thousand), you will run into load time issues. With this\nparameter set to true WordPress will fetch all IDs of that particular post\ntype on each administration page load for your post type. Servers with\nlimited memory resources may also be challenged by this parameter being set to true."
         visibility: public
         return:
             type: $this
@@ -305,7 +306,7 @@ methods:
                 default: true
     -
         name: menuIcon
-        summary: ''
+        summary: 'The menu icon.'
         description: ''
         visibility: public
         return:
@@ -319,8 +320,8 @@ methods:
                 default: ''
     -
         name: menuPosition
-        summary: 'The position in the menu order the post type should appear. show_in_menu must be true.'
-        description: "Default: defaults to below Comments\n5 - below Posts\n10 - below Media\n15 - below Links\n20 - below Pages\n25 - below comments\n60 - below first separator\n65 - below Plugins\n70 - below Users\n75 - below Tools\n80 - below Settings\n100 - below second separator"
+        summary: 'The position in the menu order the post type should appear.'
+        description: "<code>show_in_menu</code> must be true.\nDefault: defaults to below Comments\n5 - below Posts\n10 - below Media\n15 - below Links\n20 - below Pages\n25 - below comments\n60 - below first separator\n65 - below Plugins\n70 - below Users\n75 - below Tools\n80 - below Settings\n100 - below second separator"
         visibility: public
         return:
             type: $this
@@ -333,18 +334,22 @@ methods:
                 default: 25
     -
         name: setPluralName
-        summary: ''
+        summary: 'Set the plural name. Useful if simply appending an ''s'' isn''t grammatically correct.'
         description: ''
         visibility: public
+        return:
+            type: $this
+            description: ''
         args:
             -
                 name: plural_name
+                description: ''
                 type: string
                 default: ''
     -
         name: public
-        summary: "Implies:\nexclude_from_search = false\npublicly_queryable = true\nshow_in_nav_menus = true\nshow_ui = true"
-        description: ''
+        summary: 'Sets the <code>public</code> arg.'
+        description: "Implies:\nexclude_from_search = false\npublicly_queryable = true\nshow_in_nav_menus = true\nshow_ui = true"
         visibility: public
         return:
             type: $this
@@ -385,7 +390,7 @@ methods:
                 default: true
     -
         name: showInMenu
-        summary: ''
+        summary: 'Show this post type in the menu.'
         description: ''
         visibility: public
         return:
@@ -399,7 +404,7 @@ methods:
                 default: true
     -
         name: showInNavMenus
-        summary: 'Whether post_type is available for selection in navigation menus.'
+        summary: 'Post type is available for selection in navigation menus.'
         description: 'Default: value of public argument'
         visibility: public
         return:
@@ -427,17 +432,21 @@ methods:
                 default: true
     -
         name: setSingularName
-        summary: ''
+        summary: 'Overrides auto generated singular name.'
         description: ''
         visibility: public
+        return:
+            type: $this
+            description: ''
         args:
             -
                 name: singular_name
+                description: ''
                 type: string
                 default: ''
     -
         name: supportsAuthor
-        summary: ''
+        summary: 'Support author.'
         description: ''
         visibility: public
         return:
@@ -445,7 +454,7 @@ methods:
             description: ''
     -
         name: supportsComments
-        summary: ''
+        summary: 'Support comments.'
         description: ''
         visibility: public
         return:
@@ -453,7 +462,7 @@ methods:
             description: ''
     -
         name: supportsCustomFields
-        summary: ''
+        summary: 'Support custom fields.'
         description: ''
         visibility: public
         return:
@@ -461,7 +470,7 @@ methods:
             description: ''
     -
         name: supportsEditor
-        summary: ''
+        summary: 'Support editor.'
         description: ''
         visibility: public
         return:
@@ -469,7 +478,7 @@ methods:
             description: ''
     -
         name: supportsExcerpt
-        summary: ''
+        summary: 'Support excerpt.'
         description: ''
         visibility: public
         return:
@@ -477,15 +486,15 @@ methods:
             description: ''
     -
         name: supportsFeaturedImage
-        summary: 'Alias for @see \WPDev\PostType\PostType::supportsThumbnail()'
-        description: ''
+        summary: 'Support featured image (aka thumbnail).'
+        description: 'Alias for @see \WPDev\PostType\PostType::supportsThumbnail()'
         visibility: public
         return:
             type: $this
             description: ''
     -
         name: supportsPageAttributes
-        summary: ''
+        summary: 'Support page attributes.'
         description: ''
         visibility: public
         return:
@@ -493,12 +502,15 @@ methods:
             description: ''
     -
         name: supportsPostFormats
-        summary: ''
+        summary: 'Support post formats.'
         description: ''
         visibility: public
+        return:
+            type: $this
+            description: ''
     -
         name: supportsRevisions
-        summary: ''
+        summary: 'Support revisions.'
         description: ''
         visibility: public
         return:
@@ -506,7 +518,7 @@ methods:
             description: ''
     -
         name: supportsThumbnail
-        summary: ''
+        summary: 'Alternative to <code>@see supportsFeaturedImage</code>. Support featured image (aka thumbnail).'
         description: ''
         visibility: public
         return:
@@ -514,7 +526,7 @@ methods:
             description: ''
     -
         name: supportsTitle
-        summary: ''
+        summary: 'Support title.'
         description: ''
         visibility: public
         return:
@@ -522,7 +534,7 @@ methods:
             description: ''
     -
         name: supportsTrackbacks
-        summary: ''
+        summary: 'Support trackbacks.'
         description: ''
         visibility: public
         return:

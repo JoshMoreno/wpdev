@@ -4,7 +4,7 @@ namespace: WPDev\Facades
 methods:
     -
         name: __construct
-        summary: 'Constructor. Alternative use the <code>::create()</code> method for a more fluid syntax.'
+        summary: 'Constructor. For a more fluid syntax use <code>OptionsPage::create()</code>.'
         description: ''
         visibility: public
         args:

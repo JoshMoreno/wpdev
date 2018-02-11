@@ -4,7 +4,7 @@ namespace: WPDev\Models
 methods:
     -
         name: __construct
-        summary: Constructor.
+        summary: 'Constructor. For a more fluid syntax use <code>Post::create()</code>.'
         description: ''
         visibility: public
         args:
@@ -25,12 +25,12 @@ methods:
         args:
             -
                 name: post
-                description: 'Optional. Post ID or post object. Defaults to global $post.'
+                description: 'Optional. Post ID or post object. Defaults to `$GLOBALS[''post'']`.'
                 type: int|\WP_Post|null
                 default: null
     -
         name: acfField
-        summary: 'Uses ACF''s get_field() to fetch a field value.'
+        summary: 'Uses ACF''s <code>get_field()</code> to fetch a field value.'
         description: ''
         visibility: public
         return:
@@ -48,7 +48,7 @@ methods:
                 default: true
     -
         name: acfFields
-        summary: 'Uses ACF''s get_fields() to get all custom field values in an associative array.'
+        summary: 'Uses ACF''s <code>get_fields()</code> to get all custom field values in an associative array.'
         description: ''
         visibility: public
         return:
@@ -62,7 +62,7 @@ methods:
                 default: true
     -
         name: ancestors
-        summary: 'Retrieves the parent posts in direct parent to highest level ancestor order. Each post will be an instance of \WPDev\Models\Post.'
+        summary: 'Retrieves the parent posts in direct parent to highest level ancestor order. Each post will be an instance of <code>\WPDev\Models\Post</code>.'
         description: "The direct parent is returned as the first value in the array.\nThe highest level ancestor is returned as the last value in the array."
         visibility: public
         return:
@@ -79,12 +79,12 @@ methods:
         args:
             -
                 name: date_format
-                description: 'A date format string. Defaults to date format set in the WP backend.'
+                description: 'A date format string. Defaults to `get_option(''date_format'')` date format set in the WP backend.'
                 type: string
                 default: ''
     -
         name: field
-        summary: 'Gets a field value using get_post_meta().'
+        summary: 'Gets a field value using <code>get_post_meta()</code>.'
         description: ''
         visibility: public
         return:
@@ -145,8 +145,8 @@ methods:
             description: ''
     -
         name: content
-        summary: 'Same as the_content() except we don''t echo.'
-        description: "WP has a get_the_content() that doesn't apply filters or convert\nshortcodes. Inconsistent. Doesn't accept an id or WP_Post object either. Lame.\nRather than duplicating core code here we just capture the output."
+        summary: 'Same as <code>the_content()</code> except we don''t echo.'
+        description: "WP has a <code>get_the_content()</code> that doesn't apply filters or convert\nshortcodes. Inconsistent. Doesn't accept an <code>id</code> or <code>WP_Post</code> object either. Lame.\nRather than duplicating core code here we just capture the output."
         visibility: public
         return:
             type: string
@@ -186,7 +186,7 @@ methods:
                 default: ''
     -
         name: parent
-        summary: 'Gets the parent post if any. If so will return a \WPDev\Models\Post object.'
+        summary: 'Gets the parent post if any. If so will return a <code>\WPDev\Models\Post</code> object.'
         description: ''
         visibility: public
         return:
@@ -240,7 +240,7 @@ methods:
                 default: null
     -
         name: wpPost
-        summary: 'The original WP_Post object'
+        summary: 'The original <code>WP_Post</code> object'
         description: ''
         visibility: public
         return:
