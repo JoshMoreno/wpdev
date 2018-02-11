@@ -10,6 +10,7 @@ class Post
     protected $content;
     protected $createdDate;
     protected $excerpt;
+    protected $featuredImageId;
     protected $globalPostStash;
     protected $modifiedDate;
     protected $id = 0;
@@ -118,6 +119,32 @@ class Post
     }
 
     /**
+     * Get the featured image.
+     *
+     * @param string $size The image size to use.
+     *
+     * @return \WPDev\Models\Image
+     */
+    public function featuredImage($size = 'full')
+    {
+        return Image::create($this->featuredImageId(), $size);
+    }
+
+    /**
+     * Get the featured image id.
+     *
+     * @return int
+     */
+    public function featuredImageId()
+    {
+        if (is_null($this->featuredImageId)) {
+            $this->featuredImageId = (int) $this->field('_thumbnail_id');
+        }
+
+        return $this->featuredImageId;
+    }
+
+    /**
      * Gets a field value using `get_post_meta()`.
      *
      * @param string $key The field key (aka meta key).
@@ -128,6 +155,16 @@ class Post
     public function field(string $key, bool $single_value = true)
     {
         return get_post_meta($this->id, $key, $single_value);
+    }
+
+    /**
+     * Whether the post has a featured image or not.
+     *
+     * @return bool
+     */
+    public function hasFeaturedImage()
+    {
+        return (bool) $this->featuredImageId();
     }
 
 	/**
