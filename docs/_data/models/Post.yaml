@@ -83,6 +83,28 @@ methods:
                 type: string
                 default: ''
     -
+        name: featuredImage
+        summary: 'Get the featured image.'
+        description: ''
+        visibility: public
+        return:
+            type: \WPDev\Models\Image
+            description: ''
+        args:
+            -
+                name: size
+                description: 'The image size to use.'
+                type: string
+                default: full
+    -
+        name: featuredImageId
+        summary: 'Get the featured image id.'
+        description: ''
+        visibility: public
+        return:
+            type: int
+            description: ''
+    -
         name: field
         summary: 'Gets a field value using <code>get_post_meta()</code>.'
         description: ''
@@ -100,6 +122,14 @@ methods:
                 description: 'Whether WP should return the value or the value wrapped in an array.'
                 type: bool
                 default: true
+    -
+        name: hasFeaturedImage
+        summary: 'Whether the post has a featured image or not.'
+        description: ''
+        visibility: public
+        return:
+            type: bool
+            description: ''
     -
         name: hasTerm
         summary: 'Checks whether the post has the term. If no arg passed checks if it has any term.'

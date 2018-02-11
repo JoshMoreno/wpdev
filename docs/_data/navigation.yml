@@ -4,6 +4,9 @@
 - text: Controllers
   url: /controllers
 
+- text: Helpers
+  url: /helpers
+
 - text: Facades
   url: \#
   sublinks:
@@ -17,6 +20,5 @@
   sublinks:
     - text: Post
       url: /models/post
-
-- text: Helpers
-  url: /helpers
+    - text: Image
+      url: /models/image

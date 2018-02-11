@@ -1,0 +1,56 @@
+---
+layout: docs
+permalink: /models/image.html
+---
+{% capture usage %}
+{% highlight php %}
+use WPDev\Models\Image;
+
+echo Image::create(80, 'large');
+/* Outputs something like...
+<img src="https://site.com/wp-content/uploads/2018/02/sample-image-260x300.jpg"
+	   width="260"
+	   height="300"
+	   alt="This is the alt text"
+	   srcset="https://site.com/wp-content/uploads/2018/02/sample-image-260x300.jpg 260w, https://site.com/wp-content/uploads/2018/02/sample-image-768x887.jpg 768w, https://site.com/wp-content/uploads/2018/02/sample-image-887x1024.jpg 887w, https://site.com/wp-content/uploads/2018/02/sample-image.jpg 1143w"
+	   sizes="(max-width: 260px) 100vw, 260px"
+	   title="This is the title"
+>
+*/
+
+echo Image::create(80, 'large')
+	->setAttribute('class', 'img-responsive someclass')
+	->setAttribute('data-cool', 'pretty much')
+	->setAttribute('data-no-val')
+	->withCaption();
+/* Only if there actually is a caption it outputs something like...
+<figure>
+	<img src="https://site.com/wp-content/uploads/2018/02/sample-image-260x300.jpg"
+		 width="260"
+		 height="300"
+		 alt="This is the alt text"
+		 srcset="https://site.com/wp-content/uploads/2018/02/sample-image-260x300.jpg 260w, https://site.com/wp-content/uploads/2018/02/sample-image-768x887.jpg 768w, https://site.com/wp-content/uploads/2018/02/sample-image-887x1024.jpg 887w, https://site.com/wp-content/uploads/2018/02/sample-image.jpg 1143w"
+		 sizes="(max-width: 260px) 100vw, 260px"
+		 title="This is the title"
+		 class="img-responsive someclass"
+		 data-cool="pretty much"
+		 data-no-val
+	>
+	<figcaption>This is the caption</figcaption>
+</figure>
+*/
+
+// You don't have to use it to output an image tag.
+$image = Image::create(80, 'large');
+$image_url = $image->url();
+$image_caption = $image->caption();
+$image_metadata = $image->metadata();
+{% endhighlight %}
+{% endcapture %}
+
+{% include docs/modelPage.liquid
+	model=site.data.models.Image
+	title="Image Model"
+	tagline="Images made easy."
+	usage=usage
+%}
