@@ -30,7 +30,7 @@ methods:
                 default: null
     -
         name: acfField
-        summary: 'Uses ACF''s <code>get_field()</code> to fetch a field value.'
+        summary: 'Uses ACF''s get_field() to fetch a field value.'
         description: ''
         visibility: public
         return:
@@ -48,7 +48,7 @@ methods:
                 default: true
     -
         name: acfFields
-        summary: 'Uses ACF''s <code>get_fields()</code> to get all custom field values in an associative array.'
+        summary: 'Uses ACF''s get_fields() to get all custom field values in an associative array.'
         description: ''
         visibility: public
         return:
@@ -84,7 +84,7 @@ methods:
                 default: ''
     -
         name: field
-        summary: 'Gets a field value using <code>get_post_meta()</code>.'
+        summary: 'Gets a field value using get_post_meta().'
         description: ''
         visibility: public
         return:
@@ -145,8 +145,8 @@ methods:
             description: ''
     -
         name: content
-        summary: 'Same as <code>the_content()</code> except we don''t echo.'
-        description: "WP has a <code>get_the_content()</code> that doesn't apply filters or convert\nshortcodes. Inconsistent. Doesn't accept an id or WP_Post object either. Lame.\nRather than duplicating core code here we just capture the output."
+        summary: 'Same as the_content() except we don''t echo.'
+        description: "WP has a get_the_content() that doesn't apply filters or convert\nshortcodes. Inconsistent. Doesn't accept an id or WP_Post object either. Lame.\nRather than duplicating core code here we just capture the output."
         visibility: public
         return:
             type: string

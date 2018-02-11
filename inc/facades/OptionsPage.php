@@ -18,7 +18,9 @@ class OptionsPage
     private $parentSlug = 'options-general.php';
 
     /**
-     * @param string $page_title
+     * Constructor. Alternative use the `::create()` method for a more fluid syntax.
+     *
+     * @param string $page_title The title of the page. By default this will also be used as the menu title and the page slug (a slugified version of course).
      */
     public function __construct(string $page_title)
     {
@@ -32,6 +34,13 @@ class OptionsPage
         $this->callback  = [$this, 'sampleCallback'];
     }
 
+    /**
+     * Set the page content callback.
+     *
+     * @param callable $callback The callback in charge of generating the content for the page.
+     *
+     * @return $this
+     */
     public function contentCallback(callable $callback)
     {
         $this->callback = $callback;
@@ -39,6 +48,15 @@ class OptionsPage
         return $this;
     }
 
+    /**
+     * The capability required for this menu to be displayed to the user.
+     *
+     * You still need to check for the correct capability in the content callback.
+     *
+     * @param string $capability
+     *
+     * @return $this
+     */
     public function capability(string $capability)
     {
         $this->capability = $capability;
@@ -47,6 +65,20 @@ class OptionsPage
     }
 
     /**
+     * Allows for more fluid syntax.
+     *
+     * @param string $page_title The title of the page. By default this will also be used as the menu title and the page slug (a slugified version of course).
+     *
+     * @return $this
+     */
+    public static function create(string $page_title)
+    {
+        return new static($page_title);
+    }
+
+    /**
+     * Set the menu icon.
+     *
      * @param string $icon name of Dashicon, URL to icon, or base64 encoded svg with fill="black"
      *
      * @link https://developer.wordpress.org/resource/dashicons/
@@ -60,6 +92,13 @@ class OptionsPage
         return $this;
     }
 
+    /**
+     * Set the slug for the page.
+     *
+     * @param string $menu_slug
+     *
+     * @return $this
+     */
     public function menuSlug(string $menu_slug)
     {
         $this->menuSlug = $menu_slug;
@@ -67,6 +106,13 @@ class OptionsPage
         return $this;
     }
 
+    /**
+     * Sets the menu title.
+     *
+     * @param string $menu_title
+     *
+     * @return $this
+     */
     public function menuTitle(string $menu_title)
     {
         $this->menuTitle = $menu_title;
@@ -74,6 +120,13 @@ class OptionsPage
         return $this;
     }
 
+    /**
+     * Sets the parent slug. Used to make this page a child page.
+     *
+     * @param string $slug The slug of the parent page.
+     *
+     * @return $this
+     */
     public function parentSlug(string $slug = 'options-general.php')
     {
         $this->parentSlug = $slug;
@@ -81,6 +134,13 @@ class OptionsPage
         return $this;
     }
 
+    /**
+     * Sets the position of the menu item.
+     *
+     * @param int $position
+     *
+     * @return $this
+     */
     public function position(int $position = 100)
     {
         $this->position = $position;
@@ -88,6 +148,9 @@ class OptionsPage
         return $this;
     }
 
+    /**
+     * Registers the page with WP. Hooks and all.
+     */
     public function register()
     {
         add_action('admin_menu', function () {
@@ -96,7 +159,7 @@ class OptionsPage
     }
 
     /**
-     * Registers the page but not within the appropriate hook.
+     * Registers the page but not within the appropriate hook `admin_menu`.
      */
     public function registerManually()
     {
@@ -120,6 +183,8 @@ class OptionsPage
     }
 
     /**
+     * A sample page callback. You should be setting your own callback via `contentCallback()`.
+     *
      * https://codex.wordpress.org/Creating_Options_Pages#Opening_the_Page
      */
     public function sampleCallback()
@@ -138,6 +203,13 @@ class OptionsPage
         <?php echo ob_get_clean();
     }
 
+    /**
+     * Make the page top level.
+     *
+     * @param bool $bool
+     *
+     * @return $this
+     */
     public function topLevel(bool $bool = true)
     {
         $this->topLevel = $bool;

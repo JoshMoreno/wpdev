@@ -4,7 +4,7 @@ namespace: WPDev\Facades
 methods:
     -
         name: __construct
-        summary: 'PostType constructor. For more fluid syntax use PostType::<code>create()</code>'
+        summary: 'PostType constructor. For more fluid syntax use PostType::create()'
         description: ''
         visibility: public
         args:
@@ -56,7 +56,7 @@ methods:
                 type: string
     -
         name: deleteWithUser
-        summary: "Whether to delete posts of this type when deleting a user. If true, posts of this type\nbelonging to the user will be moved to trash when then user is deleted. If false, posts\nof this type belonging to the user will not be trashed or deleted. If not set (the default),\nposts are trashed if <code>post_type_supports('author')</code>. Otherwise posts are not trashed or deleted."
+        summary: "Whether to delete posts of this type when deleting a user. If true, posts of this type\nbelonging to the user will be moved to trash when then user is deleted. If false, posts\nof this type belonging to the user will not be trashed or deleted. If not set (the default),\nposts are trashed if post_type_supports('author'). Otherwise posts are not trashed or deleted."
         description: 'Default: null'
         visibility: public
         return:
@@ -157,7 +157,7 @@ methods:
     -
         name: register
         summary: 'This is the easiest way to register your post type.'
-        description: "However it uses an anonymous function so if you need to allow other plugins\nto be able to use @see <code>remove_action()</code> then you should use @see <code>registerManually()</code>"
+        description: "However it uses an anonymous function so if you need to allow other plugins\nto be able to use @see remove_action() then you should use @see registerManually()"
         visibility: public
         return:
             type: $this
@@ -176,7 +176,7 @@ methods:
     -
         name: registerMetaBoxCB
         summary: 'Provide a callback function that will be called when setting up the meta boxes for the edit form.'
-        description: "The callback function takes one argument $post, which contains the WP_Post object for the currently edited post.\nDo <code>remove_meta_box()</code> and <code>add_meta_box()</code> calls in the callback."
+        description: "The callback function takes one argument $post, which contains the WP_Post object for the currently edited post.\nDo remove_meta_box() and add_meta_box() calls in the callback."
         visibility: public
         return:
             type: $this
@@ -217,7 +217,7 @@ methods:
     -
         name: rewrite
         summary: '[''slug'']         string Customize the permalink structure slug. Defaults to the $post_type value. Should be translatable.'
-        description: "['with_front']   bool Should the permalink structure be prepended with the front base.\n                 (example: if your permalink structure is /blog/,\n                 then your links will be: false->/news/, true->/blog/news/). Defaults to true\n['feeds']        bool Should a feed permalink structure be built for this post type. Defaults to has_archive value.\n['pages']        bool Should the permalink structure provide for pagination. Defaults to true\n['ep_mask']      const If not specified, then it inherits from <code>permalink_epmask(if permalink_epmask is set)</code>,\n                 otherwise defaults to EP_PERMALINK\n                 see @link https://make.wordpress.org/plugins/2012/06/07/rewrite-endpoints-api/\n                 and also @link https://code.tutsplus.com/articles/the-rewrite-api-post-types-taxonomies--wp-25488"
+        description: "['with_front']   bool Should the permalink structure be prepended with the front base.\n                 (example: if your permalink structure is /blog/,\n                 then your links will be: false->/news/, true->/blog/news/). Defaults to true\n['feeds']        bool Should a feed permalink structure be built for this post type. Defaults to has_archive value.\n['pages']        bool Should the permalink structure provide for pagination. Defaults to true\n['ep_mask']      const If not specified, then it inherits from permalink_epmask(if permalink_epmask is set),\n                 otherwise defaults to EP_PERMALINK\n                 see @link https://make.wordpress.org/plugins/2012/06/07/rewrite-endpoints-api/\n                 and also @link https://code.tutsplus.com/articles/the-rewrite-api-post-types-taxonomies--wp-25488"
         visibility: public
         return:
             type: $this
@@ -357,7 +357,7 @@ methods:
                 default: true
     -
         name: publiclyQueryable
-        summary: 'Whether queries can be performed on the front end as part of <code>parse_request()</code>.'
+        summary: 'Whether queries can be performed on the front end as part of parse_request().'
         description: ''
         visibility: public
         return:
@@ -477,7 +477,7 @@ methods:
             description: ''
     -
         name: supportsFeaturedImage
-        summary: 'Alias for @see \WPDev\PostType\PostType::<code>supportsThumbnail()</code>'
+        summary: 'Alias for @see \WPDev\PostType\PostType::supportsThumbnail()'
         description: ''
         visibility: public
         return:
@@ -545,7 +545,7 @@ methods:
     -
         name: taxonomies
         summary: 'An array of registered taxonomies like category or post_tag that will be used with this post type.'
-        description: "This can be used in lieu of calling <code>register_taxonomy_for_object_type()</code> directly.\nCustom taxonomies still need to be registered with <code>register_taxonomy()</code>."
+        description: "This can be used in lieu of calling register_taxonomy_for_object_type() directly.\nCustom taxonomies still need to be registered with register_taxonomy()."
         visibility: public
         return:
             type: $this

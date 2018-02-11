@@ -5,7 +5,7 @@ use WPDev\Docs\ClassParser;
 
 function wrap_function_calls_in_code_tags($string)
 {
-    return preg_replace('/[a-z_A-Z]+\([^\)]*\)(\.[^\)]*\))?/', '<code>$0</code>', $string);
+    return preg_replace('/`([^`]+)`/', '<code>$1</code>', $string);
 }
 
 function generate_yaml_file($model, $folder_to_save_into)
