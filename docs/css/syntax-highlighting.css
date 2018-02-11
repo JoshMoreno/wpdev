@@ -1,6 +1,7 @@
 .highlight, pre.highlight {
     background: #282c34;
     color: #abb2bf;
+    tab-size: 4;
 }
 
 .highlight pre {

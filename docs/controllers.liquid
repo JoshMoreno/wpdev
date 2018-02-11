@@ -1,0 +1,52 @@
+---
+layout: docs
+permalink: controllers.html
+---
+<h1 class="display-4">Controllers</h1>
+<p class="lead">Let's get some separation of concerns going.</p>
+
+<p>This works the same way as default WP templating system. You can override parent theme controllers by including a same named controller in the child theme. You can also override a specific controller by using more specific naming (i.e <code>single-custom_post_type.php</code> will override <code>single.php</code>). This is independent of template files. Just because you have a <code>single-custom_post_type.php</code> controller does not mean you need a <code>single-custom_post_type.php</code> template file.
+</p>
+
+
+
+<h3>1. Create a controllers folder</h3>
+Create a `controllers` folder in your parent and/or child theme.
+
+<h3>2. Create controllers</h3>
+In the <code>controllers</code> folder, create files following the WP template hierarchy naming conventions (i.e <code>single-custom_post_type.php</code>). This directory gets searched recursively so you can organize in folders.
+
+Create a class (name it whatever you'd like) that implements the <code>\WPDev\Controller\ControllerInterface</code> interface. Implement the interface by defining a <code>build</code> method that returns an array.
+
+{% highlight php tabsize=2 %}
+namespace MyTheme;
+
+use WPDev\Controller\ControllerInterface;
+
+class SinglePost implements ControllerInterface
+{
+	/**
+	* The default data. Gets set before calling build()
+	* @var array
+	*/
+	protected $defaultData = [];
+
+	public function recentPosts()
+	{
+		$query = new WP_Query(['post_type' => 'post']);
+		return get_posts_from_query($query);
+	}
+
+	public function build(): array
+	{
+		return [
+			'recent_posts' => $this->recentPosts(),
+		];
+	}
+}
+{% endhighlight %}
+
+<h3>3. Use your data and enjoy cleaner templates</h3>
+<p>Your data will be available in two ways: as <code>$data</code> (array) and as extracted variables. So <code>$data['some_value']</code> becomes <code>$some_value</code>. Use whatever you prefer.</p>
+
+<p>👉 There is also two more goodies that gets merged into the <code>$data</code> array - <code>$data['Post']</code> also available as <code>$Post</code>. This is an instance of <code>WPDev\Models\Post</code> and <code>$data['Posts']</code> also available as <code>$Posts</code> which is an array of posts from the main query (useful for archive pages for example).</p>
