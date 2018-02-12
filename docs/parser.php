@@ -16,3 +16,9 @@ foreach ($loader->getClassMap() as $class => $path) {
 		generate_yaml_file($class, __DIR__.'/_data/facades/');
 	}
 }
+
+foreach ($loader->getClassMap() as $class => $path) {
+	if (Stringy::create($class)->startsWith('WPDev\\Template')) {
+		generate_yaml_file($class, __DIR__.'/_data/template/');
+	}
+}

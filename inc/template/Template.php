@@ -1,6 +1,6 @@
 <?php
 
-namespace WPDev\Templates;
+namespace WPDev\Template;
 
 use Symfony\Component\Finder\Finder;
 

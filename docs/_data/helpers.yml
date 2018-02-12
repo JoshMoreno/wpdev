@@ -29,3 +29,42 @@
   return:
     type: array
     description: 'Array of WPDev\Models\Post objects or an empty array if there were no posts to map over.'
+
+- name: template
+  summary: 'Include a theme template file. Optionally pass data.'
+  fullName: template( string $file_name, array $data = [] )
+  args:
+      - name: file_name
+        description: 'The file name of the template.'
+        type: string
+      - name: data
+        description: 'Data to be passed to view. Will also be extracted into variables.'
+        type: array
+  return:
+    type: bool
+    description: 'True if successfully included the template. Otherwise, false.'
+
+- name: template_locate
+  summary: 'Locates a template file.'
+  fullName: template_locate( string $file_name )
+  args:
+      - name: file_name
+        description: 'The file name of the template.'
+        type: string
+  return:
+    type: string
+    description: 'The path to the template file. Empty if none found.'
+
+- name: plugin_template
+  summary: 'Include a theme overridable plugin template file. Optionally pass data.'
+  fullName: plugin_template( string $file_path, array $data = [] )
+  args:
+      - name: file_path
+        description: 'The path to the template file in the plugin. The basename will be used to search the `theme/templates/plugins/my-plugin` folder.'
+        type: string
+      - name: data
+        description: 'Data to be passed to view. Will also be extracted into variables.'
+        type: array
+  return:
+    type: bool
+    description: 'True if successfully included the template. Otherwise, false.'

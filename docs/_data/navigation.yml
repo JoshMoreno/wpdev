@@ -22,3 +22,11 @@
       url: /models/post
     - text: Image
       url: /models/image
+
+- text: Template
+  url: \#
+  sublinks:
+    - text: Template
+      url: /template/template
+    - text: PluginTemplate
+      url: /template/plugin-template

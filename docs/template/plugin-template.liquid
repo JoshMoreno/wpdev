@@ -1,0 +1,35 @@
+---
+layout: docs
+permalink: /template/plugin-template.html
+---
+{% capture usage %}
+<p>Works the same as <code>WPDev\Template\Template</code> except it will fallback to the absolute path passed in.</p>
+<p>One major difference is that it will only look in the theme's <code>templates/plugins/$your_plugin_folder_name</code></p>
+<p>For example if your plugin is in a folder called <code>my-plugin</code>, then it will look for overriding templates in the child/parent theme's <code>templates/plugins/my-plugin/</code> folder. This is to help avoid template naming conflicts between plugins. It also has the benefit of keeping the templates folder organized.</p>
+{% highlight php %}
+use WPDev\Template\PluginTemplate;
+
+// Simple include without any data
+PluginTemplate::include(__DIR__ . '/hero-banner.php');
+
+// With data
+PluginTemplate::include(__DIR__ . '/hero-banner.php', ['title' => 'So Easy']);
+{% endhighlight %}
+{% highlight php %}
+// Or with global helper function...
+// Since it is global - note the absence of "use WPDev\Template\PluginTemplate;"
+
+// Simple include without any data
+plugin_template(__DIR__ . '/hero-banner.php');
+
+// With data
+plugin_template(__DIR__ . 'hero-banner.php', ['title' => 'So Easy']);
+{% endhighlight %}
+{% endcapture %}
+
+{% include docs/modelPage.liquid
+    model=site.data.template.PluginTemplate
+    title="PluginTemplate"
+    tagline="Overridable plugin templates made easy."
+    usage=usage
+%}

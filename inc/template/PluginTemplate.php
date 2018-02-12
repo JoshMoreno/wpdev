@@ -1,6 +1,6 @@
 <?php
 
-namespace WPDev\Templates;
+namespace WPDev\Template;
 
 class PluginTemplate extends Template
 {

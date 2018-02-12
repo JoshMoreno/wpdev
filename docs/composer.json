@@ -6,7 +6,12 @@
     },
     "autoload": {
         "psr-4": {
-            "WPDev\\": ["inc/", "../inc/models/", "../inc/facades/"]
+            "WPDev\\": [
+                "inc/",
+                "../inc/models/",
+                "../inc/facades/",
+                "../inc/template"
+            ]
         },
         "files": [
             "inc/helpers.php"
