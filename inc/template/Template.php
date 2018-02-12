@@ -112,7 +112,6 @@ class Template
 
     protected function locateAllTemplates()
     {
-        dump($this->paths, $this->fileName);
         if (!$this->paths) {
             return [];
         }
