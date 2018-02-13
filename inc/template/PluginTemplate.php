@@ -31,6 +31,17 @@ class PluginTemplate extends Template
         }
     }
 
+    /*
+    |--------------------------------------------------------------------------
+    | Protected
+    |--------------------------------------------------------------------------
+    */
+
+    protected function excludedPaths()
+    {
+        return [];
+    }
+
     protected function paths()
     {
         return [

@@ -110,6 +110,13 @@ class Template
         return $real_paths;
     }
 
+    protected function excludedPaths()
+    {
+        return [
+            'plugins'
+        ];
+    }
+
     protected function locateAllTemplates()
     {
         if (!$this->paths) {
@@ -117,7 +124,7 @@ class Template
         }
 
         $finder    = new Finder();
-        $templates = $finder->files()->in($this->paths)->name($this->fileName);
+        $templates = $finder->files()->in($this->paths)->exclude($this->excludedPaths())->name($this->fileName);
 
         return iterator_to_array($templates);
     }
