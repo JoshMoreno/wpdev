@@ -58,6 +58,9 @@ class ControllerLoader
      */
     protected function buildListOfFiles()
     {
+        if (!$this->paths) {
+            return [];
+        }
 
         $pattern = '/implements (\\\WPDev\\\)?ControllerInterface/';
         $finder  = new Finder();
