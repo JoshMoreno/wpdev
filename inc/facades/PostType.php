@@ -259,31 +259,15 @@ class PostType
      * Registers the activation hook.
      */
     public function handleActivationHook() {
-    	register_activation_hook(wpdev_main_plugin_file_name(), [$this, 'onPluginActivation']);
+        add_action('activate_plugin', [$this, 'registerManually']);
     }
 
     /**
      * Registers the deactivation hook.
      */
     public function handleDeactivationHook() {
-    	register_deactivation_hook(wpdev_main_plugin_file_name(), [$this, 'deregister']);
+        add_action('deactivate_plugin', [$this, 'deregister']);
     }
-
-    /**
-     * Registers the post type and flushes rewrite rules.
-     */
-	public function onPluginActivation() {
-		$this->registerManually();
-		flush_rewrite_rules();
-    }
-
-    /**
-     * Deregisters the post type and flushes rewrite rules.
-     */
-	public function onPluginDeactivation() {
-		$this->deregister();
-		flush_rewrite_rules();
-	}
 
     /**
      * Use this method if you want need to use a named function
