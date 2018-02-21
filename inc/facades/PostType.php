@@ -12,8 +12,8 @@ class PostType
     // todo method for capability_type
     // todo method for capabilities
 
-    private $name;
     protected $defaultSupports = ['title', 'editor', 'thumbnail'];
+    protected $name;
     public $singularName = '';
     public $pluralName = '';
     public $overrideArgs = [];
