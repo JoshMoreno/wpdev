@@ -13,6 +13,7 @@ class PostType
     // todo method for capabilities
 
     private $name;
+    protected $defaultSupports = ['title', 'editor', 'thumbnail'];
     public $singularName = '';
     public $pluralName = '';
     public $overrideArgs = [];
@@ -108,7 +109,7 @@ class PostType
 
             'menu_position' => 5, // below posts
 
-            'supports' => ['title', 'editor', 'thumbnail'],
+            'supports' => $this->defaultSupports,
         ];
 
         return $defaultArgs;
@@ -502,6 +503,23 @@ class PostType
     }
 
     /**
+     * Removes a supports arg. Use this to remove one of the defaults.
+     *
+     * @param string $feature The feature to remove
+     *
+     * @return $this
+     */
+    public function removeSupportArg(string $feature)
+    {
+        if (($key = array_search($feature, $this->defaultSupports)) !== false) {
+            unset($this->defaultSupports[$key]);
+        }
+
+        return $this;
+    }
+
+
+/**
      * Set the plural name. Useful if simply appending an 's' isn't grammatically correct.
      *
      * @param string $plural_name
