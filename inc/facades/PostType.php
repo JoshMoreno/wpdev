@@ -25,10 +25,6 @@ class PostType
 	 */
     public function __construct(string $name)
     {
-        if ( ! $name) {
-            throw new InvalidArgumentException('Did not receive a name for the custom post type');
-        }
-
         $this->name = $name;
 
         $this->validateName();
@@ -798,6 +794,10 @@ class PostType
             'order',
             'theme',
         ];
+
+        if (!$this->name) {
+            throw new InvalidArgumentException('Empty string not valid.');
+        }
 
         if (in_array($this->name, $reserved_names)) {
             throw new InvalidArgumentException("'{$this->name}' is a WordPress reserved name");
