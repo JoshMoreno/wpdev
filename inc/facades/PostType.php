@@ -28,6 +28,9 @@ class PostType
         $this->name = $name;
 
         $this->validateName();
+
+	    $this->singularName = $this->formatName();
+	    $this->pluralName = $this->formatName(true);
     }
 
     /**
@@ -62,35 +65,35 @@ class PostType
         $defaultArgs = [
 
             'labels' => [
-                'name'                  => $this->getPluralName(),
-                'singular_name'         => $this->getSingularName(),
+                'name'                  => $this->pluralName,
+                'singular_name'         => $this->singularName,
                 'add_new'               => "Add New",
-                'add_new_item'          => "Add New {$this->getSingularName()}",
-                'edit_item'             => "Edit {$this->getSingularName()}",
-                'new_item'              => "New {$this->getSingularName()}",
-                'view_item'             => "View {$this->getSingularName()}",
-                'view_items'            => "View {$this->getPluralName()}",
-                'search_items'          => "Search {$this->getPluralName()}",
-                'not_found'             => "No {$this->getPluralName()} found",
-                'not_found_in_trash'    => "No {$this->getPluralName()} found in Trash",
-                'parent_item_colon'     => "Parent {$this->getSingularName()}:",
-                'all_items'             => "All {$this->getPluralName()}",
-                'archives'              => "{$this->getSingularName()} Archives",
-                'attributes'            => "{$this->getSingularName()} Attributes",
-                'insert_into_item'      => "Insert into {$this->getSingularName()}",
-                'uploaded_to_this_item' => "Uploaded to this {$this->getSingularName()}",
+                'add_new_item'          => "Add New {$this->singularName}",
+                'edit_item'             => "Edit {$this->singularName}",
+                'new_item'              => "New {$this->singularName}",
+                'view_item'             => "View {$this->singularName}",
+                'view_items'            => "View {$this->pluralName}",
+                'search_items'          => "Search {$this->pluralName}",
+                'not_found'             => "No {$this->pluralName} found",
+                'not_found_in_trash'    => "No {$this->pluralName} found in Trash",
+                'parent_item_colon'     => "Parent {$this->singularName}:",
+                'all_items'             => "All {$this->pluralName}",
+                'archives'              => "{$this->singularName} Archives",
+                'attributes'            => "{$this->singularName} Attributes",
+                'insert_into_item'      => "Insert into {$this->singularName}",
+                'uploaded_to_this_item' => "Uploaded to this {$this->singularName}",
                 'featured_image'        => 'Featured Image',
                 'set_featured_image'    => 'Set featured image',
                 'remove_featured_image' => 'Remove featured image',
                 'use_featured_image'    => 'Use as featured image',
-                'menu_name'             => $this->getPluralName(),
-                'filter_items_list'     => "Filter {$this->getPluralName()} list",
-                'items_list_navigation' => "{$this->getPluralName()} list navigation",
-                'items_list'            => "{$this->getPluralName()} list",
-                'name_admin_bar'        => $this->getSingularName(),
+                'menu_name'             => $this->pluralName,
+                'filter_items_list'     => "Filter {$this->pluralName} list",
+                'items_list_navigation' => "{$this->pluralName} list navigation",
+                'items_list'            => "{$this->pluralName} list",
+                'name_admin_bar'        => $this->singularName,
             ],
 
-            'description' => "Handles the {$this->getPluralName()}",
+            'description' => "Handles the {$this->pluralName}",
 
             /**
              * Implies:
@@ -187,27 +190,7 @@ class PostType
             $name .= 's';
         }
 
-        return ucwords($name);
-    }
-
-    private function getSingularName()
-    {
-        if ( ! $this->singularName) {
-            $this->singularName = $this->formatName();
-        }
-
-        return $this->singularName;
-    }
-
-    private function getPluralName()
-    {
-        if ( ! $this->pluralName && ! $this->singularName) {
-            $this->pluralName = $this->formatName(true);
-        } elseif ( ! $this->pluralName) {
-            $this->pluralName = $this->singularName.'s';
-        }
-
-        return $this->pluralName;
+        return trim(ucwords($name));
     }
 
     /**

@@ -15,6 +15,31 @@ class PostTypeTest extends \PHPUnit\Framework\TestCase
         \WPDev\Facades\PostType::create($name);
     }
 
+	public function testSingularNameGeneratesCorrectly() {
+
+    	$names = [
+    	    'project' => 'Project', // capitalizes
+		    'dummy_name' => 'Dummy Name', //turns underscores into spaces and capitalizes
+		    'dummy_sample_name' => 'Dummy Sample Name', //turns underscores into spaces and capitalizes
+		    'dummy-name' => 'Dummy-Name', // capitalizes hyphenated words
+		    'dummy-sample-name' => 'Dummy-Sample-Name', // capitalizes hyphenated words
+		    'dummy_sample-name' => 'Dummy Sample-Name', // handles both spaces and hyphenated fine
+		    'dummy-sample-' => 'Dummy-Sample-', // doesn't mess with last hyphen, edge case
+		    '_dummy_sample_' => 'Dummy Sample', // trims spaces
+	    ];
+
+		foreach ($names as $name => $expected) {
+			$postType = \WPDev\Facades\PostType::create($name);
+			$this->assertEquals($expected, $postType->singularName);
+    	}
+    }
+
+	/*
+	|--------------------------------------------------------------------------
+	| Data Providers
+	|--------------------------------------------------------------------------
+	*/
+
     /**
      * Valid names
      * @return array
