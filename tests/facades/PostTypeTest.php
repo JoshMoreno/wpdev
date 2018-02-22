@@ -15,33 +15,42 @@ class PostTypeTest extends \PHPUnit\Framework\TestCase
         \WPDev\Facades\PostType::create($name);
     }
 
-	public function testSingularNameGeneratesCorrectly() {
+    public function testSingularNameGeneratesCorrectly()
+    {
+        $names = [
+            // capitalizes
+            'project'           => 'Project',
+            //turns underscores into spaces and capitalizes
+            'dummy_name'        => 'Dummy Name',
+            //turns underscores into spaces and capitalizes
+            'dummy_sample_name' => 'Dummy Sample Name',
+            // capitalizes hyphenated words
+            'dummy-name'        => 'Dummy-Name',
+            // capitalizes hyphenated words
+            'dummy-sample-name' => 'Dummy-Sample-Name',
+            // handles both spaces and hyphenated fine
+            'dummy_sample-name' => 'Dummy Sample-Name',
+            // doesn't mess with last hyphen, edge case
+            'dummy-sample-'     => 'Dummy-Sample-',
+            // trims spaces
+            '_dummy_sample_'    => 'Dummy Sample',
+        ];
 
-    	$names = [
-    	    'project' => 'Project', // capitalizes
-		    'dummy_name' => 'Dummy Name', //turns underscores into spaces and capitalizes
-		    'dummy_sample_name' => 'Dummy Sample Name', //turns underscores into spaces and capitalizes
-		    'dummy-name' => 'Dummy-Name', // capitalizes hyphenated words
-		    'dummy-sample-name' => 'Dummy-Sample-Name', // capitalizes hyphenated words
-		    'dummy_sample-name' => 'Dummy Sample-Name', // handles both spaces and hyphenated fine
-		    'dummy-sample-' => 'Dummy-Sample-', // doesn't mess with last hyphen, edge case
-		    '_dummy_sample_' => 'Dummy Sample', // trims spaces
-	    ];
-
-		foreach ($names as $name => $expected) {
-			$postType = \WPDev\Facades\PostType::create($name);
-			$this->assertEquals($expected, $postType->singularName);
-    	}
+        foreach ($names as $name => $expected) {
+            $postType = \WPDev\Facades\PostType::create($name);
+            $this->assertEquals($expected, $postType->singularName);
+        }
     }
 
-	/*
-	|--------------------------------------------------------------------------
-	| Data Providers
-	|--------------------------------------------------------------------------
-	*/
+    /*
+    |--------------------------------------------------------------------------
+    | Data Providers
+    |--------------------------------------------------------------------------
+    */
 
     /**
      * Valid names
+     *
      * @return array
      */
     public function validNameProvider()
