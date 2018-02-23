@@ -12,7 +12,7 @@ class PostType
     // todo method for capability_type
     // todo method for capabilities
 
-    protected $defaultSupports = ['title', 'editor', 'thumbnail'];
+    protected $supports = ['title', 'editor', 'thumbnail'];
     protected $name;
     public $singularName = '';
     public $pluralName = '';
@@ -31,28 +31,6 @@ class PostType
 
 	    $this->singularName = $this->formatName();
 	    $this->pluralName = $this->formatName(true);
-    }
-
-    /**
-     * Adds to the 'supports' array
-     *
-     * @param string $arg
-     *
-     * @return $this
-     */
-    public function addSupportArg($arg = '')
-    {
-        if ( ! $arg) {
-            return $this;
-        }
-
-        if (empty($this->overrideArgs['supports'])) {
-            $this->overrideArgs['supports'] = [];
-        }
-
-        $this->overrideArgs['supports'][] = $arg;
-
-        return $this;
     }
 
     private function buildArgs()
@@ -108,7 +86,7 @@ class PostType
 
             'menu_position' => 5, // below posts
 
-            'supports' => $this->defaultSupports,
+            'supports' => $this->supports,
         ];
 
         return $defaultArgs;
@@ -490,8 +468,8 @@ class PostType
      */
     public function removeSupportArg(string $feature)
     {
-        if (($key = array_search($feature, $this->defaultSupports)) !== false) {
-            unset($this->defaultSupports[$key]);
+        if (($key = array_search($feature, $this->supports)) !== false) {
+            unset($this->supports[$key]);
         }
 
         return $this;
@@ -618,7 +596,7 @@ class PostType
      */
     public function supportsAuthor()
     {
-        return $this->addSupportArg('author');
+        return $this->supports('author');
     }
 
     /**
@@ -628,7 +606,7 @@ class PostType
      */
     public function supportsComments()
     {
-        return $this->addSupportArg('comments');
+        return $this->supports('comments');
     }
 
     /**
@@ -638,7 +616,7 @@ class PostType
      */
     public function supportsCustomFields()
     {
-        return $this->addSupportArg('custom-fields');
+        return $this->supports('custom-fields');
     }
 
     /**
@@ -648,7 +626,7 @@ class PostType
      */
     public function supportsEditor()
     {
-        return $this->addSupportArg('editor');
+        return $this->supports('editor');
     }
 
     /**
@@ -658,7 +636,7 @@ class PostType
      */
     public function supportsExcerpt()
     {
-        return $this->addSupportArg('excerpt');
+        return $this->supports('excerpt');
     }
 
     /**
@@ -680,7 +658,7 @@ class PostType
      */
     public function supportsPageAttributes()
     {
-        return $this->addSupportArg('page-attributes');
+        return $this->supports('page-attributes');
     }
 
     /**
@@ -690,7 +668,7 @@ class PostType
      */
     public function supportsPostFormats()
     {
-        return $this->addSupportArg('post-formats');
+        return $this->supports('post-formats');
     }
 
     /**
@@ -700,7 +678,7 @@ class PostType
      */
     public function supportsRevisions()
     {
-        return $this->addSupportArg('revisions');
+        return $this->supports('revisions');
     }
 
     /**
@@ -710,7 +688,7 @@ class PostType
      */
     public function supportsThumbnail()
     {
-        return $this->addSupportArg('thumbnail');
+        return $this->supports('thumbnail');
     }
 
     /**
@@ -720,7 +698,7 @@ class PostType
      */
     public function supportsTitle()
     {
-        return $this->addSupportArg('title');
+        return $this->supports('title');
     }
 
     /**
@@ -730,20 +708,32 @@ class PostType
      */
     public function supportsTrackbacks()
     {
-        return $this->addSupportArg('trackbacks');
+        return $this->supports('trackbacks');
     }
 
     /**
      * False can be passed as value instead of an array to
      * prevent default (title and editor) behavior
      *
-     * @param array|false $features
+     * @param array|false|string $features
      *
      * @return $this
      */
     public function supports($features = ['editor', 'title'])
     {
-        return $this->setArg('supports', $features);
+    	// allow for complete override
+    	if (is_array($features) || is_bool($features)) {
+    		$this->supports = $features;
+	    }
+
+	    // if we have a string make sure we have an array to push to
+	    if (!is_array($this->supports)) {
+    		$this->supports = [];
+	    }
+
+	    $this->supports[] = $features;
+
+        return $this;
     }
 
     /**
