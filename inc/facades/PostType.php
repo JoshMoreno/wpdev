@@ -33,65 +33,6 @@ class PostType
 	    $this->pluralName = $this->formatName(true);
     }
 
-    protected function buildArgs()
-    {
-        return $this->deepMergeArray($this->buildDefaultArgs(), $this->overrideArgs);
-    }
-
-    protected function buildDefaultArgs()
-    {
-        $defaultArgs = [
-
-            'labels' => [
-                'name'                  => $this->pluralName,
-                'singular_name'         => $this->singularName,
-                'add_new'               => "Add New",
-                'add_new_item'          => "Add New {$this->singularName}",
-                'edit_item'             => "Edit {$this->singularName}",
-                'new_item'              => "New {$this->singularName}",
-                'view_item'             => "View {$this->singularName}",
-                'view_items'            => "View {$this->pluralName}",
-                'search_items'          => "Search {$this->pluralName}",
-                'not_found'             => "No {$this->pluralName} found",
-                'not_found_in_trash'    => "No {$this->pluralName} found in Trash",
-                'parent_item_colon'     => "Parent {$this->singularName}:",
-                'all_items'             => "All {$this->pluralName}",
-                'archives'              => "{$this->singularName} Archives",
-                'attributes'            => "{$this->singularName} Attributes",
-                'insert_into_item'      => "Insert into {$this->singularName}",
-                'uploaded_to_this_item' => "Uploaded to this {$this->singularName}",
-                'featured_image'        => 'Featured Image',
-                'set_featured_image'    => 'Set featured image',
-                'remove_featured_image' => 'Remove featured image',
-                'use_featured_image'    => 'Use as featured image',
-                'menu_name'             => $this->pluralName,
-                'filter_items_list'     => "Filter {$this->pluralName} list",
-                'items_list_navigation' => "{$this->pluralName} list navigation",
-                'items_list'            => "{$this->pluralName} list",
-                'name_admin_bar'        => $this->singularName,
-            ],
-
-            'description' => "Handles the {$this->pluralName}",
-
-            /**
-             * Implies:
-             * exclude_from_search = false
-             * publicly_queryable = true
-             * show_ui = true
-             * show_in_nav_menus = true
-             * show_in_menu = true
-             * show_in_admin_bar = true
-             */
-            'public'      => true,
-
-            'menu_position' => 5, // below posts
-
-            'supports' => $this->supports,
-        ];
-
-        return $defaultArgs;
-    }
-
     /**
      * Whether or not the post_type can be exported
      * Default: true
@@ -751,42 +692,69 @@ class PostType
         return $this->setArg('taxonomies', $taxonomies);
     }
 
-    protected function validateName()
+    /*
+    |--------------------------------------------------------------------------
+    | Protected
+    |--------------------------------------------------------------------------
+    */
+
+    protected function buildArgs()
     {
-        $reserved_names = [
-            'post',
-            'page',
-            'attachment',
-            'revision',
-            'nav_menu_item',
-            'custom_css',
-            'customize_changeset',
-            'action',
-            'author',
-            'order',
-            'order',
-            'theme',
+        return $this->deepMergeArray($this->buildDefaultArgs(), $this->overrideArgs);
+    }
+
+    protected function buildDefaultArgs()
+    {
+        $defaultArgs = [
+
+            'labels' => [
+                'name'                  => $this->pluralName,
+                'singular_name'         => $this->singularName,
+                'add_new'               => "Add New",
+                'add_new_item'          => "Add New {$this->singularName}",
+                'edit_item'             => "Edit {$this->singularName}",
+                'new_item'              => "New {$this->singularName}",
+                'view_item'             => "View {$this->singularName}",
+                'view_items'            => "View {$this->pluralName}",
+                'search_items'          => "Search {$this->pluralName}",
+                'not_found'             => "No {$this->pluralName} found",
+                'not_found_in_trash'    => "No {$this->pluralName} found in Trash",
+                'parent_item_colon'     => "Parent {$this->singularName}:",
+                'all_items'             => "All {$this->pluralName}",
+                'archives'              => "{$this->singularName} Archives",
+                'attributes'            => "{$this->singularName} Attributes",
+                'insert_into_item'      => "Insert into {$this->singularName}",
+                'uploaded_to_this_item' => "Uploaded to this {$this->singularName}",
+                'featured_image'        => 'Featured Image',
+                'set_featured_image'    => 'Set featured image',
+                'remove_featured_image' => 'Remove featured image',
+                'use_featured_image'    => 'Use as featured image',
+                'menu_name'             => $this->pluralName,
+                'filter_items_list'     => "Filter {$this->pluralName} list",
+                'items_list_navigation' => "{$this->pluralName} list navigation",
+                'items_list'            => "{$this->pluralName} list",
+                'name_admin_bar'        => $this->singularName,
+            ],
+
+            'description' => "Handles the {$this->pluralName}",
+
+            /**
+             * Implies:
+             * exclude_from_search = false
+             * publicly_queryable = true
+             * show_ui = true
+             * show_in_nav_menus = true
+             * show_in_menu = true
+             * show_in_admin_bar = true
+             */
+            'public'      => true,
+
+            'menu_position' => 5, // below posts
+
+            'supports' => $this->supports,
         ];
 
-        if (!$this->name) {
-            throw new InvalidArgumentException('Empty string not valid.');
-        }
-
-        if (in_array($this->name, $reserved_names)) {
-            throw new InvalidArgumentException("'{$this->name}' is a WordPress reserved name");
-        }
-
-        if (strpos($this->name, ' ') !== false) {
-            throw new InvalidArgumentException('Post type machine name cannot contain spaces.');
-        }
-
-        if (strtolower($this->name) !== $this->name) {
-            throw new InvalidArgumentException('Post type machine name cannot contain capital letters.');
-        }
-
-        if (strlen($this->name) > 20) {
-            throw new InvalidArgumentException('Post type machine name cannot exceed 20 characters. Current name is '.strlen($this->name).' characters long.');
-        }
+        return $defaultArgs;
     }
 
     protected function deepMergeArray()
@@ -823,5 +791,43 @@ class PostType
         }
 
         return $result;
+    }
+
+    protected function validateName()
+    {
+        $reserved_names = [
+            'post',
+            'page',
+            'attachment',
+            'revision',
+            'nav_menu_item',
+            'custom_css',
+            'customize_changeset',
+            'action',
+            'author',
+            'order',
+            'order',
+            'theme',
+        ];
+
+        if (!$this->name) {
+            throw new InvalidArgumentException('Empty string not valid.');
+        }
+
+        if (in_array($this->name, $reserved_names)) {
+            throw new InvalidArgumentException("'{$this->name}' is a WordPress reserved name");
+        }
+
+        if (strpos($this->name, ' ') !== false) {
+            throw new InvalidArgumentException('Post type machine name cannot contain spaces.');
+        }
+
+        if (strtolower($this->name) !== $this->name) {
+            throw new InvalidArgumentException('Post type machine name cannot contain capital letters.');
+        }
+
+        if (strlen($this->name) > 20) {
+            throw new InvalidArgumentException('Post type machine name cannot exceed 20 characters. Current name is '.strlen($this->name).' characters long.');
+        }
     }
 }
