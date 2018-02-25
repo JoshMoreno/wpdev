@@ -33,12 +33,12 @@ class PostType
 	    $this->pluralName = $this->formatName(true);
     }
 
-    private function buildArgs()
+    protected function buildArgs()
     {
         return $this->deepMergeArray($this->buildDefaultArgs(), $this->overrideArgs);
     }
 
-    private function buildDefaultArgs()
+    protected function buildDefaultArgs()
     {
         $defaultArgs = [
 
@@ -155,7 +155,7 @@ class PostType
         unregister_post_type($name);
     }
 
-    private function formatName(bool $plural = false)
+    protected function formatName(bool $plural = false)
     {
         $name = str_replace('_', ' ', $this->name);
 
@@ -751,7 +751,7 @@ class PostType
         return $this->setArg('taxonomies', $taxonomies);
     }
 
-    private function validateName()
+    protected function validateName()
     {
         $reserved_names = [
             'post',
@@ -789,7 +789,7 @@ class PostType
         }
     }
 
-    private function deepMergeArray()
+    protected function deepMergeArray()
     {
         $arrays = func_get_args();
         $result = [];
