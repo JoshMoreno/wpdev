@@ -1,3 +1,6 @@
 /.* export-ignore
 readme.md export-ignore
 /docs export-ignore
+/tests export-ignore
+/init-test-env export-ignore
+/phpunit.xml export-ignore
