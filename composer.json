@@ -18,6 +18,12 @@
     "require-dev": {
         "phpunit/phpunit": "^6.0",
         "guzzlehttp/guzzle": "^6.3",
-        "symfony/filesystem": "^4.0"
+        "symfony/filesystem": "^4.0",
+        "10up/wp_mock": "0.3.0"
+    },
+    "scripts": {
+        "test": "composer unit-test && composer integration-test",
+        "integration-test": "phpunit --bootstrap=tests/integration-bootstrap.php --color=always --verbose tests/integration",
+        "unit-test": "phpunit --bootstrap=tests/unit-bootstrap.php --color=always --verbose tests/unit"
     }
 }

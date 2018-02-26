@@ -12,7 +12,7 @@ class PostType
     // todo method for capability_type
     // todo method for capabilities
 
-    protected $supports = ['title', 'editor', 'thumbnail'];
+    public $supports = ['title', 'editor', 'thumbnail'];
     protected $name;
     public $singularName = '';
     public $pluralName = '';
@@ -75,41 +75,11 @@ class PostType
 
     /**
      * Deregisters the post type.
+     *
+     * @return bool|\WP_Error
      */
     public function deregister() {
-    	self::deregisterManually($this->name);
-    }
-
-    /**
-     * Calls `unregister_post_type`. Meant for use in deactivation hook.
-     *
-     * @param string $name
-     *
-     * @throws \Exception
-     */
-    public static function deregisterManually(string $name = '')
-    {
-        if ( ! $name) {
-            throw new Exception('Need to pass in the name of the post type to deregister');
-        }
-
-        unregister_post_type($name);
-    }
-
-    protected function formatName(bool $plural = false)
-    {
-        $name = str_replace('_', ' ', $this->name);
-
-        // capitalize hyphenated words
-        if (strpos($name, '-')) {
-            $name = implode('-', array_map('ucfirst', explode('-', $name)));
-        }
-
-        if ($plural) {
-            $name .= 's';
-        }
-
-        return trim(ucwords($name));
+        return unregister_post_type($this->name);
     }
 
     /**
@@ -155,22 +125,7 @@ class PostType
     }
 
     /**
-     * Registers the activation hook.
-     */
-    public function handleActivationHook() {
-        add_action('activate_plugin', [$this, 'registerManually']);
-    }
-
-    /**
-     * Registers the deactivation hook.
-     */
-    public function handleDeactivationHook() {
-        add_action('deactivate_plugin', [$this, 'deregister']);
-    }
-
-    /**
-     * Use this method if you want need to use a named function
-     * to register your post type.
+     * Use this method if you want to take care of all the hooks.
      *
      * @return \WP_Error|\WP_Post_Type
      */
@@ -185,26 +140,14 @@ class PostType
      * It uses an anonymous function so if you need to allow other plugins
      * to be able to use `@see remove_action()` then you should use `@see registerManually()`
      *
-     * @param bool $handle_activation_hooks Whether to register activation and deactivation hooks
-     * @param callable|null $callback
-     *
      * @return $this
      */
-    public function register(bool $handle_activation_hooks = true, callable $callback = null)
+    public function register()
     {
-    	if ($handle_activation_hooks) {
-    		$this->handleActivationHook();
-    		$this->handleDeactivationHook();
-	    }
+        add_action('activate_plugin', [$this, 'registerManually']);
+        add_action('deactivate_plugin', [$this, 'deregister']);
 
-        add_action('init', function () use ($callback) {
-            if ($callback) {
-                $response = register_post_type($this->name, $this->buildArgs());
-                $callback($response);
-            } else {
-                register_post_type($this->name, $this->buildArgs());
-            }
-        });
+        add_action('init', [$this, 'registerManually']);
 
         return $this;
     }
@@ -219,7 +162,7 @@ class PostType
      *
      * @return $this
      */
-    public function registerMetaBoxCB($callback = '')
+    public function registerMetaBoxCB($callback)
     {
         return $this->setArg('register_meta_box_cb', $callback);
     }
@@ -234,10 +177,6 @@ class PostType
      */
     public function restBase(string $rest_base)
     {
-        if ( ! $rest_base) {
-            $rest_base = $this->name;
-        }
-
         return $this->setArg('rest_base', $rest_base);
     }
 
@@ -290,6 +229,10 @@ class PostType
      */
     public function setArg(string $key = '', $val = '')
     {
+        if ($key === 'supports') {
+            return $this->supports($val);
+        }
+
         $this->overrideArgs[$key] = $val;
 
         return $this;
@@ -583,7 +526,7 @@ class PostType
     /**
      * Support featured image (aka thumbnail).
      *
-     * Alias for @see \WPDev\PostType\PostType::supportsThumbnail()
+     * Alias for @see \WPDev\Models\PostType::supportsThumbnail()
      *
      * @return $this
      */
@@ -660,11 +603,12 @@ class PostType
      *
      * @return $this
      */
-    public function supports($features = ['editor', 'title'])
+    public function supports($features)
     {
     	// allow for complete override
     	if (is_array($features) || is_bool($features)) {
     		$this->supports = $features;
+    		return $this;
 	    }
 
 	    // if we have a string make sure we have an array to push to
@@ -757,9 +701,8 @@ class PostType
         return $defaultArgs;
     }
 
-    protected function deepMergeArray()
+    protected function deepMergeArray(...$arrays)
     {
-        $arrays = func_get_args();
         $result = [];
 
         foreach ($arrays as $array) {
@@ -791,6 +734,22 @@ class PostType
         }
 
         return $result;
+    }
+
+    protected function formatName(bool $plural = false)
+    {
+        $name = str_replace('_', ' ', $this->name);
+
+        // capitalize hyphenated words
+        if (strpos($name, '-')) {
+            $name = implode('-', array_map('ucfirst', explode('-', $name)));
+        }
+
+        if ($plural) {
+            $name .= 's';
+        }
+
+        return trim(ucwords($name));
     }
 
     protected function validateName()
