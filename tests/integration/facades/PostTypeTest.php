@@ -225,7 +225,12 @@ class PostTypeTest extends WP_UnitTestCase
 
         $actual = array_keys($GLOBALS['_wp_post_type_features']['project']);
         $this->assertSame(array_unique($expected), $actual);
+    }
 
+    public function testTaxonomies()
+    {
+        $post = PostType::create('project')->taxonomies(['category'])->registerManually();
+        $this->assertContains('category', get_object_taxonomies('project'));
     }
 
     public function tearDown()
