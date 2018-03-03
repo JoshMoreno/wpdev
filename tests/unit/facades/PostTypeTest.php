@@ -2,6 +2,7 @@
 namespace WPDev\Tests\Unit;
 
 use InvalidArgumentException;
+use WP_Mock;
 use WP_Mock\Tools\TestCase;
 use WPDev\Facades\PostType;
 use WPDev\Models\Post;
@@ -9,6 +10,7 @@ use WPDev\Models\Post;
 class PostTypeTest extends TestCase {
     /** @var  PostType */
     protected $postType;
+    protected $postTypeName;
 
     /*
     |--------------------------------------------------------------------------
@@ -21,7 +23,9 @@ class PostTypeTest extends TestCase {
      */
     public function setUp()
     {
-        $this->postType = PostType::create('project');
+        parent::setUp();
+        $this->postTypeName = 'project';
+        $this->postType = PostType::create($this->postTypeName);
     }
 
     /**
@@ -29,6 +33,7 @@ class PostTypeTest extends TestCase {
      */
     public function tearDown()
     {
+        parent::tearDown();
         $this->postType = null;
     }
 
@@ -37,6 +42,106 @@ class PostTypeTest extends TestCase {
     | Tests
     |--------------------------------------------------------------------------
     */
+
+    public function testCreate()
+    {
+        $this->assertInstanceOf(PostType::class, PostType::create('project'));
+    }
+
+    public function testDeregister()
+    {
+        WP_Mock::passthruFunction('unregister_post_type');
+        $this->assertSame($this->postTypeName, $this->postType->deregister());
+    }
+
+    public function testMenuIcon()
+    {
+        $this->_testSetterWithString('menuIcon', 'menu_icon');
+    }
+
+    public function testMenuPosition()
+    {
+        $this->_testSetterWithIntegers('menuPosition', 'menu_position');
+    }
+
+    public function testPermalinkEpMask()
+    {
+        $this->postType->permalinkEPMask(1);
+        $this->assertSame(1, $this->postType->overrideArgs['permalink_epmask']);
+
+        $this->postType->permalinkEPMask(50);
+        $this->assertSame(50, $this->postType->overrideArgs['permalink_epmask']);
+    }
+
+    public function testQueryVar()
+    {
+        $this->_testSetterWithBoolean('queryVar', 'query_var');
+        $this->_testSetterWithString('queryVar', 'query_var');
+    }
+
+    public function testRegisterManually()
+    {
+        WP_Mock::passthruFunction('register_post_type');
+        $this->assertSame($this->postTypeName, $this->postType->registerManually());
+    }
+
+    public function testRegisterAddsActivatePluginAction()
+    {
+        WP_Mock::expectActionAdded('activate_plugin', [$this->postType, 'registerManually']);
+
+        $this->postType->register();
+
+        $this->assertHooksAdded();
+    }
+
+    public function testRegisterAddsDeactivatePluginAction()
+    {
+        WP_Mock::expectActionAdded('deactivate_plugin', [$this->postType, 'deregister']);
+
+        $this->postType->register();
+
+        $this->assertHooksAdded();
+    }
+
+    public function testRegisterAddsInitAction()
+    {
+        WP_Mock::expectActionAdded('init', [$this->postType, 'registerManually']);
+
+        $this->postType->register();
+
+        $this->assertHooksAdded();
+    }
+
+    public function testRegisterMetaBoxCB()
+    {
+        WP_Mock::userFunction('sampleCallback');
+        $this->postType->registerMetaBoxCB('sampleCallback');
+        $this->assertSame('sampleCallback', $this->postType->overrideArgs['register_meta_box_cb']);
+    }
+
+    public function testRemoveSupport()
+    {
+        $this->postType->removeSupport('title');
+        $this->assertSame(['editor', 'thumbnail'], $this->postType->supports);
+
+        $this->postType->removeSupport('nonexistent');
+        $this->assertSame(['editor', 'thumbnail'], $this->postType->supports);
+    }
+
+    public function testRestBase()
+    {
+        $this->_testSetterWithString('restBase', 'rest_base');
+    }
+
+    public function testRestControllerClass()
+    {
+        $this->_testSetterWithString('restControllerClass', 'rest_controller_class');
+    }
+
+    public function testRewrite()
+    {
+        $this->_testSetterWithAny('rewrite', 'rewrite');
+    }
 
     /**
      * Tests the post type name validator
@@ -83,12 +188,12 @@ class PostTypeTest extends TestCase {
      */
     public function testSetArg()
     {
-        $post = PostType::create('project')->setArg('something', 'some val');
-        $this->assertSame('some val', $post->overrideArgs['something']);
-
-        /** 'supports' works a little differently and will be tested in
+        /**
+         * 'supports' works a little differently and will be tested in
          * We'll test this in @see testSupports
          */
+        $this->postType->setArg('something', 'some val');
+        $this->assertSame('some val', $this->postType->overrideArgs['something']);
     }
 
     public function testSupports()
@@ -100,53 +205,78 @@ class PostTypeTest extends TestCase {
         $this->assertFalse($post->supports);
 
         // array overwrites
-        $post->supports([1,2,3]);
-        $this->assertSame([1,2,3], $post->supports);
+        $post->supports(['feature1','feature2','feature3']);
+        $this->assertSame(['feature1','feature2','feature3'], $post->supports);
 
         // anything else gets appended
-        $post->supports(4);
-        $this->assertSame([1,2,3,4], $post->supports);
+        $post->supports('another');
+        $this->assertSame(['feature1','feature2','feature3','another'], $post->supports);
 
         // one more time, array overwrites
-        $post->supports([1]);
-        $this->assertSame([1], $post->supports);
+        $post->supports(['test']);
+        $this->assertSame(['test'], $post->supports);
+    }
+
+    public function testVariousSupportSetterWrappers()
+    {
+        $this->postType->supports([]);
+        $this->_testSupportSetter('supportsAuthor', 'author');
+        $this->_testSupportSetter('supportsComments', 'comments');
+        $this->_testSupportSetter('supportsCustomFields', 'custom-fields');
+        $this->_testSupportSetter('supportsEditor', 'editor');
+        $this->_testSupportSetter('supportsExcerpt', 'excerpt');
+        $this->_testSupportSetter('supportsFeaturedImage', 'thumbnail');
+        $this->_testSupportSetter('supportsPageAttributes', 'page-attributes');
+        $this->_testSupportSetter('supportsPostFormats', 'post-formats');
+        $this->_testSupportSetter('supportsRevisions', 'revisions');
+        $this->_testSupportSetter('supportsThumbnail', 'thumbnail');
+        $this->_testSupportSetter('supportsTitle', 'title');
+        $this->_testSupportSetter('supportsTrackbacks', 'trackbacks');
     }
 
     public function testSetPluralName()
     {
-        $post = PostType::create('story')->setPluralName('Stories');
-        $this->assertSame('Stories', $post->pluralName);
+        $this->postType->setPluralName('Stories');
+        $this->assertSame('Stories', $this->postType->pluralName);
     }
 
     public function testSetSingularName()
     {
-        $post = PostType::create('custom_story')->setSingularName('Story');
-        $this->assertSame('Story', $post->singularName);
+        $this->postType->setSingularName('Story');
+        $this->assertSame('Story', $this->postType->singularName);
     }
 
     public function testBooleanSetters()
     {
-        $this->booleanSetterTest('canExport', 'can_export');
-        $this->booleanSetterTest('deleteWithUser', 'delete_with_user');
-        $this->booleanSetterTest('showInRest', 'show_in_rest');
-        $this->booleanSetterTest('excludeFromSearch', 'exclude_from_search');
-        $this->booleanSetterTest('hierarchical', 'hierarchical');
-        $this->booleanSetterTest('mapMetaCap', 'map_meta_cap');
-        $this->booleanSetterTest('public', 'public');
-        $this->booleanSetterTest('publiclyQueryable', 'publicly_queryable');
-        $this->booleanSetterTest('showInAdminBar', 'show_in_admin_bar');
-        $this->booleanSetterTest('showInMenu', 'show_in_menu');
-        $this->booleanSetterTest('showInNavMenus', 'show_in_nav_menus');
-        $this->booleanSetterTest('showUI', 'show_ui');
+        $this->_testSetterWithBoolean('canExport', 'can_export');
+        $this->_testSetterWithBoolean('deleteWithUser', 'delete_with_user');
+        $this->_testSetterWithBoolean('showInRest', 'show_in_rest');
+        $this->_testSetterWithBoolean('excludeFromSearch', 'exclude_from_search');
+        $this->_testSetterWithBoolean('hierarchical', 'hierarchical');
+        $this->_testSetterWithBoolean('mapMetaCap', 'map_meta_cap');
+        $this->_testSetterWithBoolean('public', 'public');
+        $this->_testSetterWithBoolean('publiclyQueryable', 'publicly_queryable');
+        $this->_testSetterWithBoolean('showInAdminBar', 'show_in_admin_bar');
+        $this->_testSetterWithBoolean('showInMenu', 'show_in_menu');
+        $this->_testSetterWithBoolean('showInNavMenus', 'show_in_nav_menus');
+        $this->_testSetterWithBoolean('showUI', 'show_ui');
     }
 
-    protected function booleanSetterTest($method, $key)
+    public function testHasArchive()
     {
-        $this->postType->$method();
-        $this->assertTrue($this->postType->overrideArgs[$key]);
+        $this->postType->hasArchive();
+        $this->assertTrue($this->postType->overrideArgs['has_archive']);
 
-        $this->postType->$method(false);
-        $this->assertFalse($this->postType->overrideArgs[$key]);
+        $this->postType->hasArchive(false);
+        $this->assertFalse($this->postType->overrideArgs['has_archive']);
+
+        $this->postType->hasArchive('something');
+        $this->assertSame('something', $this->postType->overrideArgs['has_archive']);
+    }
+
+    public function testTaxonomies()
+    {
+        $this->_testSetterWithArray('taxonomies', 'taxonomies');
     }
 
     /*
@@ -216,5 +346,55 @@ class PostTypeTest extends TestCase {
         ];
 
         return array_merge($this->reservedNamesProvider(), $tests);
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Protected
+    |--------------------------------------------------------------------------
+    */
+    protected function _testSetterWithAny($method, $key)
+    {
+        $this->_testSetterWithArray($method, $key);
+        $this->_testSetterWithBoolean($method, $key);
+        $this->_testSetterWithIntegers($method, $key);
+        $this->_testSetterWithString($method, $key);
+    }
+
+    protected function _testSetterWithArray($method, $key)
+    {
+        $this->postType->$method([1,2,3]);
+        $this->assertSame([1,2,3], $this->postType->overrideArgs[$key]);
+    }
+
+    protected function _testSetterWithBoolean($method, $key)
+    {
+        $this->postType->$method();
+        $this->assertTrue($this->postType->overrideArgs[$key]);
+
+        $this->postType->$method(false);
+        $this->assertFalse($this->postType->overrideArgs[$key]);
+    }
+
+    protected function _testSetterWithIntegers($method, $key)
+    {
+        $this->postType->$method(999);
+        $this->assertSame(999, $this->postType->overrideArgs[$key]);
+    }
+
+    protected function _testSetterWithString($method, $key)
+    {
+        $this->postType->$method('test');
+        $this->assertSame('test', $this->postType->overrideArgs[$key]);
+    }
+
+    protected function _testSupportSetter($method, $feature)
+    {
+        $this->postType->$method();
+        $this->assertContains($feature, $this->postType->supports);
+
+        // test that we can remove by passing false
+        $this->postType->$method(false);
+        $this->assertNotContains($feature, $this->postType->supports);
     }
 }

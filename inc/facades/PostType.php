@@ -98,12 +98,13 @@ class PostType
 
     /**
      * This sets the endpoint mask. However `rewrite['ep_mask']` takes precedence if it's set there too.
+     * @link https://make.wordpress.org/plugins/2012/06/07/rewrite-endpoints-api/
      *
      * @param int|const $endpoint Constant preferred to avoid future failure (core updates)
      *
      * @return $this
      */
-    public function permalinkEPMask($endpoint = EP_PERMALINK)
+    public function permalinkEPMask(int $endpoint)
     {
         return $this->setArg('permalink_epmask', $endpoint);
     }
@@ -158,11 +159,11 @@ class PostType
      * The callback function takes one argument `$post`, which contains the `WP_Post` object for the currently edited post.
      * Do remove_meta_box() and add_meta_box() calls in the callback.
      *
-     * @param array|string $callback
+     * @param callable $callback
      *
      * @return $this
      */
-    public function registerMetaBoxCB($callback)
+    public function registerMetaBoxCB(callable $callback)
     {
         return $this->setArg('register_meta_box_cb', $callback);
     }
@@ -346,14 +347,19 @@ class PostType
     /**
      * Removes a supports arg. Use this to remove one of the defaults.
      *
-     * @param string $feature The feature to remove
+     * @param int|string $feature The feature to remove.
      *
      * @return $this
      */
-    public function removeSupportArg(string $feature)
+    public function removeSupport($feature)
     {
+        if (!is_string($feature) || !is_int($feature)) {
+            $feature = (string) $feature;
+        }
+
         if (($key = array_search($feature, $this->supports)) !== false) {
             unset($this->supports[$key]);
+            $this->supports = array_values($this->supports);
         }
 
         return $this;
@@ -476,51 +482,61 @@ class PostType
     /**
      * Support author.
      *
+     * @param bool $add True (default) to add, False to remove.
+     *
      * @return $this
      */
-    public function supportsAuthor()
+    public function supportsAuthor(bool $add = true)
     {
-        return $this->supports('author');
+        return $this->addOrRemoveSupport('author', $add);
     }
 
     /**
      * Support comments.
      *
+     * @param bool $add True (default) to add, False to remove.
+     *
      * @return $this
      */
-    public function supportsComments()
+    public function supportsComments(bool $add = true)
     {
-        return $this->supports('comments');
+        return $this->addOrRemoveSupport('comments', $add);
     }
 
     /**
      * Support custom fields.
      *
+     * @param bool $add True (default) to add, False to remove.
+     *
      * @return $this
      */
-    public function supportsCustomFields()
+    public function supportsCustomFields(bool $add = true)
     {
-        return $this->supports('custom-fields');
+        return $this->addOrRemoveSupport('custom-fields', $add);
     }
 
     /**
      * Support editor.
      *
+     * @param bool $add True (default) to add, False to remove.
+     *
      * @return $this
      */
-    public function supportsEditor()
+    public function supportsEditor(bool $add = true)
     {
-        return $this->supports('editor');
+        return $this->addOrRemoveSupport('editor', $add);
     }
 
     /**
      * Support excerpt.
      *
+     * @param bool $add True (default) to add, False to remove.
+     *
      * @return $this
      */
-    public function supportsExcerpt()
+    public function supportsExcerpt(bool $add = true)
     {
-        return $this->supports('excerpt');
+        return $this->addOrRemoveSupport('excerpt', $add);
     }
 
     /**
@@ -528,71 +544,85 @@ class PostType
      *
      * Alias for @see \WPDev\Models\PostType::supportsThumbnail()
      *
+     * @param bool $add True (default) to add, False to remove.
+     *
      * @return $this
      */
-    public function supportsFeaturedImage()
+    public function supportsFeaturedImage(bool $add = true)
     {
-        return $this->supportsThumbnail();
+        return $this->supportsThumbnail($add);
     }
 
     /**
      * Support page attributes.
      *
+     * @param bool $add True (default) to add, False to remove.
+     *
      * @return $this
      */
-    public function supportsPageAttributes()
+    public function supportsPageAttributes(bool $add = true)
     {
-        return $this->supports('page-attributes');
+        return $this->addOrRemoveSupport('page-attributes', $add);
     }
 
     /**
      * Support post formats.
      *
+     * @param bool $add True (default) to add, False to remove.
+     *
      * @return $this
      */
-    public function supportsPostFormats()
+    public function supportsPostFormats(bool $add = true)
     {
-        return $this->supports('post-formats');
+        return $this->addOrRemoveSupport('post-formats', $add);
     }
 
     /**
      * Support revisions.
      *
+     * @param bool $add True (default) to add, False to remove.
+     *
      * @return $this
      */
-    public function supportsRevisions()
+    public function supportsRevisions(bool $add = true)
     {
-        return $this->supports('revisions');
+        return $this->addOrRemoveSupport('revisions', $add);
     }
 
     /**
      * Alternative to `@see supportsFeaturedImage`. Support featured image (aka thumbnail).
      *
+     * @param bool $add True (default) to add, False to remove.
+     *
      * @return $this
      */
-    public function supportsThumbnail()
+    public function supportsThumbnail(bool $add = true)
     {
-        return $this->supports('thumbnail');
+        return $this->addOrRemoveSupport('thumbnail', $add);
     }
 
     /**
      * Support title.
      *
+     * @param bool $add True (default) to add, False to remove.
+     *
      * @return $this
      */
-    public function supportsTitle()
+    public function supportsTitle(bool $add = true)
     {
-        return $this->supports('title');
+        return $this->addOrRemoveSupport('title', $add);
     }
 
     /**
      * Support trackbacks.
      *
+     * @param bool $add True (default) to add, False to remove.
+     *
      * @return $this
      */
-    public function supportsTrackbacks()
+    public function supportsTrackbacks(bool $add = true)
     {
-        return $this->supports('trackbacks');
+        return $this->addOrRemoveSupport('trackbacks', $add);
     }
 
     /**
@@ -641,6 +671,11 @@ class PostType
     | Protected
     |--------------------------------------------------------------------------
     */
+
+    protected function addOrRemoveSupport($feature, $add = true)
+    {
+        return ($add) ? $this->supports($feature) : $this->removeSupport($feature);
+    }
 
     protected function buildArgs()
     {
