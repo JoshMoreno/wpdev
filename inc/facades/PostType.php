@@ -739,6 +739,7 @@ class PostType
     protected function formatName(bool $plural = false)
     {
         $name = str_replace('_', ' ', $this->name);
+        $name = trim($name);
 
         // capitalize hyphenated words
         if (strpos($name, '-')) {
@@ -749,7 +750,7 @@ class PostType
             $name .= 's';
         }
 
-        return trim(ucwords($name));
+        return ucwords($name);
     }
 
     protected function validateName()
