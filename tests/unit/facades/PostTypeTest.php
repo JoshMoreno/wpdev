@@ -7,6 +7,7 @@ use WPDev\Facades\PostType;
 use WPDev\Models\Post;
 
 class PostTypeTest extends TestCase {
+    /** @var  PostType */
     protected $postType;
 
     /*
@@ -75,6 +76,11 @@ class PostTypeTest extends TestCase {
         $this->assertEquals($expected_plural_name, $postType->pluralName);
     }
 
+    /**
+     * While most other methods use this internally let's not assume
+     * it will be like that in the future. Let's write tests for each method to
+     * know 100% that it's working as intended.
+     */
     public function testSetArg()
     {
         $post = PostType::create('project')->setArg('something', 'some val');
@@ -116,6 +122,31 @@ class PostTypeTest extends TestCase {
     {
         $post = PostType::create('custom_story')->setSingularName('Story');
         $this->assertSame('Story', $post->singularName);
+    }
+
+    public function testBooleanSetters()
+    {
+        $this->booleanSetterTest('canExport', 'can_export');
+        $this->booleanSetterTest('deleteWithUser', 'delete_with_user');
+        $this->booleanSetterTest('showInRest', 'show_in_rest');
+        $this->booleanSetterTest('excludeFromSearch', 'exclude_from_search');
+        $this->booleanSetterTest('hierarchical', 'hierarchical');
+        $this->booleanSetterTest('mapMetaCap', 'map_meta_cap');
+        $this->booleanSetterTest('public', 'public');
+        $this->booleanSetterTest('publiclyQueryable', 'publicly_queryable');
+        $this->booleanSetterTest('showInAdminBar', 'show_in_admin_bar');
+        $this->booleanSetterTest('showInMenu', 'show_in_menu');
+        $this->booleanSetterTest('showInNavMenus', 'show_in_nav_menus');
+        $this->booleanSetterTest('showUI', 'show_ui');
+    }
+
+    protected function booleanSetterTest($method, $key)
+    {
+        $this->postType->$method();
+        $this->assertTrue($this->postType->overrideArgs[$key]);
+
+        $this->postType->$method(false);
+        $this->assertFalse($this->postType->overrideArgs[$key]);
     }
 
     /*
