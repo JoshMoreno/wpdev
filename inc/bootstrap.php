@@ -83,7 +83,7 @@ function on_plugin_activation()
 {
     // should end up evaluating to 'wpdev/wpdev.php'
     $path    = basename(dirname(__DIR__)).'/wpdev.php';
-    $plugins = get_option('active_plugins') ?? [];
+    $plugins = get_option('active_plugins', []);
     $key     = array_search($path, $plugins);
 
     if ($key !== false) {
