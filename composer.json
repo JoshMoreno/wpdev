@@ -1,6 +1,14 @@
 {
     "name": "joshmoreno/wpdev",
     "description": "A WordPress plugin to aid in rapid modern development.",
+    "homepage": "https://getwpdev.com",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Josh Moreno",
+            "email": "josh@joshmoreno.com"
+        }
+    ],
     "autoload": {
         "psr-4": {
             "WPDev\\": "inc/"
