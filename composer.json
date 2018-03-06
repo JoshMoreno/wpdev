@@ -1,4 +1,6 @@
 {
+    "name": "joshmoreno/wpdev",
+    "description": "A WordPress plugin to aid in rapid modern development.",
     "autoload": {
         "psr-4": {
             "WPDev\\": "inc/"
@@ -8,6 +10,7 @@
         "psr-4": { "WPDev\\": "cli/" }
     },
     "require": {
+        "php": "^7.1.3",
         "filp/whoops": "^2.1",
         "symfony/var-dumper": "^4.0",
         "cocur/slugify": "^3.0",
