@@ -1,6 +1,7 @@
 {
     "name": "joshmoreno/wpdev",
     "description": "A WordPress plugin to aid in rapid modern development.",
+    "type": "wordpress-plugin",
     "homepage": "https://getwpdev.com",
     "license": "MIT",
     "authors": [
