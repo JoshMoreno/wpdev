@@ -4,3 +4,6 @@ readme.md export-ignore
 /tests export-ignore
 /init-test-env export-ignore
 /phpunit.xml export-ignore
+/console export-ignore
+/cli export-ignore
+/bin
