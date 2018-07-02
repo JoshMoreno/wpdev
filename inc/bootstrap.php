@@ -25,8 +25,10 @@ VarDumper::setHandler([Dumper::class, 'dump']);
 |--------------------------------------------------------------------------
 | Better and prettier error handling
 */
-$whoops = new Run;
-$whoops->pushHandler(new PrettyPageHandler)->register();
+if (defined( 'WP_DEBUG') && WP_DEBUG && (!defined( 'WP_CLI' ) || !WP_CLI)) {
+	$whoops = new Run;
+	$whoops->pushHandler(new PrettyPageHandler)->register();
+}
 
 /*
 |--------------------------------------------------------------------------
