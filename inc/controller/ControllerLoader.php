@@ -3,204 +3,176 @@
 namespace WPDev\Controller;
 
 use Brain\Hierarchy\Hierarchy;
+use ReflectionClass;
 use Symfony\Component\Finder\Finder;
 
 class ControllerLoader
 {
-    protected $files;
-    protected $hierarchy;
-    /** @var \WPDev\ControllerInterface */
-    protected $controller;
-    protected $paths;
-    protected $parentPath;
-    protected $templateHierarchy;
+	protected $files;
+	protected $hierarchy;
+	/** @var ControllerInterface */
+	protected $controller;
+	protected $directories;
+	protected $parentPath;
+	protected $templateHierarchy;
+	protected $lastDefinedClass;
 
-    /**
-     * @param \Brain\Hierarchy\Hierarchy $hierarchy
-     */
-    public function __construct(Hierarchy $hierarchy)
-    {
-        $this->hierarchy         = $hierarchy;
-        $this->templateHierarchy = $hierarchy->getTemplates();
+	/**
+	 * @param \Brain\Hierarchy\Hierarchy $hierarchy
+	 */
+	public function __construct(Hierarchy $hierarchy)
+	{
+		$this->hierarchy         = $hierarchy;
+		$this->templateHierarchy = $hierarchy->getTemplates();
+		$this->directories       = $this->getDirectories();
+		$this->files             = apply_filters('wpdev.controllerFiles', $this->buildListOfFiles());
 
-        $this->paths = $this->buildPaths();
+		$this->loadController();
+	}
 
-        $this->files = $this->buildListOfFiles();
+	public function buildData()
+	{
+		if ($this->controller) {
+			return (array) $this->controller->build();
+		}
 
-        $this->files = apply_filters('wpdev.controllers', $this->files);
-
-        $this->loadController();
-    }
+		return [];
+	}
 
 	/**
 	 * For more fluid syntax
 	 *
 	 * @param \Brain\Hierarchy\Hierarchy $hierarchy
+	 *
 	 * @return $this
 	 */
-	public static function create(Hierarchy $hierarchy) {
+	public static function create(Hierarchy $hierarchy)
+	{
 		return new static($hierarchy);
-    }
+	}
 
 	/**
 	 * Returns the controller instance
 	 *
-	 * @return \WPDev\ControllerInterface
+	 * @return ControllerInterface
 	 */
-	public function getController() {
+	public function getController()
+	{
 		return $this->controller;
-    }
+	}
 
-    /**
-     * Gets all the controller files.
-     *
-     * @return array Filename => Path
-     */
-    protected function buildListOfFiles()
-    {
-        if (!$this->paths) {
-            return [];
-        }
+	/*
+	|--------------------------------------------------------------------------
+	| Protected
+	|--------------------------------------------------------------------------
+	*/
+	protected function buildControllerKey($controllerPath)
+	{
+		foreach ($this->directories as $path) {
+			$path           = rtrim($path, '/') . '/';
+			$controllerPath = str_replace($path, '', $controllerPath);
+		}
 
-        $pattern = '/implements (\\\WPDev\\\)?ControllerInterface/';
-        $finder  = new Finder();
-        $files   = $finder->files()
-                          ->in($this->paths)
-                          ->name('*.php')
-                          ->contains($pattern);
+		return str_replace('.php', '', $controllerPath);
+	}
 
-        $controller_files = [];
+	/**
+	 * Gets all the controller files.
+	 *
+	 * @return array Filename => Path
+	 */
+	protected function buildListOfFiles()
+	{
+		if ( ! $this->directories) {
+			return [];
+		}
 
-        /** @var \SplFileInfo $file */
-        foreach ($files as $file) {
-            include_once $file->getRealPath();
-            $key = $file->getBasename('.php');
-            if ( ! isset($controller_files[$key])) {
-                $controller_files[$key] = [];
-            }
-            $controller_files[$key][] = $file->getRealPath();
-        }
+		$finder = new Finder();
+		$files  = $finder->files()
+		                 ->in($this->directories)
+		                 ->name('*.php');
 
-        return $controller_files;
-    }
+		$controller_files = [];
+		$lastClass        = end(get_declared_classes());
 
-    protected function buildPaths()
-    {
-        // account for both child and parent themes
-        $paths = array_unique([
-            get_stylesheet_directory().'/controllers',
-            get_template_directory().'/controllers',
-        ]);
+		/** @var \SplFileInfo $file */
+		foreach ($files as $file) {
+			include_once $file->getRealPath();
+			$currentClass = end(get_declared_classes());
 
-        // allow devs to mess with the paths
-        $paths = (array)apply_filters('wpdev.controllerpaths', $paths);
+			// last file loaded was not a class
+			if ($currentClass === $lastClass) {
+				continue;
+			}
 
-        // only dirs that actually exist
-        $real_paths = array_filter($paths, function ($path) {
-            return file_exists($path) && is_dir($path);
-        });
+			$lastClass = $currentClass;
 
-        return $real_paths;
-    }
+			if ($this->isValidController($currentClass)) {
+				$key                    = $this->buildControllerKey($file->getRealPath());
+				$controller_files[$key] = $currentClass;
+			}
+		}
 
-    protected function loadController()
-    {
-        if ( ! $this->files) {
-            return;
-        }
+		return $controller_files;
+	}
 
-        foreach ($this->templateHierarchy as $file_name) {
-            if (empty($this->files[$file_name])) {
-                continue;
-            }
+	protected function getDirectories()
+	{
+		// account for both child and parent themes
+		$directories = array_unique([
+			get_stylesheet_directory() . '/controllers',
+			get_template_directory() . '/controllers',
+		]);
 
-            $classname  = $this->getClassNameFromFile($this->files[$file_name][0]);
-            $controller = new $classname();
+		// allow devs to mess with the paths
+		$directories = (array) apply_filters('wpdev.controllerDirectories', $directories);
 
-            if (method_exists($controller, 'build')) {
-                $this->controller = $controller;
-                break; // only load one controller
-            }
-        }
-    }
+		return $this->onlyRealDirectories($directories);
+	}
 
-    public function buildData()
-    {
-        if ($this->controller) {
-            return (array)$this->controller->build();
-        }
+	protected function isValidController($className)
+	{
+		try {
+			$controller = new ReflectionClass($className);
+		} catch (\ReflectionException $e) {
+			return false;
+		}
 
-        return [];
-    }
+		if ( ! $controller->implementsInterface('WPDev\Controller\ControllerInterface')) {
+			return false;
+		}
 
-    /**
-     * Thanks to Jarret Byrne
-     * Based off of @link http://jarretbyrne.com/2015/06/197/
-     *
-     * @param $path_to_file = string
-     *
-     * @return mixed|string
-     */
-    protected function getClassNameFromFile($path_to_file)
-    {
-        //Grab the contents of the file
-        $contents = file_get_contents($path_to_file);
+		if ( ! $controller->hasMethod('build')) {
+			return false;
+		}
 
-        //Start with a blank namespace and class
-        $namespace = '';
-        $class     = '';
+		return true;
+	}
 
-        //Set helper values to know that we have found the namespace/class token and need to collect the string values after them
-        $getting_namespace = false;
-        $getting_class     = false;
+	protected function loadController()
+	{
+		if ( ! $this->files) {
+			return;
+		}
 
-        //Go through each token and evaluate it as necessary
-        foreach (token_get_all($contents) as $token) {
+		foreach ($this->templateHierarchy as $file_name) {
+			if (empty($this->files[$file_name])) {
+				continue;
+			}
 
-            //If this token is the namespace declaring, then flag that the next tokens will be the namespace name
-            if (is_array($token) && $token[0] == T_NAMESPACE) {
-                $getting_namespace = true;
-            }
+			$controller = $this->files[$file_name];
+			$controller = new $controller();
 
-            //If this token is the class declaring, then flag that the next tokens will be the class name
-            if (is_array($token) && $token[0] == T_CLASS) {
-                $getting_class = true;
-            }
+			$this->controller = new $controller();
+			break;
+		}
+	}
 
-            //While we're grabbing the namespace name...
-            if ($getting_namespace === true) {
-
-                //If the token is a string or the namespace separator...
-                if (is_array($token) && in_array($token[0], [
-                        T_STRING,
-                        T_NS_SEPARATOR,
-                    ])) {
-
-                    //Append the token's value to the name of the namespace
-                    $namespace .= $token[1];
-                } elseif ($token === ';') {
-
-                    //If the token is the semicolon, then we're done with the namespace declaration
-                    $getting_namespace = false;
-                }
-            }
-
-            //While we're grabbing the class name...
-            if ($getting_class === true) {
-
-                //If the token is a string, it's the name of the class
-                if (is_array($token) && $token[0] == T_STRING) {
-
-                    //Store the token's value as the class name
-                    $class = $token[1];
-
-                    //Got what we need, stope here
-                    break;
-                }
-            }
-        }
-
-        //Build the fully-qualified class name and return it
-        return $namespace ? $namespace.'\\'.$class : $class;
-    }
+	protected function onlyRealDirectories(array $directories)
+	{
+		return array_filter($directories, function($directory)
+		{
+			return file_exists($directory) && is_dir($directory);
+		});
+	}
 }
