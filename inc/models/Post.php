@@ -37,6 +37,24 @@ class Post
         }
     }
 
+	/**
+	 * Delegates to the respective public method.
+	 * @param $key Name of public method to call
+	 *
+	 * @return mixed|null
+	 */
+	public function __get($key)
+	{
+		try {
+			$method = new \ReflectionMethod($this, $key);
+			if ($method->isPublic()) {
+				return $this->$key();
+			}
+		} catch (\ReflectionException $e) {
+			return null;
+		}
+    }
+
     /**
      * Alternative to constructor. For more fluid syntax.
      *
