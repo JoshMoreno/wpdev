@@ -93,12 +93,12 @@ class ControllerLoader
 		                 ->name('*.php');
 
 		$controller_files = [];
-		$lastClass        = end(get_declared_classes());
+		$lastClass        = $this->getLastLoadedClass();
 
 		/** @var \SplFileInfo $file */
 		foreach ($files as $file) {
 			include_once $file->getRealPath();
-			$currentClass = end(get_declared_classes());
+			$currentClass = $this->getLastLoadedClass();
 
 			// last file loaded was not a class
 			if ($currentClass === $lastClass) {
@@ -128,6 +128,12 @@ class ControllerLoader
 		$directories = (array) apply_filters('wpdev.controllerDirectories', $directories);
 
 		return $this->onlyRealDirectories($directories);
+	}
+
+	protected function getLastLoadedClass()
+	{
+		$classes = get_declared_classes();
+		return end($classes);
 	}
 
 	protected function isValidController($className)
