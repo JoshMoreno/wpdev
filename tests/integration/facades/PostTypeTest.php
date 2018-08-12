@@ -159,9 +159,9 @@ class PostTypeTest extends WP_UnitTestCase
         unregister_post_type('project');
     }
 
-    public function testPublic()
+    public function testIsPublic()
     {
-        $this->booleanArgTest('public', 'public');
+        $this->booleanArgTest('isPublic', 'public');
     }
 
     public function testPubliclyQueryable()
