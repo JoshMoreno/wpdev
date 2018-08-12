@@ -254,7 +254,7 @@ class PostTypeTest extends TestCase {
         $this->_testSetterWithBoolean('excludeFromSearch', 'exclude_from_search');
         $this->_testSetterWithBoolean('hierarchical', 'hierarchical');
         $this->_testSetterWithBoolean('mapMetaCap', 'map_meta_cap');
-        $this->_testSetterWithBoolean('public', 'public');
+        $this->_testSetterWithBoolean('isPublic', 'public');
         $this->_testSetterWithBoolean('publiclyQueryable', 'publicly_queryable');
         $this->_testSetterWithBoolean('showInAdminBar', 'show_in_admin_bar');
         $this->_testSetterWithBoolean('showInMenu', 'show_in_menu');
