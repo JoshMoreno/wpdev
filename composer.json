@@ -16,7 +16,7 @@
         }
     },
     "autoload-dev": {
-        "psr-4": { "WPDev\\": "cli/" }
+        "psr-4": { "WPDev\\CLI\\": "cli/" }
     },
     "require": {
         "php": "^7.1.3",
