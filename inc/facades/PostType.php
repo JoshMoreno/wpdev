@@ -4,6 +4,7 @@ namespace WPDev\Facades;
 
 use Exception;
 use InvalidArgumentException;
+use Webmozart\Assert\Assert;
 
 class PostType
 {
@@ -22,9 +23,11 @@ class PostType
 	 * Constructor. For more fluid syntax use `PostType::create()`
 	 *
 	 * @param string $name The name of the post type. Should be singular.
+	 * @throws \InvalidArgumentException
 	 */
-    public function __construct(string $name)
+    public function __construct($name)
     {
+    	Assert::string($name);
         $this->name = $name;
 
         $this->validateName();
@@ -40,9 +43,11 @@ class PostType
      * @param bool $bool
      *
      * @return $this
+     * @throws \InvalidArgumentException
      */
-    public function canExport(bool $bool = true)
+    public function canExport($bool = true)
     {
+    	Assert::boolean($bool);
         return $this->setArg('can_export', $bool);
     }
 
@@ -52,7 +57,7 @@ class PostType
 	 * @param string $name
 	 * @return $this
 	 */
-	public static function create(string $name) {
+	public static function create($name) {
 		return new static($name);
     }
 
@@ -67,9 +72,11 @@ class PostType
      * @param bool $bool
      *
      * @return $this
+     * @throws \InvalidArgumentException
      */
-    public function deleteWithUser(bool $bool = true)
+    public function deleteWithUser($bool = true)
     {
+    	Assert::boolean($bool);
         return $this->setArg('delete_with_user', $bool);
     }
 
@@ -104,8 +111,9 @@ class PostType
      *
      * @return $this
      */
-    public function permalinkEPMask(int $endpoint)
+    public function permalinkEPMask($endpoint)
     {
+    	Assert::integer($endpoint);
         return $this->setArg('permalink_epmask', $endpoint);
     }
 
@@ -175,9 +183,11 @@ class PostType
      * @param string $rest_base
      *
      * @return $this
+     * @throws \InvalidArgumentException
      */
-    public function restBase(string $rest_base)
+    public function restBase($rest_base)
     {
+    	Assert::string($rest_base);
         return $this->setArg('rest_base', $rest_base);
     }
 
@@ -188,9 +198,11 @@ class PostType
      * @param string $controller
      *
      * @return $this
+     * @throws \InvalidArgumentException
      */
-    public function restControllerClass(string $controller = 'WP_REST_Posts_Controller')
+    public function restControllerClass($controller = 'WP_REST_Posts_Controller')
     {
+    	Assert::string($controller);
         return $this->setArg('rest_controller_class', $controller);
     }
 
@@ -228,8 +240,9 @@ class PostType
      *
      * @return $this
      */
-    public function setArg(string $key = '', $val = '')
+    public function setArg($key = '', $val = '')
     {
+    	Assert::string($key);
         if ($key === 'supports') {
             return $this->supports($val);
         }
@@ -246,8 +259,9 @@ class PostType
      *
      * @return $this
      */
-    public function showInRest(bool $bool = true)
+    public function showInRest($bool = true)
     {
+    	Assert::boolean($bool);
         return $this->setArg('show_in_rest', $bool);
     }
 
@@ -260,9 +274,11 @@ class PostType
      * @param bool $bool
      *
      * @return $this
+     * @throws \InvalidArgumentException
      */
-    public function excludeFromSearch(bool $bool = true)
+    public function excludeFromSearch($bool = true)
     {
+    	Assert::boolean($bool);
         return $this->setArg('exclude_from_search', $bool);
     }
 
@@ -283,9 +299,11 @@ class PostType
      * @param bool $bool
      *
      * @return $this
+     * @throws \InvalidArgumentException
      */
-    public function hierarchical(bool $bool = true)
+    public function hierarchical($bool = true)
     {
+    	Assert::boolean($bool);
         return $this->setArg('hierarchical', $bool);
     }
 
@@ -298,9 +316,11 @@ class PostType
      * @param bool $bool
      *
      * @return $this
+     * @throws \InvalidArgumentException
      */
-    public function mapMetaCap(bool $bool = true)
+    public function mapMetaCap($bool = true)
     {
+    	Assert::boolean($bool);
         return $this->setArg('map_meta_cap', $bool);
     }
 
@@ -312,9 +332,11 @@ class PostType
      * @link https://developer.wordpress.org/resource/dashicons/
      *
      * @return $this
+     * @throws \InvalidArgumentException
      */
-    public function menuIcon(string $icon = '')
+    public function menuIcon($icon = '')
     {
+    	Assert::string($icon);
         return $this->setArg('menu_icon', $icon);
     }
 
@@ -338,9 +360,11 @@ class PostType
      * @param int $position
      *
      * @return $this
+     * @throws \InvalidArgumentException
      */
-    public function menuPosition(int $position = 25)
+    public function menuPosition($position = 25)
     {
+    	Assert::integer($position);
         return $this->setArg('menu_position', $position);
     }
 
@@ -372,9 +396,11 @@ class PostType
      * @param string $plural_name
      *
      * @return $this
+     * @throws \InvalidArgumentException
      */
-    public function setPluralName(string $plural_name = '')
+    public function setPluralName($plural_name = '')
     {
+        Assert::string($plural_name);
         $this->pluralName = $plural_name;
 
         return $this;
@@ -392,9 +418,11 @@ class PostType
      * @param bool $bool
      *
      * @return $this
+     * @throws \InvalidArgumentException
      */
-    public function public(bool $bool = true)
+    public function isPublic($bool = true)
     {
+    	Assert::boolean($bool);
         return $this->setArg('public', $bool);
     }
 
@@ -404,9 +432,11 @@ class PostType
      * @param bool $bool
      *
      * @return $this
+     * @throws \InvalidArgumentException
      */
-    public function publiclyQueryable(bool $bool = true)
+    public function publiclyQueryable($bool = true)
     {
+    	Assert::boolean($bool);
         return $this->setArg('publicly_queryable', $bool);
     }
 
@@ -418,9 +448,11 @@ class PostType
      * @param bool $bool
      *
      * @return $this
+     * @throws \InvalidArgumentException
      */
-    public function showInAdminBar(bool $bool = true)
+    public function showInAdminBar($bool = true)
     {
+    	Assert::boolean($bool);
         return $this->setArg('show_in_admin_bar', $bool);
     }
 
@@ -445,9 +477,11 @@ class PostType
      * @param bool $bool
      *
      * @return $this
+     * @throws \InvalidArgumentException
      */
-    public function showInNavMenus(bool $bool = true)
+    public function showInNavMenus($bool = true)
     {
+    	Assert::boolean($bool);
         return $this->setArg('show_in_nav_menus', $bool);
     }
 
@@ -459,9 +493,11 @@ class PostType
      * @param bool $bool
      *
      * @return $this
+     * @throws \InvalidArgumentException
      */
-    public function showUI(bool $bool = true)
+    public function showUI($bool = true)
     {
+    	Assert::boolean($bool);
         return $this->setArg('show_ui', $bool);
     }
 
@@ -471,9 +507,11 @@ class PostType
      * @param string $singular_name
      *
      * @return $this
+     * @throws \InvalidArgumentException
      */
-    public function setSingularName(string $singular_name = '')
+    public function setSingularName($singular_name = '')
     {
+    	Assert::string($singular_name);
         $this->singularName = $singular_name;
 
         return $this;
@@ -485,9 +523,11 @@ class PostType
      * @param bool $add True (default) to add, False to remove.
      *
      * @return $this
+     * @throws \InvalidArgumentException
      */
-    public function supportsAuthor(bool $add = true)
+    public function supportsAuthor($add = true)
     {
+    	Assert::boolean($add);
         return $this->addOrRemoveSupport('author', $add);
     }
 
@@ -497,9 +537,11 @@ class PostType
      * @param bool $add True (default) to add, False to remove.
      *
      * @return $this
+     * @throws \InvalidArgumentException
      */
-    public function supportsComments(bool $add = true)
+    public function supportsComments($add = true)
     {
+    	Assert::boolean($add);
         return $this->addOrRemoveSupport('comments', $add);
     }
 
@@ -509,9 +551,11 @@ class PostType
      * @param bool $add True (default) to add, False to remove.
      *
      * @return $this
+     * @throws \InvalidArgumentException
      */
-    public function supportsCustomFields(bool $add = true)
+    public function supportsCustomFields($add = true)
     {
+    	Assert::boolean($add);
         return $this->addOrRemoveSupport('custom-fields', $add);
     }
 
@@ -521,9 +565,11 @@ class PostType
      * @param bool $add True (default) to add, False to remove.
      *
      * @return $this
+     * @throws \InvalidArgumentException
      */
-    public function supportsEditor(bool $add = true)
+    public function supportsEditor($add = true)
     {
+    	Assert::boolean($add);
         return $this->addOrRemoveSupport('editor', $add);
     }
 
@@ -533,9 +579,11 @@ class PostType
      * @param bool $add True (default) to add, False to remove.
      *
      * @return $this
+     * @throws \InvalidArgumentException
      */
-    public function supportsExcerpt(bool $add = true)
+    public function supportsExcerpt($add = true)
     {
+    	Assert::boolean($add);
         return $this->addOrRemoveSupport('excerpt', $add);
     }
 
@@ -547,9 +595,11 @@ class PostType
      * @param bool $add True (default) to add, False to remove.
      *
      * @return $this
+     * @throws \InvalidArgumentException
      */
-    public function supportsFeaturedImage(bool $add = true)
+    public function supportsFeaturedImage($add = true)
     {
+    	Assert::boolean($add);
         return $this->supportsThumbnail($add);
     }
 
@@ -559,9 +609,11 @@ class PostType
      * @param bool $add True (default) to add, False to remove.
      *
      * @return $this
+     * @throws \InvalidArgumentException
      */
-    public function supportsPageAttributes(bool $add = true)
+    public function supportsPageAttributes($add = true)
     {
+    	Assert::boolean($add);
         return $this->addOrRemoveSupport('page-attributes', $add);
     }
 
@@ -571,9 +623,11 @@ class PostType
      * @param bool $add True (default) to add, False to remove.
      *
      * @return $this
+     * @throws \InvalidArgumentException
      */
-    public function supportsPostFormats(bool $add = true)
+    public function supportsPostFormats($add = true)
     {
+    	Assert::boolean($add);
         return $this->addOrRemoveSupport('post-formats', $add);
     }
 
@@ -583,9 +637,11 @@ class PostType
      * @param bool $add True (default) to add, False to remove.
      *
      * @return $this
+     * @throws \InvalidArgumentException
      */
-    public function supportsRevisions(bool $add = true)
+    public function supportsRevisions($add = true)
     {
+    	Assert::boolean($add);
         return $this->addOrRemoveSupport('revisions', $add);
     }
 
@@ -595,9 +651,11 @@ class PostType
      * @param bool $add True (default) to add, False to remove.
      *
      * @return $this
+     * @throws \InvalidArgumentException
      */
-    public function supportsThumbnail(bool $add = true)
+    public function supportsThumbnail($add = true)
     {
+    	Assert::boolean($add);
         return $this->addOrRemoveSupport('thumbnail', $add);
     }
 
@@ -607,9 +665,11 @@ class PostType
      * @param bool $add True (default) to add, False to remove.
      *
      * @return $this
+     * @throws \InvalidArgumentException
      */
-    public function supportsTitle(bool $add = true)
+    public function supportsTitle($add = true)
     {
+    	Assert::boolean($add);
         return $this->addOrRemoveSupport('title', $add);
     }
 
@@ -619,9 +679,11 @@ class PostType
      * @param bool $add True (default) to add, False to remove.
      *
      * @return $this
+     * @throws \InvalidArgumentException
      */
-    public function supportsTrackbacks(bool $add = true)
+    public function supportsTrackbacks($add = true)
     {
+    	Assert::boolean($add);
         return $this->addOrRemoveSupport('trackbacks', $add);
     }
 
@@ -771,8 +833,15 @@ class PostType
         return $result;
     }
 
-    protected function formatName(bool $plural = false)
+	/**
+	 * @param bool $plural
+	 *
+	 * @return string
+	 * @throws \InvalidArgumentException
+	 */
+    protected function formatName($plural = false)
     {
+    	Assert::boolean($plural);
         $name = str_replace('_', ' ', $this->name);
         $name = trim($name);
 

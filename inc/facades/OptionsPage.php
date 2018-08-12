@@ -3,7 +3,7 @@
 namespace WPDev\Facades;
 
 use Cocur\Slugify\Slugify;
-use InvalidArgumentException;
+use Webmozart\Assert\Assert;
 
 class OptionsPage
 {
@@ -21,13 +21,11 @@ class OptionsPage
      * Constructor. For a more fluid syntax use `OptionsPage::create()`.
      *
      * @param string $page_title The title of the page. By default this will also be used as the menu title and the page slug (a slugified version of course).
+	 * @throws \InvalidArgumentException
      */
-    public function __construct(string $page_title)
+    public function __construct($page_title)
     {
-        if ( ! $page_title) {
-            throw new InvalidArgumentException('Need a title for the options page.');
-        }
-
+    	Assert::string($page_title);
         $this->pageTitle = $page_title;
         $this->menuTitle = $page_title;
         $this->menuSlug  = (new Slugify())->slugify($page_title);
@@ -56,9 +54,11 @@ class OptionsPage
      * @param string $capability
      *
      * @return $this
+	 * @throw \InvalidArgumentException
      */
-    public function capability(string $capability)
+    public function capability($capability)
     {
+    	Assert::string($capability);
         $this->capability = $capability;
 
         return $this;
@@ -70,9 +70,11 @@ class OptionsPage
      * @param string $page_title The title of the page. By default this will also be used as the menu title and the page slug (a slugified version of course).
      *
      * @return $this
+	 * @throw \InvalidArgumentException
      */
-    public static function create(string $page_title)
+    public static function create($page_title)
     {
+    	Assert::string($page_title);
         return new static($page_title);
     }
 
@@ -84,9 +86,11 @@ class OptionsPage
      * @link https://developer.wordpress.org/resource/dashicons/
      *
      * @return $this
+	 * @throw \InvalidArgumentException
      */
-    public function menuIcon(string $icon = '')
+    public function menuIcon($icon = '')
     {
+    	Assert::string($icon);
         $this->menuIcon = $icon;
 
         return $this;
@@ -98,9 +102,11 @@ class OptionsPage
      * @param string $menu_slug
      *
      * @return $this
+	 * @throw \InvalidArgumentException
      */
-    public function menuSlug(string $menu_slug)
+    public function menuSlug($menu_slug)
     {
+    	Assert::string($menu_slug);
         $this->menuSlug = $menu_slug;
 
         return $this;
@@ -112,9 +118,11 @@ class OptionsPage
      * @param string $menu_title
      *
      * @return $this
+	 * @throw \InvalidArgumentException
      */
-    public function menuTitle(string $menu_title)
+    public function menuTitle($menu_title)
     {
+    	Assert::string($menu_title);
         $this->menuTitle = $menu_title;
 
         return $this;
@@ -126,9 +134,11 @@ class OptionsPage
      * @param string $slug The slug of the parent page.
      *
      * @return $this
+	 * @throw \InvalidArgumentException
      */
-    public function parentSlug(string $slug = 'options-general.php')
+    public function parentSlug($slug = 'options-general.php')
     {
+    	Assert::string($slug);
         $this->parentSlug = $slug;
 
         return $this;
@@ -140,9 +150,11 @@ class OptionsPage
      * @param int $position
      *
      * @return $this
+	 * @throws \InvalidArgumentException
      */
-    public function position(int $position = 100)
+    public function position($position = 100)
     {
+    	Assert::integer($position);
         $this->position = $position;
 
         return $this;
@@ -209,9 +221,11 @@ class OptionsPage
      * @param bool $bool
      *
      * @return $this
+	 * @throws \InvalidArgumentException
      */
-    public function topLevel(bool $bool = true)
+    public function topLevel($bool = true)
     {
+    	Assert::boolean($bool);
         $this->topLevel = $bool;
 
         return $this;

@@ -10,5 +10,5 @@ interface ControllerInterface
 	 *
 	 * @return array
 	 */
-	public function build(): array;
+	public function build();
 }

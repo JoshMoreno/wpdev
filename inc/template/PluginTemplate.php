@@ -2,6 +2,8 @@
 
 namespace WPDev\Template;
 
+use Webmozart\Assert\Assert;
+
 class PluginTemplate extends Template
 {
     protected $filePath;
@@ -12,10 +14,11 @@ class PluginTemplate extends Template
      *
      * @param string $file_path The absolute path to the file in the plugin. The basename will be used when searching in the themes.
      * @param array $data Data to be passed to the template.
-     *
+     * @throws \InvalidArgumentException
      */
-    public function __construct(string $file_path, array $data = [])
+    public function __construct($file_path, array $data = [])
     {
+    	Assert::string($file_path);
         $this->filePath = $file_path;
         $this->pluginFolder   = $this->pluginFolderName($file_path);
         parent::__construct($file_path, $data);

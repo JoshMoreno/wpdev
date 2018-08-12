@@ -2,6 +2,8 @@
 
 namespace WPDev\Models;
 
+use Webmozart\Assert\Assert;
+
 class Image
 {
     /**
@@ -28,9 +30,11 @@ class Image
      *
      * @param $id The image id
      * @param string $size The image size
+	 * @throws \InvalidArgumentException
      */
-    public function __construct($id, string $size = 'full')
+    public function __construct($id, $size = 'full')
     {
+    	Assert::string($size);
         $this->id   = (int)$id;
         $this->size = $size;
         $this->getAndSetDefaultData();
@@ -102,9 +106,11 @@ class Image
      * @param string $attribute The attribute to get
      *
      * @return string|null
+	 * @throws \InvalidArgumentException
      */
-    public function getAttribute(string $attribute)
+    public function getAttribute($attribute)
     {
+    	Assert::string($attribute);
         if (isset($this->attributes[$attribute])) {
             return $this->attributes[$attribute];
         }
@@ -142,9 +148,11 @@ class Image
      * @param string $name The attribute name
      *
      * @return $this
+	 * @throws \InvalidArgumentException
      */
-    public function removeAttribute(string $name)
+    public function removeAttribute($name)
     {
+    	Assert::string($name);
         unset($this->attributes[$name]);
 
         return $this;
@@ -157,9 +165,12 @@ class Image
      * @param null|string $value The value. Null to just output the name.
      *
      * @return $this
+	 * @throws \InvalidArgumentException
      */
-    public function setAttribute(string $name, string $value = null)
+    public function setAttribute($name, $value = null)
     {
+    	Assert::string($name);
+    	Assert::nullOrString($value);
         $this->attributes[$name] = $value;
 
         return $this;
@@ -201,9 +212,11 @@ class Image
      * @param bool $bool Whether to output with the caption or not.
      *
      * @return $this
+	 * @throws \InvalidArgumentException
      */
-    public function withCaption(bool $bool = true)
+    public function withCaption($bool = true)
     {
+    	Assert::boolean($bool);
         $this->withCaption = $bool;
 
         return $this;

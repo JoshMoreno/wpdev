@@ -3,6 +3,7 @@
 namespace WPDev\Template;
 
 use Symfony\Component\Finder\Finder;
+use Webmozart\Assert\Assert;
 
 class Template
 {
@@ -16,24 +17,27 @@ class Template
      *
      * @param string $file_name
      * @param array $data
+     * @throws \InvalidArgumentException
      */
-    public function __construct(string $file_name, array $data = [])
+    public function __construct($file_name, array $data = [])
     {
+    	Assert::string($file_name);
         $this->fileName       = basename($file_name);
         $this->data           = $data;
         $this->paths          = $this->buildValidPaths();
         $this->foundTemplates = $this->locateAllTemplates();
     }
 
-    /**
-     * For a more fluid syntax. Alternatively use `Template::include()` or `Template::locate()`.
-     *
-     * @param string $file_name
-     * @param array $data
-     *
-     * @return $this
-     */
-    public static function create(string $file_name, array $data = [])
+	/**
+	 * For a more fluid syntax. Alternatively use `Template::include()` or `Template::locate()`.
+	 *
+	 * @param string $file_name
+	 * @param array  $data
+	 *
+	 * @return $this
+	 * @throws \InvalidArgumentException
+	 */
+    public static function create($file_name, array $data = [])
     {
         return new static($file_name, $data);
     }
@@ -57,8 +61,9 @@ class Template
      * @param array $data Data to be passed to view. Will also be extracted into variables.
      *
      * @return bool True if successfully included the template. Otherwise, false.
+     * @throws \InvalidArgumentException
      */
-    public static function include(string $file_name, array $data = [])
+    public static function include($file_name, array $data = [])
     {
         return static::create($file_name, $data)->includeTemplate();
     }
@@ -87,8 +92,9 @@ class Template
      * @param string $file_name
      *
      * @return string The path to the template file. Empty if none found.
+     * @throws \InvalidArgumentException
      */
-    public static function locate(string $file_name)
+    public static function locate($file_name)
     {
         return self::create($file_name)->getTemplate();
     }

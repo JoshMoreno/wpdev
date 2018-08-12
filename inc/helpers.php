@@ -47,7 +47,7 @@ if (! function_exists('template')) {
 	 *
 	 * @return bool True if successfully included the template. Otherwise, false.
 	 */
-	function template(string $file_name, array $data = []) {
+	function template($file_name, array $data = []) {
 		return Template::include($file_name, $data);
 	}
 }
@@ -60,7 +60,7 @@ if (! function_exists('template_locate')) {
 	 *
 	 * @return string The path to the template file. Empty if none found.
 	 */
-	function template_locate(string $file_name) {
+	function template_locate($file_name) {
 		return Template::locate($file_name);
 	}
 }
@@ -69,12 +69,12 @@ if (! function_exists('plugin_template')) {
 	/**
 	 * Include a theme template file. Optionally pass data.
 	 *
-	 * @param string $file_name The file name of the template.
+	 * @param string $file_path The file name of the template.
 	 * @param array $data Data to be passed to view. Will also be extracted into variables.
 	 *
 	 * @return bool True if successfully included the template. Otherwise, false.
 	 */
-	function plugin_template(string $file_path, array $data = []) {
+	function plugin_template($file_path, array $data = []) {
 		return PluginTemplate::include($file_path, $data);
 	}
 }

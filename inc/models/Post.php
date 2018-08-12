@@ -2,6 +2,7 @@
 
 namespace WPDev\Models;
 
+use Webmozart\Assert\Assert;
 use WP_Error;
 
 class Post
@@ -74,9 +75,12 @@ class Post
      * @param bool $format Should ACF format the value for you
      *
      * @return mixed|null
+     * @throws \InvalidArgumentException
      */
-    public function acfField(string $selector, bool $format = true)
+    public function acfField($selector, $format = true)
     {
+    	Assert::string($selector);
+    	Assert::boolean($format);
         if (!$this->isAcfActive()) {
             return null;
         }
@@ -90,9 +94,11 @@ class Post
      * @param bool $format Whether ACF should format the values.
      *
      * @return array Associate array with all custom field values
+     * @throws \InvalidArgumentException
      */
-    public function acfFields(bool $format = true)
+    public function acfFields($format = true)
     {
+    	Assert::boolean($format);
         if ($this->isAcfActive()) {
             return get_fields($this->id, $format);
         }
@@ -126,9 +132,11 @@ class Post
      * @param string $date_format A date format string. Defaults to `get_option('date_format')` date format set in the WP backend.
      *
      * @return false|string The formatted date. False on failure.
+     * @throws \InvalidArgumentException
      */
-    public function createdDate(string $date_format = '')
+    public function createdDate($date_format = '')
     {
+    	Assert::string($date_format);
         if (is_null($this->createdDate)) {
             $this->createdDate = get_the_date($date_format, $this->postElseId());
         }
@@ -145,6 +153,7 @@ class Post
      */
     public function featuredImage($size = 'full')
     {
+    	Assert::string($size);
         return Image::create($this->featuredImageId(), $size);
     }
 
@@ -170,8 +179,10 @@ class Post
      *
      * @return mixed The field value if it exists. Else an empty string if $single_value = true or an empty array if $single_value = false.
      */
-    public function field(string $key, bool $single_value = true)
+    public function field($key, $single_value = true)
     {
+    	Assert::string($key);
+    	Assert::boolean($single_value);
         return get_post_meta($this->id, $key, $single_value);
     }
 

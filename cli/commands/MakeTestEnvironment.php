@@ -36,7 +36,7 @@ class MakeTestEnvironment extends Command
     {
         parent::__construct($name);
         $this->client = new Client();
-        $this->testDir = dirname(__DIR__, 2) . '/test-env';
+        $this->testDir = dirname(dirname(__DIR__)) . '/test-env';
         $this->wpTestsDir = $this->testDir.'/wordpress-tests-lib';
         $this->wpCoreDir = $this->testDir.'/wordpress';
         $this->fs = new Filesystem();
