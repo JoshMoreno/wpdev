@@ -90,7 +90,6 @@ class PostTypeTest extends WP_UnitTestCase
 
     public function testPermalinkEPMaskArg()
     {
-        $this->argTest('permalinkEPMask', [], EP_PERMALINK, 'permalink_epmask');
         $this->argTest('permalinkEPMask', [2], 2, 'permalink_epmask');
     }
 
