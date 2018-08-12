@@ -154,7 +154,7 @@ class PostTypeTest extends WP_UnitTestCase
 
     public function testRemoveSupportArg()
     {
-        $post = PostType::create('project')->removeSupportArg('title');
+        $post = PostType::create('project')->removeSupport('title');
         $this->assertNotContains('title', $post->supports);
         unregister_post_type('project');
     }
