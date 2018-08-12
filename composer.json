@@ -10,6 +10,11 @@
             "email": "josh@joshmoreno.com"
         }
     ],
+    "config": {
+      "platform": {
+        "php": "5.6.4"
+      }
+    },
     "autoload": {
         "psr-4": {
             "WPDev\\": "inc/"
@@ -19,21 +24,21 @@
         "psr-4": { "WPDev\\CLI\\": "cli/" }
     },
     "require": {
-        "php": "^7.1.3",
-        "filp/whoops": "^2.1",
-        "symfony/var-dumper": "^4.0",
-        "cocur/slugify": "^3.0",
+        "php": "^5.6.4",
+        "filp/whoops": "^2.2",
+        "symfony/var-dumper": "^3.4",
+        "cocur/slugify": "^3.1",
         "brain/hierarchy": "^2.3",
-        "symfony/finder": "^4.0",
-        "tightenco/collect": "^5.6",
+        "symfony/finder": "^3.4",
+        "tightenco/collect": "^5.4",
         "webmozart/assert": "^1.3"
     },
     "require-dev": {
-        "phpunit/phpunit": "^6.0",
+        "phpunit/phpunit": "^7.3",
         "guzzlehttp/guzzle": "^6.3",
-        "symfony/console": "^4.0",
-        "symfony/filesystem": "^4.0",
-        "10up/wp_mock": "0.3.0"
+        "symfony/console": "^4.1",
+        "symfony/filesystem": "^4.1",
+        "10up/wp_mock": "^0.3.0"
     },
     "scripts": {
         "test": "composer unit-test && composer integration-test",
