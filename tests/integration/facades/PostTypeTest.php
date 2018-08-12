@@ -101,6 +101,7 @@ class PostTypeTest extends WP_UnitTestCase
 
     public function testRegisterMetaBoxCB()
     {
+    	function sampleCallback(){}
         $this->argTest('registerMetaBoxCB', ['sampleCallback'], 'sampleCallback', 'register_meta_box_cb');
     }
 
