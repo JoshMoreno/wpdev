@@ -53,14 +53,16 @@ class PluginTemplate extends Template
         ];
     }
 
-    /**
-     * Gets the plugin folder name containing the template file.
-     *
-     * We use this to help avoid template naming conflicts between plugins and themes.
-     * Also has the added benefit of keeping the project organized.
-     *
-     * @param $file_path
-     */
+	/**
+	 * Gets the plugin folder name containing the template file.
+	 *
+	 * We use this to help avoid template naming conflicts between plugins and themes.
+	 * Also has the added benefit of keeping the project organized.
+	 *
+	 * @param $file_path
+	 *
+	 * @return string
+	 */
     protected function pluginFolderName($file_path)
     {
         $relative_plugin_path = str_replace(WP_PLUGIN_DIR.'/', '', $file_path);
