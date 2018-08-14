@@ -81,7 +81,7 @@ class Template
 
         $data = $this->data;
         extract($data);
-        include $this->getTemplate();
+        include $template;
 
         return true;
     }
