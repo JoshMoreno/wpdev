@@ -13,7 +13,7 @@ class Template
     protected $foundTemplates = [];
 
     /**
-     * Constructor. Alternatively use `Template::include()` or `Template::locate()`.
+     * Constructor. Alternatively use `Template::render()` or `Template::locate()`.
      *
      * @param string $file_name
      * @param array $data
@@ -29,7 +29,7 @@ class Template
     }
 
 	/**
-	 * For a more fluid syntax. Alternatively use `Template::include()` or `Template::locate()`.
+	 * For a more fluid syntax. Alternatively use `Template::render()` or `Template::locate()`.
 	 *
 	 * @param string $file_name
 	 * @param array  $data
@@ -63,7 +63,7 @@ class Template
      * @return bool True if successfully included the template. Otherwise, false.
      * @throws \InvalidArgumentException
      */
-    public static function include($file_name, array $data = [])
+    public static function render($file_name, array $data = [])
     {
         return static::create($file_name, $data)->includeTemplate();
     }

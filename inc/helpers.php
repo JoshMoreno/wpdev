@@ -48,7 +48,7 @@ if (! function_exists('template')) {
 	 * @return bool True if successfully included the template. Otherwise, false.
 	 */
 	function template($file_name, array $data = []) {
-		return Template::include($file_name, $data);
+		return Template::render($file_name, $data);
 	}
 }
 
@@ -75,6 +75,6 @@ if (! function_exists('plugin_template')) {
 	 * @return bool True if successfully included the template. Otherwise, false.
 	 */
 	function plugin_template($file_path, array $data = []) {
-		return PluginTemplate::include($file_path, $data);
+		return PluginTemplate::render($file_path, $data);
 	}
 }
