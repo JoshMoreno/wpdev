@@ -5,7 +5,6 @@ use InvalidArgumentException;
 use WP_Mock;
 use WP_Mock\Tools\TestCase;
 use WPDev\Facades\PostType;
-use WPDev\Models\Post;
 
 class PostTypeTest extends TestCase {
     /** @var  PostType */
