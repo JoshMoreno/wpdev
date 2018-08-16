@@ -41,8 +41,11 @@
         "10up/wp_mock": "^0.2.0"
     },
     "scripts": {
-        "test": "composer unit-test && composer integration-test",
-        "integration-test": "phpunit --bootstrap=tests/integration-bootstrap.php --color=always --verbose tests/integration",
-        "unit-test": "phpunit --bootstrap=tests/unit-bootstrap.php --color=always --verbose tests/unit"
+        "tests": ["@unit-tests", "@integration-tests"],
+        "integration-tests": "phpunit -c ./tests/integration.xml",
+        "unit-tests": "phpunit -c ./tests/unit.xml",
+        "tests-5.6": ["@unit-tests-5.6", "@integration-tests-5.6"],
+        "integration-tests-5.6": "/usr/bin/php5.6 ./vendor/bin/phpunit -c ./tests/integration.xml",
+        "unit-tests-5.6": "/usr/bin/php5.6 ./vendor/bin/phpunit -c ./tests/unit.xml"
     }
 }
