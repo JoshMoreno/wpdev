@@ -3,15 +3,18 @@
 # Official Docs
 [getwpdev.com](https://getwpdev.com)
 
+# What is it?
+A thin wrapper around WordPress to make development quicker, modern, and object oriented.
+
 # Requirements
-PHP >= 7.1.3
+PHP >= 5.6.4
 
 WordPress >= 4.9
 
 # Installation  
 #### WP-CLI
 ```bash
-wp plugin install --activate https://github.com/JoshMoreno/wpdev/releases/download/v1.2.1-alpha/wpdev.zip
+wp plugin install --activate https://github.com/JoshMoreno/wpdev/releases/download/v2.0.0-alpha/wpdev.zip
 ```
 #### Composer
 ```bash
