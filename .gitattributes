@@ -6,4 +6,3 @@ readme.md export-ignore
 /phpunit.xml export-ignore
 /console export-ignore
 /cli export-ignore
-/bin
