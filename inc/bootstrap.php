@@ -8,6 +8,7 @@ use Whoops\Handler\PrettyPageHandler;
 use Whoops\Run;
 use WPDev\Controller\ControllerLoader;
 use WPDev\Debug\Dumper;
+use WPDev\Factories\PostFactory;
 use WPDev\Models\Post;
 use WP_Query;
 
@@ -46,12 +47,12 @@ function data($template)
     }
 
     $default_data = [
-        'Post'  => new Post(get_post()),
+        'Post'  => PostFactory::make(get_post()),
         'Posts' => [],
     ];
 
     if ( ! empty($GLOBALS['wp_query'])) {
-        $default_data['Posts'] = get_posts_from_query($GLOBALS['wp_query']);
+        $default_data['Posts'] = PostFactory::makeFromQuery($GLOBALS['wp_query']);
     }
 
     // Load Controllers then include the template
