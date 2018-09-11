@@ -1,6 +1,7 @@
 <?php
 
 use WPDev\Debug\Dumper;
+use WPDev\Factories\PostFactory;
 use WPDev\Models\Post;
 use WPDev\Template\PluginTemplate;
 use WPDev\Template\Template;
@@ -27,13 +28,11 @@ if ( ! function_exists('get_posts_from_query')) {
      *
      * @param \WP_Query $wp_query A WP_Query object
      *
-     * @return array Array of WPDev\Models\Post objects or an empty array if there were no posts to map over.
+     * @return Post[] Array of WPDev\Models\Post objects or an empty array if there were no posts to map over.
      */
     function get_posts_from_query(WP_Query $wp_query)
     {
-        return array_map(function ($post) {
-            return new Post($post);
-        }, $wp_query->posts);
+    	return PostFactory::makeFromQuery($wp_query);
     }
 }
 
