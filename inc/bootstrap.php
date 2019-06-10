@@ -82,20 +82,21 @@ add_filter('template_include', __NAMESPACE__.'\\data', 1000);
 | And we have to do it every time a plugin is activated since
 | WP always calls sort()
 */
-function on_plugin_activation()
+function on_pre_update_option_active_plugins($value, $old_value, $option)
 {
-    // should end up evaluating to 'wpdev/wpdev.php'
-    $path    = basename(dirname(__DIR__)).'/wpdev.php';
-    $plugins = get_option('active_plugins', []);
-    $key     = array_search($path, $plugins);
+	// should end up evaluating to 'wpdev/wpdev.php'
+	$path = basename(dirname(__DIR__)).'/wpdev.php';
+	$key = array_search($path, $value);
 
-    if ($key !== false) {
-        array_splice($plugins, $key, 1);
-        array_unshift($plugins, $path);
-        update_option('active_plugins', $plugins);
-    }
+	if ($key !== false) {
+		array_splice($value, $key, 1);
+		array_unshift($value, $path);
+	}
+
+	return $value;
 }
-add_action('activated_plugin', __NAMESPACE__.'\\on_plugin_activation');
+
+add_filter('pre_update_option_active_plugins', __NAMESPACE__.'\\on_pre_update_option_active_plugins', 10, 3);
 
 /*
 |--------------------------------------------------------------------------
