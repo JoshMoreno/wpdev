@@ -6,7 +6,11 @@
  * Author: Josh Moreno
  */
 
-require_once __DIR__ . '/vendor/autoload.php';
+// we may have installed this plugin via composer
+if (!class_exists(\WPDev\Models\Post::class)) {
+	require_once __DIR__ . '/vendor/autoload.php';
+}
+
 require_once __DIR__ . '/inc/helpers.php';
 require_once __DIR__ . '/inc/bootstrap.php';
 
