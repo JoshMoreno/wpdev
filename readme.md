@@ -14,7 +14,7 @@ WordPress >= 4.9
 # Installation  
 #### WP-CLI
 ```bash
-wp plugin install --activate https://github.com/JoshMoreno/wpdev/releases/download/v2.0.0-alpha/wpdev.zip
+wp plugin install --activate https://github.com/JoshMoreno/wpdev/releases/download/v2.0.3-alpha/wpdev.zip
 ```
 #### Composer
 ```bash
