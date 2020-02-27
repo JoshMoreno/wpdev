@@ -25,6 +25,19 @@ class PluginTemplate extends Template
 
     }
 
+    public function getTemplate()
+    {
+        if ($template = parent::getTemplate()) {
+            return $template;
+        }
+
+        if (file_exists($this->filePath)) {
+            return $this->filePath;
+        }
+
+        return '';
+    }
+
     public function includeTemplate()
     {
         if (!parent::includeTemplate()) {
