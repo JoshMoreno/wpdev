@@ -46,6 +46,10 @@
         "unit-tests": "phpunit -c ./tests/unit.xml",
         "tests-5.6": ["@unit-tests-5.6", "@integration-tests-5.6"],
         "integration-tests-5.6": "/usr/bin/php5.6 ./vendor/bin/phpunit -c ./tests/integration.xml",
-        "unit-tests-5.6": "/usr/bin/php5.6 ./vendor/bin/phpunit -c ./tests/unit.xml"
+        "unit-tests-5.6": "/usr/bin/php5.6 ./vendor/bin/phpunit -c ./tests/unit.xml",
+        "bundle": ["composer install --no-dev --optimize-autoloader --ignore-platform-reqs", "composer archive --format=zip --file=wpdev"]
+    },
+    "archive": {
+        "exclude": ["/tests", ".gitignore", ".gitattributes", "/cli", "/console", "/readme.md", "!/vendor"]
     }
 }
