@@ -2,7 +2,6 @@
 
 namespace WPDev\Models;
 
-use Webmozart\Assert\Assert;
 use WP_Error;
 
 class Post
@@ -25,8 +24,6 @@ class Post
     protected $wpPost;
 
     /**
-     * Constructor. For a more fluid syntax use `Post::create()`.
-     *
      * @param int|WP_Post|null $post Optional. Post ID or post object. Defaults to global $post.
      */
     public function __construct($post = null)
@@ -40,11 +37,10 @@ class Post
 
 	/**
 	 * Delegates to the respective public method.
-	 * @param $key Name of public method to call
 	 *
 	 * @return mixed|null
 	 */
-	public function __get($key)
+	public function __get(string $key)
 	{
 		try {
 			$method = new \ReflectionMethod($this, $key);
@@ -56,14 +52,7 @@ class Post
 		}
     }
 
-    /**
-     * Alternative to constructor. For more fluid syntax.
-     *
-     * @param int|WP_Post|null $post Optional. Post ID or post object. Defaults to `$GLOBALS['post']`.
-     *
-     * @return $this
-     */
-    public static function create($post = null)
+    public static function create($post = null): self
     {
         return new static($post);
     }
@@ -71,34 +60,22 @@ class Post
     /**
      * Uses ACF's `get_field()` to fetch a field value.
      *
-     * @param string $selector The field key
+     * @param string $fieldName The field key
      * @param bool $format Should ACF format the value for you
      *
      * @return mixed|null
-     * @throws \InvalidArgumentException
      */
-    public function acfField($selector, $format = true)
+    public function acfField(string $fieldName, bool $format = true)
     {
-    	Assert::string($selector);
-    	Assert::boolean($format);
         if (!$this->isAcfActive()) {
-            return null;
+            return $this->field($fieldName, $format);
         }
 
-        return get_field($selector, $this->id, $format);
+        return get_field($fieldName, $this->id, $format);
     }
 
-    /**
-     * Uses ACF's `get_fields()` to get all custom field values in an associative array.
-     *
-     * @param bool $format Whether ACF should format the values.
-     *
-     * @return array Associate array with all custom field values
-     * @throws \InvalidArgumentException
-     */
-    public function acfFields($format = true)
+    public function acfFields(bool $format = true): array
     {
-    	Assert::boolean($format);
         if ($this->isAcfActive()) {
             return get_fields($this->id, $format);
         }
@@ -112,9 +89,9 @@ class Post
      * The direct parent is returned as the first value in the array.
      * The highest level ancestor is returned as the last value in the array.
      *
-     * @return \WPDev\Models\Post[] Array of \WPDev\Models\Post objects
+     * @return \WPDev\Models\Post[]
      */
-    public function ancestors()
+    public function ancestors(): array
     {
         if (is_null($this->ancestors)) {
             $ancestors       = get_post_ancestors($this->postElseId());
@@ -132,11 +109,9 @@ class Post
      * @param string $date_format A date format string. Defaults to `get_option('date_format')` date format set in the WP backend.
      *
      * @return false|string The formatted date. False on failure.
-     * @throws \InvalidArgumentException
      */
-    public function createdDate($date_format = '')
+    public function createdDate(string $date_format = '')
     {
-    	Assert::string($date_format);
         if (is_null($this->createdDate)) {
             $this->createdDate = get_the_date($date_format, $this->postElseId());
         }
@@ -144,25 +119,12 @@ class Post
         return $this->createdDate;
     }
 
-    /**
-     * Get the featured image. Returns an instance of `\WPDev\Models\Image`.
-     *
-     * @param string $size The image size to use.
-     *
-     * @return \WPDev\Models\Image
-     */
-    public function featuredImage($size = 'full')
+    public function featuredImage(string $size = 'full'): Image
     {
-    	Assert::string($size);
         return Image::create($this->featuredImageId(), $size);
     }
 
-    /**
-     * Get the featured image id.
-     *
-     * @return int
-     */
-    public function featuredImageId()
+    public function featuredImageId(): int
     {
         if (is_null($this->featuredImageId)) {
             $this->featuredImageId = (int) $this->field('_thumbnail_id');
@@ -174,24 +136,14 @@ class Post
     /**
      * Gets a field value using `get_post_meta()`.
      *
-     * @param string $key The field key (aka meta key).
-     * @param bool $single_value Whether WP should return the value or the value wrapped in an array.
-     *
      * @return mixed The field value if it exists. Else an empty string if $single_value = true or an empty array if $single_value = false.
      */
-    public function field($key, $single_value = true)
+    public function field(string $fieldName, bool $single_value = true)
     {
-    	Assert::string($key);
-    	Assert::boolean($single_value);
-        return get_post_meta($this->id, $key, $single_value);
+        return get_post_meta($this->id, $fieldName, $single_value);
     }
 
-    /**
-     * Whether the post has a featured image or not.
-     *
-     * @return bool
-     */
-    public function hasFeaturedImage()
+    public function hasFeaturedImage(): bool
     {
         return (bool) $this->featuredImageId();
     }
@@ -203,26 +155,17 @@ class Post
 	 * @param string $taxonomy_name Taxonomy name
 	 * @return bool True if the current post has any of the given tags (or any tag, if no tag specified).
 	 */
-	public function hasTerm($term = '', $taxonomy_name = '') {
+	public function hasTerm($term = '', string $taxonomy_name = ''): bool
+    {
 		return has_term($term, $taxonomy_name, $this->postElseId());
     }
 
-    /**
-     * Post ID
-     *
-     * @return int
-     */
-    public function id()
+    public function id(): int
     {
         return $this->id;
     }
 
-    /**
-     * Post title
-     *
-     * @return string
-     */
-    public function title()
+    public function title(): string
     {
         if (is_null($this->title)) {
             $this->title = get_the_title($this->postElseId());
@@ -232,8 +175,6 @@ class Post
     }
 
     /**
-     * Post url (aka permalink).
-     *
      * @return false|string
      */
     public function url()
@@ -251,13 +192,8 @@ class Post
      * WP has a `get_the_content()` that doesn't apply filters or convert
      * shortcodes. Inconsistent. Doesn't accept an `id` or `WP_Post` object either. Lame.
      * Rather than duplicating core code here we just capture the output.
-     *
-     * @param null $more_link_text
-     * @param bool $strip_teaser
-     *
-     * @return string
      */
-    public function content($more_link_text = null, $strip_teaser = false)
+    public function content(?string $more_link_text = null, bool $strip_teaser = false): string
     {
         if (is_null($this->content)) {
             $this->setupWpGlobals();
@@ -273,13 +209,8 @@ class Post
         return $this->content;
     }
 
-	/**
-	 * Post excerpt
-	 *
-	 * @return string
-	 */
-	public function excerpt()
-	{
+	public function excerpt(): string
+    {
 		if (is_null($this->excerpt)) {
 			$this->setupWpGlobals();
 
@@ -294,13 +225,9 @@ class Post
 	}
 
     /**
-     * The last modified date.
-     *
-     * @param string $date_format
-     *
      * @return false|string
      */
-    public function modifiedDate($date_format = '')
+    public function modifiedDate(string $date_format = '')
     {
         if (is_null($this->modifiedDate)) {
             $this->modifiedDate = get_the_modified_date($date_format, $this->postElseId());
@@ -310,7 +237,7 @@ class Post
     }
 
     /**
-     * Gets the parent post if any. If so will return a `\WPDev\Models\Post` object.
+     * Gets the parent post if any
      *
      * @return bool|\WPDev\Models\Post
      */
@@ -338,10 +265,8 @@ class Post
 
     /**
      * The parent ID if there is a parent. Else 0.
-     *
-     * @return int
      */
-    public function parentId()
+    public function parentId(): int
     {
         if (is_null($this->parentId)) {
             $this->parentId = ($this->hasWpPost()) ? $this->wpPost->post_parent : 0;
@@ -351,11 +276,9 @@ class Post
     }
 
     /**
-     * The post type
-     *
      * @return string
      */
-    public function postType()
+    public function postType(): string
     {
         if ($this->hasWpPost()) {
             return $this->wpPost->post_type;
@@ -365,8 +288,6 @@ class Post
     }
 
     /**
-     * The current post status
-     *
      * @return false|string
      */
     public function status()
@@ -383,7 +304,7 @@ class Post
      *
      * @return array Taxonomy names
      */
-    public function taxonomies()
+    public function taxonomies(): array
     {
         if (is_null($this->taxonomies)) {
             $this->taxonomies = get_post_taxonomies($this->postElseId());
@@ -395,11 +316,9 @@ class Post
     /**
      * Terms for all or a specific associated taxonomy.
      *
-     * @param null $taxonomy_name
-     *
      * @return array|mixed
      */
-    public function terms($taxonomy_name = null)
+    public function terms(?string $taxonomy_name = null)
     {
         $fetch_all = is_null($taxonomy_name);
 
@@ -432,12 +351,8 @@ class Post
     }
 
 
-	/**
-     * The original `WP_Post` object
-     *
-	 * @return \WP_Post|null
-	 */
-	public function wpPost() {
+	public function wpPost(): ?\WP_Post
+    {
 		if ($this->hasWpPost()) {
 			return $this->wpPost;
 		}
@@ -445,22 +360,12 @@ class Post
 		return null;
     }
 
-    /*
-    |--------------------------------------------------------------------------
-    | Protected - Helpers
-    |--------------------------------------------------------------------------
-    |
-    */
-
-    /**
-     * @return bool
-     */
-    protected function hasWpPost()
+    protected function hasWpPost(): bool
     {
         return ($this->wpPost instanceof \WP_Post);
     }
 
-    protected function isAcfActive()
+    protected function isAcfActive(): bool
     {
         return class_exists('acf');
     }
@@ -484,7 +389,7 @@ class Post
     | This is the cleanup of our setupWpGlobals() method.
     | An attempt to leave no trace 🤫
     */
-    protected function restoreWpGlobals()
+    protected function restoreWpGlobals(): void
     {
         if (isset($this->globalPostStash)) {
             $GLOBALS['post'] = $this->globalPostStash;
@@ -503,7 +408,7 @@ class Post
     | like get_the_content() that depend on being called inside
     | The Loop (aka having post as a global along with other related globals).
     */
-    protected function setupWpGlobals()
+    protected function setupWpGlobals(): void
     {
         // stash the current global so we can set it back up after we're done
         if (isset($GLOBALS['post'])) {

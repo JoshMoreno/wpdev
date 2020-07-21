@@ -2,8 +2,6 @@
 
 namespace WPDev\Models;
 
-use Webmozart\Assert\Assert;
-
 class Image
 {
     /**
@@ -25,27 +23,14 @@ class Image
     protected $metadata = [];
     protected $size;
 
-    /**
-     * Constructor. For a more fluid syntax use `Image::create()`.
-     *
-     * @param $id The image id
-     * @param string $size The image size
-	 * @throws \InvalidArgumentException
-     */
-    public function __construct($id, $size = 'full')
+    public function __construct(int $id, string $size = 'full')
     {
-    	Assert::string($size);
         $this->id   = (int)$id;
         $this->size = $size;
         $this->getAndSetDefaultData();
     }
 
-    /**
-     * Make it easy to echo it at any time.
-     *
-     * @return string
-     */
-    public function __toString()
+    public function __toString(): string
     {
         if ( empty($this->attributes['src'])) {
             return '';
@@ -63,19 +48,12 @@ class Image
         <?php return ob_get_clean();
     }
 
-    /**
-     * Get the alt text.
-     *
-     * @return null|string
-     */
-    public function alt()
+    public function alt(): ?string
     {
         return $this->getAttribute('alt');
     }
 
     /**
-     * Get the caption.
-     *
      * @return false|string
      */
     public function caption()
@@ -87,30 +65,13 @@ class Image
         return $this->caption;
     }
 
-    /**
-     * For a more fluid syntax.
-     *
-     * @param int $id The image id
-     * @param string $size The image size
-     *
-     * @return $this
-     */
-    public static function create($id, $size = 'full')
+    public static function create(int $id, string $size = 'full'): self
     {
         return new static($id, $size);
     }
 
-    /**
-     * Gets an attribute.
-     *
-     * @param string $attribute The attribute to get
-     *
-     * @return string|null
-	 * @throws \InvalidArgumentException
-     */
-    public function getAttribute($attribute)
+    public function getAttribute(string $attribute): ?string
     {
-    	Assert::string($attribute);
         if (isset($this->attributes[$attribute])) {
             return $this->attributes[$attribute];
         }
@@ -118,19 +79,12 @@ class Image
         return null;
     }
 
-    /**
-     * Get the height of the image in the current size.
-     *
-     * @return null|string
-     */
-    public function height()
+    public function height(): ?string
     {
         return $this->getAttribute('height');
     }
 
     /**
-     * Gets the metadata.
-     *
      * @return array|mixed
      */
     public function metadata()
@@ -142,98 +96,50 @@ class Image
         return $this->metadata;
     }
 
-    /**
-     * Remove an attribute.
-     *
-     * @param string $name The attribute name
-     *
-     * @return $this
-	 * @throws \InvalidArgumentException
-     */
-    public function removeAttribute($name)
+    public function removeAttribute(string $name): self
     {
-    	Assert::string($name);
         unset($this->attributes[$name]);
 
         return $this;
     }
 
     /**
-     * Add an attribute.
-     *
-     * @param string $name The attribute name
-     * @param null|string $value The value. Null to just output the name.
-     *
-     * @return $this
-	 * @throws \InvalidArgumentException
+     * Null will just output the attribute
+     * e.g. data-example instead of data-example="something"
      */
-    public function setAttribute($name, $value = null)
+    public function setAttribute(string $name, ?string $value = null): self
     {
-    	Assert::string($name);
-    	Assert::nullOrString($value);
         $this->attributes[$name] = $value;
 
         return $this;
     }
 
-    /**
-     * Gets the title field. This is not the filename.
-     *
-     * @return null|string
-     */
-    public function title()
+    public function title(): ?string
     {
         return $this->getAttribute('title');
     }
 
-    /**
-     * Gets the url of the image in the current size.
-     *
-     * @return null|string
-     */
-    public function url()
+    public function url(): ?string
     {
         return $this->getAttribute('src');
     }
 
-    /**
-     * Gets the width of the image in the current size.
-     *
-     * @return null|string
-     */
-    public function width()
+    public function width(): ?string
     {
         return $this->getAttribute('width');
     }
 
-    /**
-     * Sets the flag to output with the caption.
-     *
-     * @param bool $bool Whether to output with the caption or not.
-     *
-     * @return $this
-	 * @throws \InvalidArgumentException
-     */
-    public function withCaption($bool = true)
+    public function withCaption(bool $bool = true): self
     {
-    	Assert::boolean($bool);
         $this->withCaption = $bool;
 
         return $this;
     }
 
-    /*
-    |--------------------------------------------------------------------------
-    | Protected - Helpers
-    |--------------------------------------------------------------------------
-    */
-
     /**
      * Builds the `name="value"` attribute string.
-     *
-     * @return string
      */
-    protected function buildAttributesString()
+    protected function buildAttributesString(): string
     {
         // concatenate key and value to make joining easier
         $attribute_strings = [];
@@ -246,13 +152,10 @@ class Image
             }
         }
 
-        return join(' ', $attribute_strings);
+        return implode(' ', $attribute_strings);
     }
 
-    /**
-     * Gets the image data and sets up the attributes.
-     */
-    protected function getAndSetDefaultData()
+    protected function getAndSetDefaultData(): void
     {
         $image_data = wp_get_attachment_image_src($this->id, $this->size);
         if ( ! $image_data) {

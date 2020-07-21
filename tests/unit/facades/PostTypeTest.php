@@ -20,7 +20,7 @@ class PostTypeTest extends TestCase {
     /**
      * This will run before each test
      */
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->postTypeName = 'project';
@@ -30,7 +30,7 @@ class PostTypeTest extends TestCase {
     /**
      * This will run after each test
      */
-    public function tearDown()
+    public function tearDown(): void
     {
         parent::tearDown();
         $this->postType = null;

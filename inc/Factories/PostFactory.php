@@ -1,15 +1,12 @@
 <?php
 namespace WPDev\Factories;
 
-use Webmozart\Assert\Assert;
 use WPDev\Models\Post;
 
 class PostFactory
 {
 	/**
-	 * @param $wpPostIdOrObject
-	 *
-	 * @return Post
+	 * @param int|\WP_Post|null $wpPostIdOrObject
 	 */
 	public static function make($wpPostIdOrObject)
 	{
@@ -19,31 +16,20 @@ class PostFactory
 		return new $postModelClass($post);
 	}
 
-	/**
-	 * @param $idsOrPostObjects
-	 */
-	public static function makeFromArray($idsOrPostObjects)
-	{
-		Assert::isArray($idsOrPostObjects);
+	public static function makeFromArray(array $idsOrPostObjects): array
+    {
 		return array_map([PostFactory::class, 'make'], $idsOrPostObjects);
 	}
 
 	/**
-	 * @param \WP_Query $wp_query
-	 *
 	 * @return Post[]
 	 */
-	public static function makeFromQuery(\WP_Query $wp_query)
-	{
+	public static function makeFromQuery(\WP_Query $wp_query): array
+    {
 		return self::makeFromArray($wp_query->posts);
 	}
 
-	/**
-	 * @param \WP_Query $wp_query
-	 *
-	 * @return \WP_Query
-	 */
-	public static function replacePostsInQuery(\WP_Query $wp_query)
+	public static function replacePostsInQuery(\WP_Query $wp_query): \WP_Query
 	{
 		$wp_query->posts = self::makeFromQuery($wp_query);
 		return $wp_query;

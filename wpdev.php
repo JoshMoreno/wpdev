@@ -11,9 +11,12 @@ if (!class_exists(\WPDev\Models\Post::class)) {
 	require_once __DIR__ . '/vendor/autoload.php';
 }
 
+// can't move this to composer.json autoloader because
+// it breaks tests
 require_once __DIR__ . '/inc/helpers.php';
 require_once __DIR__ . '/inc/bootstrap.php';
 
-function wpdev_main_plugin_file_name() {
+function wpdev_main_plugin_file_name(): string
+{
 	return __FILE__;
 }

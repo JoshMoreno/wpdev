@@ -2,8 +2,6 @@
 
 namespace WPDev\Template;
 
-use Webmozart\Assert\Assert;
-
 class PluginTemplate extends Template
 {
     protected $filePath;
@@ -14,18 +12,16 @@ class PluginTemplate extends Template
      *
      * @param string $file_path The absolute path to the file in the plugin. The basename will be used when searching in the themes.
      * @param array $data Data to be passed to the template.
-     * @throws \InvalidArgumentException
      */
-    public function __construct($file_path, array $data = [])
+    public function __construct(string $file_path, array $data = [])
     {
-    	Assert::string($file_path);
         $this->filePath = $file_path;
         $this->pluginFolder   = $this->pluginFolderName($file_path);
         parent::__construct($file_path, $data);
 
     }
 
-    public function getTemplate()
+    public function getTemplate(): string
     {
         if ($template = parent::getTemplate()) {
             return $template;
@@ -42,23 +38,17 @@ class PluginTemplate extends Template
     {
         if (!parent::includeTemplate()) {
             $data = $this->data;
-            extract($data);
+            extract($data, EXTR_OVERWRITE);
             include $this->filePath;
         }
     }
 
-    /*
-    |--------------------------------------------------------------------------
-    | Protected
-    |--------------------------------------------------------------------------
-    */
-
-    protected function excludedPaths()
+    protected function excludedPaths(): array
     {
         return [];
     }
 
-    protected function paths()
+    protected function paths(): array
     {
         return [
             get_stylesheet_directory()."/templates/plugins/{$this->pluginFolder}",
@@ -71,12 +61,8 @@ class PluginTemplate extends Template
 	 *
 	 * We use this to help avoid template naming conflicts between plugins and themes.
 	 * Also has the added benefit of keeping the project organized.
-	 *
-	 * @param $file_path
-	 *
-	 * @return string
 	 */
-    protected function pluginFolderName($file_path)
+    protected function pluginFolderName(string $file_path): string
     {
         $relative_plugin_path = str_replace(WP_PLUGIN_DIR.'/', '', $file_path);
         $file_path_array      = explode('/', $relative_plugin_path);
