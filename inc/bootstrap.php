@@ -20,17 +20,6 @@ VarDumper::setHandler([Dumper::class, 'dump']);
 
 /*
 |--------------------------------------------------------------------------
-| Initialize Whoops
-|--------------------------------------------------------------------------
-| Better and prettier error handling
-*/
-if (defined( 'WP_DEBUG') && WP_DEBUG && (!defined( 'WP_CLI' ) || !WP_CLI)) {
-	$whoops = new Run;
-	$whoops->pushHandler(new PrettyPageHandler)->register();
-}
-
-/*
-|--------------------------------------------------------------------------
 | Setup Controllers
 |--------------------------------------------------------------------------
 */
