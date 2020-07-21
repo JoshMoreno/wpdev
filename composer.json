@@ -10,11 +10,6 @@
             "email": "josh@joshmoreno.com"
         }
     ],
-    "config": {
-      "platform": {
-        "php": "5.6.4"
-      }
-    },
     "autoload": {
         "psr-4": {
             "WPDev\\": "inc/"
@@ -24,14 +19,13 @@
         "psr-4": { "WPDev\\CLI\\": "cli/" }
     },
     "require": {
-        "php": ">=5.6.4",
+        "php": ">=7.2.5",
         "filp/whoops": "^2.2",
         "symfony/var-dumper": "^3.4",
         "cocur/slugify": "^3.1",
         "brain/hierarchy": "^2.3",
         "symfony/finder": "^3.4",
-        "tightenco/collect": "^5.4",
-        "webmozart/assert": "^1.3"
+        "tightenco/collect": "^5.4"
     },
     "require-dev": {
         "phpunit/phpunit": "^5.7",
@@ -44,9 +38,6 @@
         "tests": ["@unit-tests", "@integration-tests"],
         "integration-tests": "phpunit -c ./tests/integration.xml",
         "unit-tests": "phpunit -c ./tests/unit.xml",
-        "tests-5.6": ["@unit-tests-5.6", "@integration-tests-5.6"],
-        "integration-tests-5.6": "/usr/bin/php5.6 ./vendor/bin/phpunit -c ./tests/integration.xml",
-        "unit-tests-5.6": "/usr/bin/php5.6 ./vendor/bin/phpunit -c ./tests/unit.xml",
         "bundle": ["composer install --no-dev --optimize-autoloader --ignore-platform-reqs", "composer archive --format=zip --file=wpdev"]
     },
     "archive": {

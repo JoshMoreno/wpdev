@@ -13,9 +13,7 @@ class ControllerLoader
 	/** @var ControllerInterface */
 	protected $controller;
 	protected $directories;
-	protected $parentPath;
 	protected $templateHierarchy;
-	protected $lastDefinedClass;
 
 	/**
 	 * @param \Brain\Hierarchy\Hierarchy $hierarchy
@@ -30,43 +28,17 @@ class ControllerLoader
 		$this->loadController();
 	}
 
-	public function buildData()
-	{
-		if ($this->controller) {
-			return (array) $this->controller->build();
-		}
-
-		return [];
-	}
-
-	/**
-	 * For more fluid syntax
-	 *
-	 * @param \Brain\Hierarchy\Hierarchy $hierarchy
-	 *
-	 * @return $this
-	 */
-	public static function create(Hierarchy $hierarchy)
-	{
+	public static function create(Hierarchy $hierarchy): self
+    {
 		return new static($hierarchy);
 	}
 
-	/**
-	 * Returns the controller instance
-	 *
-	 * @return ControllerInterface
-	 */
-	public function getController()
+	public function getController(): ControllerInterface
 	{
 		return $this->controller;
 	}
 
-	/*
-	|--------------------------------------------------------------------------
-	| Protected
-	|--------------------------------------------------------------------------
-	*/
-	protected function buildControllerKey($controllerPath)
+	protected function buildControllerKey($controllerPath): string
 	{
 		foreach ($this->directories as $path) {
 			$path           = rtrim($path, '/') . '/';
@@ -81,8 +53,8 @@ class ControllerLoader
 	 *
 	 * @return array Filename => Path
 	 */
-	protected function buildListOfFiles()
-	{
+	protected function buildListOfFiles(): array
+    {
 		if ( ! $this->directories) {
 			return [];
 		}
@@ -116,8 +88,8 @@ class ControllerLoader
 		return $controller_files;
 	}
 
-	protected function getDirectories()
-	{
+	protected function getDirectories(): array
+    {
 		// account for both child and parent themes
 		$directories = array_unique([
 			get_stylesheet_directory() . '/controllers',
@@ -136,7 +108,7 @@ class ControllerLoader
 		return end($classes);
 	}
 
-	protected function isValidController($className)
+	protected function isValidController($className) : bool
 	{
 		try {
 			$controller = new ReflectionClass($className);
@@ -155,8 +127,8 @@ class ControllerLoader
 		return true;
 	}
 
-	protected function loadController()
-	{
+	protected function loadController(): void
+    {
 		if ( ! $this->files) {
 			return;
 		}
@@ -174,8 +146,8 @@ class ControllerLoader
 		}
 	}
 
-	protected function onlyRealDirectories(array $directories)
-	{
+	protected function onlyRealDirectories(array $directories): array
+    {
 		return array_filter($directories, function($directory)
 		{
 			return file_exists($directory) && is_dir($directory);

@@ -30,7 +30,7 @@ if ( ! function_exists('get_posts_from_query')) {
      *
      * @return Post[] Array of WPDev\Models\Post objects or an empty array if there were no posts to map over.
      */
-    function get_posts_from_query(WP_Query $wp_query)
+    function get_posts_from_query(WP_Query $wp_query): array
     {
     	return PostFactory::makeFromQuery($wp_query);
     }
@@ -46,7 +46,8 @@ if (! function_exists('template')) {
 	 *
 	 * @return bool True if successfully included the template. Otherwise, false.
 	 */
-	function template($file_name, array $data = []) {
+	function template(string $file_name, array $data = []): bool
+    {
 		return Template::render($file_name, $data);
 	}
 }
@@ -59,7 +60,8 @@ if (! function_exists('template_locate')) {
 	 *
 	 * @return string The path to the template file. Empty if none found.
 	 */
-	function template_locate($file_name) {
+	function template_locate(string $file_name): string
+    {
 		return Template::locate($file_name);
 	}
 }
@@ -73,7 +75,8 @@ if (! function_exists('plugin_template')) {
 	 *
 	 * @return bool True if successfully included the template. Otherwise, false.
 	 */
-	function plugin_template($file_path, array $data = []) {
+	function plugin_template(string $file_path, array $data = []): bool
+    {
 		return PluginTemplate::render($file_path, $data);
 	}
 }

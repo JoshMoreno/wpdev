@@ -9,8 +9,6 @@ use Whoops\Run;
 use WPDev\Controller\ControllerLoader;
 use WPDev\Debug\Dumper;
 use WPDev\Factories\PostFactory;
-use WPDev\Models\Post;
-use WP_Query;
 
 /*
 |--------------------------------------------------------------------------
@@ -67,7 +65,7 @@ function data($template)
         $data = $default_data;
     }
 
-    extract($data);
+    extract($data, EXTR_OVERWRITE);
 
     include $template;
 }

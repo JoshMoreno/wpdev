@@ -2,9 +2,7 @@
 
 namespace WPDev\Facades;
 
-use Exception;
 use InvalidArgumentException;
-use Webmozart\Assert\Assert;
 
 class PostType
 {
@@ -23,11 +21,9 @@ class PostType
 	 * Constructor. For more fluid syntax use `PostType::create()`
 	 *
 	 * @param string $name The name of the post type. Should be singular.
-	 * @throws \InvalidArgumentException
 	 */
-    public function __construct($name)
+    public function __construct(string $name)
     {
-    	Assert::string($name);
         $this->name = $name;
 
         $this->validateName();
@@ -38,26 +34,17 @@ class PostType
 
     /**
      * Whether or not the post_type can be exported
-     * Default: true
-     *
-     * @param bool $bool
-     *
-     * @return $this
-     * @throws \InvalidArgumentException
      */
-    public function canExport($bool = true)
+    public function canExport(bool $bool = true): self
     {
-    	Assert::boolean($bool);
         return $this->setArg('can_export', $bool);
     }
 
 	/**
 	 * For a more fluid syntax.
-	 *
-	 * @param string $name
-	 * @return $this
 	 */
-	public static function create($name) {
+	public static function create(string $name): self
+    {
 		return new static($name);
     }
 
@@ -68,15 +55,9 @@ class PostType
      * posts are trashed if post_type_supports('author'). Otherwise posts are not trashed or deleted.
      *
      * Default: null
-     *
-     * @param bool $bool
-     *
-     * @return $this
-     * @throws \InvalidArgumentException
      */
-    public function deleteWithUser($bool = true)
+    public function deleteWithUser(bool $bool = true): self
     {
-    	Assert::boolean($bool);
         return $this->setArg('delete_with_user', $bool);
     }
 
@@ -95,10 +76,8 @@ class PostType
      * Also use rewrite to change the slug used. If string, it should be translatable.
      *
      * @param bool|string $val
-     *
-     * @return $this
      */
-    public function hasArchive($val = true)
+    public function hasArchive($val = true): self
     {
         return $this->setArg('has_archive', $val);
     }
@@ -107,13 +86,10 @@ class PostType
      * This sets the endpoint mask. However `rewrite['ep_mask']` takes precedence if it's set there too.
      * @link https://make.wordpress.org/plugins/2012/06/07/rewrite-endpoints-api/
      *
-     * @param int|const $endpoint Constant preferred to avoid future failure (core updates)
-     *
-     * @return $this
+     * @param int $endpoint Constant preferred to avoid future failure (core updates)
      */
-    public function permalinkEPMask($endpoint)
+    public function permalinkEPMask(int $endpoint): self
     {
-    	Assert::integer($endpoint);
         return $this->setArg('permalink_epmask', $endpoint);
     }
 
@@ -125,10 +101,8 @@ class PostType
      * Remember this is for query_vars not for permalink slug.
      *
      * @param bool|string $query_var
-     *
-     * @return $this
      */
-    public function queryVar($query_var = true)
+    public function queryVar($query_var = true): self
     {
         return $this->setArg('query_var', $query_var);
     }
@@ -148,10 +122,8 @@ class PostType
      *
      * It uses an anonymous function so if you need to allow other plugins
      * to be able to use `@see remove_action()` then you should use `@see registerManually()`
-     *
-     * @return $this
      */
-    public function register()
+    public function register(): self
     {
         add_action('activate_plugin', [$this, 'registerManually']);
         add_action('deactivate_plugin', [$this, 'deregister']);
@@ -166,12 +138,8 @@ class PostType
      *
      * The callback function takes one argument `$post`, which contains the `WP_Post` object for the currently edited post.
      * Do remove_meta_box() and add_meta_box() calls in the callback.
-     *
-     * @param callable $callback
-     *
-     * @return $this
      */
-    public function registerMetaBoxCB(callable $callback)
+    public function registerMetaBoxCB(callable $callback): self
     {
         return $this->setArg('register_meta_box_cb', $callback);
     }
@@ -179,30 +147,18 @@ class PostType
     /**
      * The base slug that this post type will use when accessed using the REST API.
      * Default: $post_type
-     *
-     * @param string $rest_base
-     *
-     * @return $this
-     * @throws \InvalidArgumentException
      */
-    public function restBase($rest_base)
+    public function restBase(string $rest_base): self
     {
-    	Assert::string($rest_base);
         return $this->setArg('rest_base', $rest_base);
     }
 
     /**
      * An optional custom controller to use instead of `WP_REST_Posts_Controller`. Must be a subclass of `WP_REST_Controller`.
      * Default: WP_REST_Posts_Controller
-     *
-     * @param string $controller
-     *
-     * @return $this
-     * @throws \InvalidArgumentException
      */
-    public function restControllerClass($controller = 'WP_REST_Posts_Controller')
+    public function restControllerClass(string $controller = 'WP_REST_Posts_Controller'): self
     {
-    	Assert::string($controller);
         return $this->setArg('rest_controller_class', $controller);
     }
 
@@ -221,10 +177,8 @@ class PostType
      *                  and also @link https://code.tutsplus.com/articles/the-rewrite-api-post-types-taxonomies--wp-25488
      *
      * @param array|bool $val (see above)
-     *
-     * @return $this
      */
-    public function rewrite($val = true)
+    public function rewrite($val = true): self
     {
         return $this->setArg('rewrite', $val);
     }
@@ -235,14 +189,10 @@ class PostType
      * This is just a catch-all. In case there isn't a more semantic
      * method or if that's just your preference.
      *
-     * @param string $key
      * @param mixed $val
-     *
-     * @return $this
      */
-    public function setArg($key = '', $val = '')
+    public function setArg(string $key = '', $val = ''): self
     {
-    	Assert::string($key);
         if ($key === 'supports') {
             return $this->supports($val);
         }
@@ -254,14 +204,9 @@ class PostType
 
     /**
      * Whether to expose this post type in the `REST API`.
-     *
-     * @param bool $bool
-     *
-     * @return $this
      */
-    public function showInRest($bool = true)
+    public function showInRest(bool $bool = true): self
     {
-    	Assert::boolean($bool);
         return $this->setArg('show_in_rest', $bool);
     }
 
@@ -270,15 +215,9 @@ class PostType
      *
      * If you set to true, on the taxonomy page (ex: taxonomy.php)
      * WordPress will not find your posts and/or pagination will make 404 error...
-     *
-     * @param bool $bool
-     *
-     * @return $this
-     * @throws \InvalidArgumentException
      */
-    public function excludeFromSearch($bool = true)
+    public function excludeFromSearch(bool $bool = true): self
     {
-    	Assert::boolean($bool);
         return $this->setArg('exclude_from_search', $bool);
     }
 
@@ -295,15 +234,9 @@ class PostType
      * parameter set to true WordPress will fetch all IDs of that particular post
      * type on each administration page load for your post type. Servers with
      * limited memory resources may also be challenged by this parameter being set to true.
-     *
-     * @param bool $bool
-     *
-     * @return $this
-     * @throws \InvalidArgumentException
      */
-    public function hierarchical($bool = true)
+    public function hierarchical(bool $bool = true): self
     {
-    	Assert::boolean($bool);
         return $this->setArg('hierarchical', $bool);
     }
 
@@ -312,15 +245,9 @@ class PostType
      *
      * Note: If set it to false then standard admin role can't edit the posts types.
      * Then the edit_post capability must be added to all roles to add or edit the posts types.
-     *
-     * @param bool $bool
-     *
-     * @return $this
-     * @throws \InvalidArgumentException
      */
-    public function mapMetaCap($bool = true)
+    public function mapMetaCap(bool $bool = true): self
     {
-    	Assert::boolean($bool);
         return $this->setArg('map_meta_cap', $bool);
     }
 
@@ -330,13 +257,9 @@ class PostType
      * @param string $icon name of Dashicon, URL to icon, or base64 encoded svg with fill="black"
      *
      * @link https://developer.wordpress.org/resource/dashicons/
-     *
-     * @return $this
-     * @throws \InvalidArgumentException
      */
-    public function menuIcon($icon = '')
+    public function menuIcon(string $icon = ''): self
     {
-    	Assert::string($icon);
         return $this->setArg('menu_icon', $icon);
     }
 
@@ -356,15 +279,9 @@ class PostType
      * 75 - below Tools
      * 80 - below Settings
      * 100 - below second separator
-     *
-     * @param int $position
-     *
-     * @return $this
-     * @throws \InvalidArgumentException
      */
-    public function menuPosition($position = 25)
+    public function menuPosition(int $position = 25): self
     {
-    	Assert::integer($position);
         return $this->setArg('menu_position', $position);
     }
 
@@ -372,10 +289,8 @@ class PostType
      * Removes a supports arg. Use this to remove one of the defaults.
      *
      * @param int|string $feature The feature to remove.
-     *
-     * @return $this
      */
-    public function removeSupport($feature)
+    public function removeSupport($feature): self
     {
         if (!is_string($feature) || !is_int($feature)) {
             $feature = (string) $feature;
@@ -390,17 +305,11 @@ class PostType
     }
 
 
-/**
+    /**
      * Set the plural name. Useful if simply appending an 's' isn't grammatically correct.
-     *
-     * @param string $plural_name
-     *
-     * @return $this
-     * @throws \InvalidArgumentException
      */
-    public function setPluralName($plural_name = '')
+    public function setPluralName(string $plural_name = ''): self
     {
-        Assert::string($plural_name);
         $this->pluralName = $plural_name;
 
         return $this;
@@ -414,29 +323,17 @@ class PostType
      * publicly_queryable = true
      * show_in_nav_menus = true
      * show_ui = true
-     *
-     * @param bool $bool
-     *
-     * @return $this
-     * @throws \InvalidArgumentException
      */
-    public function isPublic($bool = true)
+    public function isPublic(bool $bool = true): self
     {
-    	Assert::boolean($bool);
         return $this->setArg('public', $bool);
     }
 
     /**
      * Whether queries can be performed on the front end as part of parse_request().
-     *
-     * @param bool $bool
-     *
-     * @return $this
-     * @throws \InvalidArgumentException
      */
-    public function publiclyQueryable($bool = true)
+    public function publiclyQueryable(bool $bool = true): self
     {
-    	Assert::boolean($bool);
         return $this->setArg('publicly_queryable', $bool);
     }
 
@@ -444,15 +341,9 @@ class PostType
      * Whether to make this post type available in the WordPress admin bar.
      *
      * Default: value of the show_in_menu argument
-     *
-     * @param bool $bool
-     *
-     * @return $this
-     * @throws \InvalidArgumentException
      */
-    public function showInAdminBar($bool = true)
+    public function showInAdminBar(bool $bool = true): self
     {
-    	Assert::boolean($bool);
         return $this->setArg('show_in_admin_bar', $bool);
     }
 
@@ -461,10 +352,8 @@ class PostType
      *
      * @param bool|string $val - If string is given it will be a submenu
      * if that url exists. Examples: 'tools.php' or 'edit.php?post_type=page';
-     *
-     * @return $this
      */
-    public function showInMenu($val = true)
+    public function showInMenu($val = true): self
     {
         return $this->setArg('show_in_menu', $val);
     }
@@ -473,15 +362,9 @@ class PostType
      * Post type is available for selection in navigation menus.
      *
      * Default: value of public argument
-     *
-     * @param bool $bool
-     *
-     * @return $this
-     * @throws \InvalidArgumentException
      */
-    public function showInNavMenus($bool = true)
+    public function showInNavMenus(bool $bool = true): self
     {
-    	Assert::boolean($bool);
         return $this->setArg('show_in_nav_menus', $bool);
     }
 
@@ -489,201 +372,80 @@ class PostType
      * Whether to generate a default UI for managing this post type in the admin.
      *
      * Default: value of public argument
-     *
-     * @param bool $bool
-     *
-     * @return $this
-     * @throws \InvalidArgumentException
      */
-    public function showUI($bool = true)
+    public function showUI(bool $bool = true): self
     {
-    	Assert::boolean($bool);
         return $this->setArg('show_ui', $bool);
     }
 
     /**
      * Overrides auto generated singular name.
-     *
-     * @param string $singular_name
-     *
-     * @return $this
-     * @throws \InvalidArgumentException
      */
-    public function setSingularName($singular_name = '')
+    public function setSingularName(string $singular_name = ''): self
     {
-    	Assert::string($singular_name);
         $this->singularName = $singular_name;
 
         return $this;
     }
 
-    /**
-     * Support author.
-     *
-     * @param bool $add True (default) to add, False to remove.
-     *
-     * @return $this
-     * @throws \InvalidArgumentException
-     */
-    public function supportsAuthor($add = true)
+    public function supportsAuthor(bool $add = true): self
     {
-    	Assert::boolean($add);
         return $this->addOrRemoveSupport('author', $add);
     }
 
-    /**
-     * Support comments.
-     *
-     * @param bool $add True (default) to add, False to remove.
-     *
-     * @return $this
-     * @throws \InvalidArgumentException
-     */
-    public function supportsComments($add = true)
+    public function supportsComments(bool $add = true): self
     {
-    	Assert::boolean($add);
         return $this->addOrRemoveSupport('comments', $add);
     }
 
-    /**
-     * Support custom fields.
-     *
-     * @param bool $add True (default) to add, False to remove.
-     *
-     * @return $this
-     * @throws \InvalidArgumentException
-     */
-    public function supportsCustomFields($add = true)
+    public function supportsCustomFields(bool $add = true): self
     {
-    	Assert::boolean($add);
         return $this->addOrRemoveSupport('custom-fields', $add);
     }
 
-    /**
-     * Support editor.
-     *
-     * @param bool $add True (default) to add, False to remove.
-     *
-     * @return $this
-     * @throws \InvalidArgumentException
-     */
-    public function supportsEditor($add = true)
+    public function supportsEditor(bool $add = true): self
     {
-    	Assert::boolean($add);
         return $this->addOrRemoveSupport('editor', $add);
     }
 
-    /**
-     * Support excerpt.
-     *
-     * @param bool $add True (default) to add, False to remove.
-     *
-     * @return $this
-     * @throws \InvalidArgumentException
-     */
-    public function supportsExcerpt($add = true)
+    public function supportsExcerpt(bool $add = true): self
     {
-    	Assert::boolean($add);
         return $this->addOrRemoveSupport('excerpt', $add);
     }
 
-    /**
-     * Support featured image (aka thumbnail).
-     *
-     * Alias for @see \WPDev\Models\PostType::supportsThumbnail()
-     *
-     * @param bool $add True (default) to add, False to remove.
-     *
-     * @return $this
-     * @throws \InvalidArgumentException
-     */
-    public function supportsFeaturedImage($add = true)
+    public function supportsFeaturedImage(bool $add = true): self
     {
-    	Assert::boolean($add);
         return $this->supportsThumbnail($add);
     }
 
-    /**
-     * Support page attributes.
-     *
-     * @param bool $add True (default) to add, False to remove.
-     *
-     * @return $this
-     * @throws \InvalidArgumentException
-     */
-    public function supportsPageAttributes($add = true)
+    public function supportsPageAttributes(bool $add = true): self
     {
-    	Assert::boolean($add);
         return $this->addOrRemoveSupport('page-attributes', $add);
     }
 
-    /**
-     * Support post formats.
-     *
-     * @param bool $add True (default) to add, False to remove.
-     *
-     * @return $this
-     * @throws \InvalidArgumentException
-     */
-    public function supportsPostFormats($add = true)
+    public function supportsPostFormats(bool $add = true): self
     {
-    	Assert::boolean($add);
         return $this->addOrRemoveSupport('post-formats', $add);
     }
 
-    /**
-     * Support revisions.
-     *
-     * @param bool $add True (default) to add, False to remove.
-     *
-     * @return $this
-     * @throws \InvalidArgumentException
-     */
-    public function supportsRevisions($add = true)
+
+    public function supportsRevisions(bool $add = true): self
     {
-    	Assert::boolean($add);
         return $this->addOrRemoveSupport('revisions', $add);
     }
 
-    /**
-     * Alternative to `@see supportsFeaturedImage`. Support featured image (aka thumbnail).
-     *
-     * @param bool $add True (default) to add, False to remove.
-     *
-     * @return $this
-     * @throws \InvalidArgumentException
-     */
-    public function supportsThumbnail($add = true)
+    public function supportsThumbnail(bool $add = true): self
     {
-    	Assert::boolean($add);
         return $this->addOrRemoveSupport('thumbnail', $add);
     }
 
-    /**
-     * Support title.
-     *
-     * @param bool $add True (default) to add, False to remove.
-     *
-     * @return $this
-     * @throws \InvalidArgumentException
-     */
-    public function supportsTitle($add = true)
+    public function supportsTitle(bool $add = true): self
     {
-    	Assert::boolean($add);
         return $this->addOrRemoveSupport('title', $add);
     }
 
-    /**
-     * Support trackbacks.
-     *
-     * @param bool $add True (default) to add, False to remove.
-     *
-     * @return $this
-     * @throws \InvalidArgumentException
-     */
-    public function supportsTrackbacks($add = true)
+    public function supportsTrackbacks(bool $add = true): self
     {
-    	Assert::boolean($add);
         return $this->addOrRemoveSupport('trackbacks', $add);
     }
 
@@ -692,10 +454,8 @@ class PostType
      * prevent default (title and editor) behavior
      *
      * @param array|false|string $features
-     *
-     * @return $this
      */
-    public function supports($features)
+    public function supports($features): self
     {
     	// allow for complete override
     	if (is_array($features) || is_bool($features)) {
@@ -718,12 +478,8 @@ class PostType
      *
      * This can be used in lieu of calling register_taxonomy_for_object_type() directly.
      * Custom taxonomies still need to be registered with register_taxonomy().
-     *
-     * @param array $taxonomies
-     *
-     * @return $this
      */
-    public function taxonomies(array $taxonomies = [])
+    public function taxonomies(array $taxonomies = []): self
     {
         return $this->setArg('taxonomies', $taxonomies);
     }
@@ -734,19 +490,19 @@ class PostType
     |--------------------------------------------------------------------------
     */
 
-    protected function addOrRemoveSupport($feature, $add = true)
+    protected function addOrRemoveSupport(string $feature, bool $add = true): self
     {
-        return ($add) ? $this->supports($feature) : $this->removeSupport($feature);
+        return $add ? $this->supports($feature) : $this->removeSupport($feature);
     }
 
-    protected function buildArgs()
+    protected function buildArgs(): array
     {
         return $this->deepMergeArray($this->buildDefaultArgs(), $this->overrideArgs);
     }
 
-    protected function buildDefaultArgs()
+    protected function buildDefaultArgs(): array
     {
-        $defaultArgs = [
+        return [
 
             'labels' => [
                 'name'                  => $this->pluralName,
@@ -794,11 +550,9 @@ class PostType
 
             'supports' => $this->supports,
         ];
-
-        return $defaultArgs;
     }
 
-    protected function deepMergeArray(...$arrays)
+    protected function deepMergeArray(...$arrays): array
     {
         $result = [];
 
@@ -806,7 +560,7 @@ class PostType
             foreach ($array as $key => $value) {
 
                 // if it's zero-based, append it
-                if (is_integer($key)) {
+                if (is_int($key)) {
                     $result[] = $value;
                     continue;
                 }
@@ -833,15 +587,8 @@ class PostType
         return $result;
     }
 
-	/**
-	 * @param bool $plural
-	 *
-	 * @return string
-	 * @throws \InvalidArgumentException
-	 */
-    protected function formatName($plural = false)
+    protected function formatName(bool $plural = false): string
     {
-    	Assert::boolean($plural);
         $name = str_replace('_', ' ', $this->name);
         $name = trim($name);
 
@@ -857,7 +604,10 @@ class PostType
         return ucwords($name);
     }
 
-    protected function validateName()
+    /**
+     * @throws InvalidArgumentException
+     */
+    protected function validateName(): void
     {
         $reserved_names = [
             'post',
