@@ -12,7 +12,7 @@ class PostFactoryTest extends TestCase
 {
 	public $mockPost;
 
-	public function setUp()
+	public function setUp(): void
 	{
 		parent::setUp();
 

@@ -16,13 +16,13 @@ class ContainerTest extends TestCase
 	| Setup and Teardown
 	|--------------------------------------------------------------------------
 	*/
-	public function setUp()
+	public function setUp(): void
 	{
 		parent::setUp();
 		$this->container = new Container();
 	}
 
-	public function tearDown()
+	public function tearDown(): void
 	{
 		$this->container = null;
 	}
