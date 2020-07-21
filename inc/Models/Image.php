@@ -148,6 +148,7 @@ class Image
             if (is_null($value)) {
                 $attribute_strings[] = $key;
             } else {
+                $value = htmlspecialchars($value, ENT_QUOTES, 'UTF-8', false);
                 $attribute_strings[] = "$key=\"$value\"";
             }
         }
