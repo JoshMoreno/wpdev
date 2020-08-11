@@ -23,7 +23,30 @@ VarDumper::setHandler([Dumper::class, 'dump']);
 | Setup Controllers
 |--------------------------------------------------------------------------
 */
-function data($template)
+function default_data() {
+    $data = [
+        'Post'  => PostFactory::make(get_post()),
+        'Posts' => [],
+    ];
+
+    if ( ! empty($GLOBALS['wp_query'])) {
+        $data['Posts'] = PostFactory::makeFromQuery($GLOBALS['wp_query']);
+    }
+
+    // Load Controllers then include the template
+    $controller = ControllerLoader::create(new Hierarchy)->getController();
+
+    /** @var \WPDev\Controller\ControllerInterface $controller */
+    if ($controller) {
+        // set the default data so controller can access it in the build method
+        $controller->defaultData = $data;
+        $data = array_merge($data, $controller->build());
+    }
+
+    return apply_filters('wpdev.templateData', $data);
+}
+
+function render_template($template)
 {
     // If we don't have a template...do what WP would do
     if ( ! $template && current_user_can('switch_themes')) {
@@ -33,32 +56,31 @@ function data($template)
         }
     }
 
-    $default_data = [
-        'Post'  => PostFactory::make(get_post()),
-        'Posts' => [],
-    ];
-
-    if ( ! empty($GLOBALS['wp_query'])) {
-        $default_data['Posts'] = PostFactory::makeFromQuery($GLOBALS['wp_query']);
-    }
-
-    // Load Controllers then include the template
-    $controller = ControllerLoader::create(new Hierarchy)->getController();
-
-    /** @var \WPDev\Controller\ControllerInterface $controller */
-    if ($controller) {
-        // set the default data so controller can access it in the build method
-        $controller->defaultData = $default_data;
-        $data                    = array_merge($default_data, $controller->build());
-    } else {
-        $data = $default_data;
-    }
-
-    extract($data, EXTR_OVERWRITE);
+    extract(default_data(), EXTR_OVERWRITE);
 
     include $template;
 }
-add_filter('template_include', __NAMESPACE__.'\\data', 1000);
+
+add_filter('after_setup_theme', function() {
+    if (class_exists('Roots\\Sage\\Container')) {
+        // sage loops over these classes and allows us to filter
+        // the template data. We want to do it on all so let's
+        // add a class to all pages that we can hook into.
+        add_filter('body_class', function($classes, $class) {
+            $classes[] = 'all';
+            return $classes;
+        }, 10, 2);
+
+        // sage theme wants complete control of template_include so
+        // we'll instead hook into their filter
+        add_filter("sage/template/all/data", function($data, $template) {
+            return array_merge($data, default_data());
+        }, 10, 2);
+        return;
+    }
+
+    add_filter('template_include', __NAMESPACE__.'\\render_template', PHP_INT_MAX);
+});
 
 /*
 |--------------------------------------------------------------------------
