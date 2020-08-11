@@ -25,9 +25,14 @@ VarDumper::setHandler([Dumper::class, 'dump']);
 */
 function default_data() {
     $data = [
-        'Post'  => PostFactory::make(get_post()),
         'Posts' => [],
     ];
+
+    if (is_home()) {
+        $data['Post'] = PostFactory::make(get_option('page_for_posts', true));
+    } else {
+        $data['Post'] = PostFactory::make(get_post());
+    }
 
     if ( ! empty($GLOBALS['wp_query'])) {
         $data['Posts'] = PostFactory::makeFromQuery($GLOBALS['wp_query']);
