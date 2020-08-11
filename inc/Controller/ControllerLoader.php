@@ -33,7 +33,7 @@ class ControllerLoader
 		return new static($hierarchy);
 	}
 
-	public function getController(): ControllerInterface
+	public function getController(): ?ControllerInterface
 	{
 		return $this->controller;
 	}
